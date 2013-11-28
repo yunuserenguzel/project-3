@@ -1,0 +1,32 @@
+class UserController < ApplicationController
+
+  before_filter :require_authentication, :except => [:register,:validate]
+
+  prepare_params_for :register,
+                     :email => [:required,:not_empty],
+                     :password => [:required, :not_empty],
+                     :username => [:required, :not_empty]
+  def register
+    @email = params[:email]
+    @username = params[:username]
+    if User.exists?(:email => @email)
+      return show_error ErrorCodeEmailExists, "this email is already taken"
+    elsif User.exists?(:username => @username)
+      return show_error ErrorCodeUsernameExists, "this username is already taken"
+    else
+      @validation_code = User.create_registration_request params
+    end
+  end
+
+  prepare_params_for :validate,
+                     :email => [:required, :not_empty],
+                     :validation_code => [:required, :not_empty]
+  def validate
+    @email = params[:email]
+    @validation_code = params[:validation_code]
+    @user = User.validate_registration_request @email, @validation_code
+  end
+
+
+
+end

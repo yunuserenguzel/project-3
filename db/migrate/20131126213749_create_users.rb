@@ -8,5 +8,6 @@ class CreateUsers < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_attachment :users, :profile_image
   end
 end

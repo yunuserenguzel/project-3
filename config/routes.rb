@@ -5,6 +5,9 @@ Sonicraph::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
+  post 'api/user/register' => 'user#register'
+  get 'api/user/validate' => 'user#validate'
+  get 'api/authentication/get_token' => 'authentication#get_token'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

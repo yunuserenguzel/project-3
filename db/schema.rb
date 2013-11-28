@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131126215202) do
+ActiveRecord::Schema.define(version: 20131127172131) do
 
   create_table "authentications", force: true do |t|
     t.string   "token"
@@ -45,6 +45,19 @@ ActiveRecord::Schema.define(version: 20131126215202) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "registration_requests", force: true do |t|
+    t.string   "username"
+    t.string   "email"
+    t.string   "passhash"
+    t.string   "realname"
+    t.string   "validation_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "registration_requests", ["email"], name: "index_registration_requests_on_email", unique: true
+  add_index "registration_requests", ["username"], name: "index_registration_requests_on_username", unique: true
 
   create_table "sonics", force: true do |t|
     t.float    "latitude"
