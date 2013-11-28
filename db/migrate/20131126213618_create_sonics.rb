@@ -8,5 +8,6 @@ class CreateSonics < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_attachment :sonics, :sonic_data
   end
 end

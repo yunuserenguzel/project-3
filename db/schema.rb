@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(version: 20131127172131) do
     t.string   "username"
     t.string   "email"
     t.string   "passhash"
-    t.string   "realname"
     t.string   "validation_code"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -66,6 +65,10 @@ ActiveRecord::Schema.define(version: 20131127172131) do
     t.integer  "user"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "sonic_data_file_name"
+    t.string   "sonic_data_content_type"
+    t.integer  "sonic_data_file_size"
+    t.datetime "sonic_data_updated_at"
   end
 
   create_table "users", force: true do |t|
@@ -75,6 +78,10 @@ ActiveRecord::Schema.define(version: 20131127172131) do
     t.string   "realname"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "profile_image_file_name"
+    t.string   "profile_image_content_type"
+    t.integer  "profile_image_file_size"
+    t.datetime "profile_image_updated_at"
   end
 
 end

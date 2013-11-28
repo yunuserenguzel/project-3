@@ -3,6 +3,16 @@ class Sonic < ActiveRecord::Base
 
   before_create :generate_sonic_id
 
+  has_attached_file :sonic_data, {
+      :url => "/system/profile_images/u:idh:hash.:extension",
+      :hash_secret => 'askdjfbhakjsfbkajsbglkajsbg',
+      :bucket => ENV['S3_BUCKET_NAME'],
+      :s3_credentials => {
+          :access_key_id => ENV['S3_KEY'],
+          :secret_access_key => ENV['S3_SECRET']
+      }
+  }
+
   def generate_sonic_id
     self.id = loop do
       id = rand(100000000..1000000000)
