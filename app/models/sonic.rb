@@ -19,4 +19,25 @@ class Sonic < ActiveRecord::Base
       break id unless User.exists?(id: id)
     end
   end
+
+  def self.get_sonic_feed_for_user user
+    return Sonic.joins(user: :followers).where(follows: {follower: user}).limit(20)
+  end
+
+  def like_sonic_for_user user
+    self.unlike_sonic_for_user user
+    like = Like.new
+    like.user = user
+    like.sonic = self
+    like.save
+    return true
+  end
+
+  def unlike_sonic_for_user user
+    Like.where(:sonic=>self, :user=>user).each do |like|
+      like.destroy!
+    end
+    return true
+  end
+
 end
