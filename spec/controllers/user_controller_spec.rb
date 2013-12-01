@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UserController do
   render_views
-  context "regsiter" do
+  context "register" do
 
     before :each do
       @params = {:format => 'json', :username => 'username', :email => 'email', :password=>'password'}
@@ -11,6 +11,7 @@ describe UserController do
     it "can register a user" do
       post :register, @params
       response.should be_successful
+      puts response.body
     end
 
   end

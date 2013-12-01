@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Sonic do
-
   context "get_sonic_feed_for_user" do
     before :each do
       @user = User.create
