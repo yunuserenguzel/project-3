@@ -27,6 +27,13 @@ class UserController < ApplicationController
     @user = User.validate_registration_request @email, @validation_code
   end
 
+  prepare_params_for :check_is_token_valid,
+                     :token => [:required, :not_empty]
+  def check_is_token_valid
+    token = params[token]
+
+  end
+
 
 
 end
