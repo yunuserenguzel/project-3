@@ -4,7 +4,7 @@ class Sonic < ActiveRecord::Base
   before_create :generate_sonic_id
 
   has_attached_file :sonic_data, {
-      :url => "/system/profile_images/u:idh:hash.:extension",
+      :url => ":s3_domain_url/profile_images/u:idh:hash.:extension",
       :hash_secret => 'askdjfbhakjsfbkajsbglkajsbg',
       :bucket => ENV['S3_BUCKET_NAME'],
       :s3_credentials => {
