@@ -40,4 +40,9 @@ class Sonic < ActiveRecord::Base
     return true
   end
 
+  def as_json options = {}
+    json = super.as_json options
+    json["sonic_data"] = self.sonic_data
+    return json
+  end
 end
