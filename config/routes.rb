@@ -9,7 +9,7 @@ Sonicraph::Application.routes.draw do
   post 'api/user/register' => 'user#register'
   get 'api/user/validate' => 'user#validate'
   get "api/user/check_is_token_valid" => 'user#check_is_token_valid'
-
+  get 'api/user/login' => 'user#login'
   get 'api/authentication/get_token' => 'authentication#get_token'
 
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'

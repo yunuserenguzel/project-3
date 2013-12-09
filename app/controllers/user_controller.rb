@@ -1,6 +1,6 @@
 class UserController < ApplicationController
 
-  before_filter :require_authentication, :except => [:register,:validate]
+  before_filter :require_authentication, :except => [:register,:validate,:login]
 
   prepare_params_for :register,
                      :email => [:required,:not_empty],
@@ -33,9 +33,9 @@ class UserController < ApplicationController
   def login
     username = params[:username]
     password = params[:password]
-    user = User.check_user_login username, password
-    if user.is_a?User
-      @token = Authentication.authenticate_user user
+    @user = User.check_user_login username, password
+    if @user.is_a?User
+      @token = Authentication.authenticate_user @user
     else
       return show_error ErrorCodeUsernameOrPasswordIsWrong, "username or password is wrong login failed"
     end
@@ -45,7 +45,7 @@ class UserController < ApplicationController
                      :token => [:required, :not_empty]
   def check_is_token_valid
     token = params[token]
-
+    #returns the authenticated user
   end
 
 

@@ -80,4 +80,9 @@ class User < ActiveRecord::Base
     return 1000000000
   end
 
+  def as_json options = {}
+    json = super.as_json
+    json["id"] = self.id.to_s
+    return json
+  end
 end
