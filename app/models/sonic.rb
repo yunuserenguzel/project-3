@@ -25,7 +25,7 @@ class Sonic < ActiveRecord::Base
   end
 
   def like_sonic_for_user user
-    self.unlike_sonic_for_user user
+    self.dislike_sonic_for_user user
     like = Like.new
     like.user = user
     like.sonic = self
@@ -33,7 +33,7 @@ class Sonic < ActiveRecord::Base
     return true
   end
 
-  def unlike_sonic_for_user user
+  def dislike_sonic_for_user user
     Like.where(:sonic=>self, :user=>user).each do |like|
       like.destroy!
     end

@@ -42,4 +42,31 @@ describe SonicController do
       response.location.should include('error_code=')
     end
   end
+
+  context "dislike_sonic" do
+    before :each do
+      @sonic = Sonic.create
+      @user = User.create
+      token = Authentication.authenticate_user @user
+      @sonic = Sonic.find(@sonic.id)
+      @params = {:format => 'json', :token=>token, :sonic=>@sonic.id}
+    end
+    it "dislikes a sonic for authenticated user" do
+      get :dislike_sonic, @params
+      response.should be_successful
+      response.body.should include(@sonic.to_json)
+    end
+    it "return error if sonic is not given" do
+      @params.except! :sonic
+      get :dislike_sonic, @params
+      response.should be_redirect
+      response.location.should include('error_code=')
+    end
+    it "returns error if given sonic id is not exists" do
+      @params[:sonic] = 1
+      get :dislike_sonic, @params
+      response.should be_redirect
+      response.location.should include('error_code=')
+    end
+  end
 end

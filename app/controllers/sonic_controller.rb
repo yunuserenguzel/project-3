@@ -8,7 +8,7 @@ class SonicController < ApplicationController
     @sonic = Sonic.new
     @sonic.sonic_data = params[:sonic_data]
     @sonic.user = @authenticated_user
-    #TODO: add latidute and longitude
+    #TODO: add latitude and longitude
     @sonic.save
   end
 
@@ -17,6 +17,13 @@ class SonicController < ApplicationController
   def like_sonic
     @sonic = Sonic.find(params[:sonic])
     @sonic.like_sonic_for_user @authenticated_user
+  end
+
+  prepare_params_for :dislike_sonic,
+                     :sonic => [:required, :type => Sonic]
+  def dislike_sonic
+    @sonic = Sonic.find(params[:sonic])
+    @sonic.dislike_sonic_for_user @authenticated_user
   end
 
 end

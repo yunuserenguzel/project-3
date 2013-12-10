@@ -44,7 +44,7 @@ describe Sonic do
       @sonic.like_sonic_for_user @user
     end
     it "unlikes a sonic" do
-      @sonic.unlike_sonic_for_user @user
+      @sonic.dislike_sonic_for_user @user
       expect(Like.all.count).to eq(0)
     end
   end
