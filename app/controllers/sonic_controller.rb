@@ -12,4 +12,11 @@ class SonicController < ApplicationController
     @sonic.save
   end
 
+  prepare_params_for :like_sonic,
+                     :sonic => [:required, :type => Sonic]
+  def like_sonic
+    @sonic = Sonic.find(params[:sonic])
+    @sonic.like_sonic_for_user @authenticated_user
+  end
+
 end

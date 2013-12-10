@@ -11,7 +11,7 @@ describe UserController do
     it "can register a user" do
       post :register, @params
       response.should be_successful
-      puts response.body
+      #puts response.body
     end
 
   end

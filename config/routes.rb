@@ -13,6 +13,7 @@ Sonicraph::Application.routes.draw do
   get 'api/authentication/get_token' => 'authentication#get_token'
 
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'
+  get 'api/get/like_sonic' => 'sonic#like_sonic'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
