@@ -69,4 +69,26 @@ describe SonicController do
       response.location.should include('error_code=')
     end
   end
+
+  context "get_sonics_after" do
+    before :each do
+      user = User.create
+      user.follow_user user
+      pivot_sonic = nil
+      30.times do |number|
+        sonic = Sonic.create(:user=>user)
+        sonic.created_at += number.hour
+        sonic.save
+        pivot_sonic = Sonic.find(sonic.id) if number == 13
+      end
+      token = Authentication.authenticate_user user
+      @params = {:format=>'json',:token=>token,:sonic=>pivot_sonic.id}
+    end
+
+    it "brings the sonics after the given sonic id " do
+      get :get_sonics_after, @params
+      response.should be_successful
+      #puts response.body
+    end
+  end
 end

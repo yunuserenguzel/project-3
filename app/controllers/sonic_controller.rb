@@ -26,4 +26,12 @@ class SonicController < ApplicationController
     @sonic.dislike_sonic_for_user @authenticated_user
   end
 
+  prepare_params_for :get_sonics_after,
+                     :sonic=>[:not_empty,:type=>Sonic]
+  def get_sonics_after
+    sonic = params[:sonic]
+    @sonics = Sonic.get_sonic_feed_for_user_after_sonic @authenticated_user, sonic
+  end
+
+
 end

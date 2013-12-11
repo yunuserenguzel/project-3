@@ -24,6 +24,27 @@ class Sonic < ActiveRecord::Base
     return Sonic.joins(user: :followers).where(follows: {follower: user}).limit(20)
   end
 
+
+  def self.get_sonic_feed_for_user_after_sonic user, sonic
+    begin
+      sonic = Sonic.find(sonic) if !sonic.is_a?Sonic
+    rescue
+      return []
+    end
+    return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at > ?",sonic.created_at).limit(20)
+  end
+
+  def self.get_sonic_feed_for_user_before_sonic user, sonic
+    begin
+    sonic = Sonic.find(sonic) if !sonic.is_a?Sonic
+  rescue
+    return []
+  end
+  return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at < ?",sonic.created_at).limit(20)
+
+end
+
+
   def like_sonic_for_user user
     self.dislike_sonic_for_user user
     like = Like.new
@@ -45,4 +66,7 @@ class Sonic < ActiveRecord::Base
     json["sonic_data"] = self.sonic_data
     return json
   end
+
+
+
 end

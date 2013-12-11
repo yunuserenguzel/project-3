@@ -18,6 +18,39 @@ describe Sonic do
     end
   end
 
+  context "get_sonic_feed_for_user_after_sonic" do
+    before :each do
+      @user = User.create
+      @user.follow_user @user
+      30.times do |number|
+        sonic = Sonic.create(:user=>@user)
+        sonic.created_at += number.hour
+        sonic.save
+        @pivot_sonic = Sonic.find(sonic.id) if number == 13
+      end
+    end
+    it "get_sonic_feed" do
+      expect(Sonic.get_sonic_feed_for_user_after_sonic(@user,@pivot_sonic).count).to eq(17)
+    end
+  end
+
+  context "get_sonic_feed_for_user_before_sonic" do
+    before :each do
+      @user = User.create
+      @user.follow_user @user
+      30.times do |number|
+        sonic = Sonic.create(:user=>@user)
+        sonic.created_at += number.hour
+        sonic.save
+        @pivot_sonic = Sonic.find(sonic.id) if number == 13
+      end
+    end
+    it "get_sonic_feed" do
+      expect(Sonic.get_sonic_feed_for_user_before_sonic(@user,@pivot_sonic).count).to eq(13)
+    end
+  end
+
+
   context "like_sonic" do
     before :each do
       @sonic = Sonic.create
