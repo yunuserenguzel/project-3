@@ -37,10 +37,9 @@ ActiveRecord::Schema.define(version: 20131127172131) do
   end
 
   create_table "notifications", force: true do |t|
-    t.string   "type"
-    t.integer  "actor_user"
-    t.integer  "sonic"
-    t.integer  "affected_user"
+    t.integer  "user_id"
+    t.string   "notification_type"
+    t.string   "data"
     t.boolean  "is_read"
     t.datetime "created_at"
     t.datetime "updated_at"
