@@ -15,7 +15,7 @@ Sonicraph::Application.routes.draw do
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'
   get 'api/sonic/like_sonic' => 'sonic#like_sonic'
   get 'api/sonic/dislike_sonic' => 'sonic#dislike_sonic'
-  get 'api/sonic/get_sonics_after' => 'sonic#get_sonics_after'
+  get 'api/sonic/get_sonics' => 'sonic#get_sonics'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

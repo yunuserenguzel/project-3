@@ -59,10 +59,10 @@ class ApplicationController < ActionController::Base
       if option == :required && params[param] == nil
         show_error ErrorCodeMissingParameter, "parameter '#{param.to_s}' is missing"
         return false
-      elsif option == :not_empty && params[param] == ""
+      elsif option == :not_empty && params[param] == "" && params.has_key?(param)
         show_error ErrorCodeInvalidParameter, "parameter '#{param.to_s}' cannot be empty"
         return false
-      elsif option.is_a?(Hash) && option.has_key?(:type)
+      elsif option.is_a?(Hash) && option.has_key?(:type) && params.has_key?(param)
         type = option[:type]
         if type < ActiveRecord::Base
           if !type.exists?(params[param])

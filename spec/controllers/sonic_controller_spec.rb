@@ -70,7 +70,7 @@ describe SonicController do
     end
   end
 
-  context "get_sonics_after" do
+  context "get_sonics" do
     before :each do
       user = User.create
       user.follow_user user
@@ -82,13 +82,27 @@ describe SonicController do
         pivot_sonic = Sonic.find(sonic.id) if number == 13
       end
       token = Authentication.authenticate_user user
-      @params = {:format=>'json',:token=>token,:sonic=>pivot_sonic.id}
+      @params = {:format=>'json',:token=>token,:after=>pivot_sonic.id, :before=>pivot_sonic.id}
     end
 
     it "brings the sonics after the given sonic id " do
-      get :get_sonics_after, @params
-      response.should be_successful
+      @params.except! :before
+      get :get_sonics, @params
       #puts response.body
+      response.should be_successful
+    end
+    it "brings the sonics before the given sonic id " do
+      @params.except! :after
+      get :get_sonics, @params
+      #puts response.body
+      response.should be_successful
+    end
+    it "brings the sonics" do
+      @params.except! :before
+      @params.except! :after
+      get :get_sonics, @params
+      #puts response.body
+      response.should be_successful
     end
   end
 end
