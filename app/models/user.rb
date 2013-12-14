@@ -58,6 +58,7 @@ class User < ActiveRecord::Base
     u.username = rr.username
     u.passhash = rr.passhash
     u.save!
+    u.follow_user u
     rr.destroy
     return u
   end

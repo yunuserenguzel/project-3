@@ -88,20 +88,17 @@ describe SonicController do
     it "brings the sonics after the given sonic id " do
       @params.except! :before
       get :get_sonics, @params
-      #puts response.body
       response.should be_successful
     end
     it "brings the sonics before the given sonic id " do
       @params.except! :after
       get :get_sonics, @params
-      #puts response.body
       response.should be_successful
     end
     it "brings the sonics" do
       @params.except! :before
       @params.except! :after
       get :get_sonics, @params
-      #puts response.body
       response.should be_successful
     end
   end
