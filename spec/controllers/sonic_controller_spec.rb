@@ -102,4 +102,31 @@ describe SonicController do
       response.should be_successful
     end
   end
+
+  context "delete_sonic" do
+    before :each do
+      @user = User.create
+      @sonic = Sonic.create(:user => @user)
+
+      @params = {:format => 'json', :token =>Authentication.authenticate_user(@user), :sonic=>@sonic.id}
+    end
+    it "returns successful" do
+      get :delete_sonic, @params
+      #puts response.body
+      response.should be_successful
+      response.should_not be_redirect
+    end
+    it "returns error if sonic is not found" do
+      @params[:sonic] = 1
+      get :delete_sonic, @params
+      #puts response.body
+      response.should be_redirect
+    end
+    it "returns error if user is not owned the sonic" do
+      @sonic.user = User.create
+      @sonic.save
+      get :delete_sonic, @params
+      response.should be_redirect
+    end
+  end
 end
