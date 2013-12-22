@@ -82,4 +82,18 @@ describe Sonic do
     end
   end
 
+  context "get likes" do
+    before :each do
+      @sonic = Sonic.create
+      5.times do
+        @sonic.like_sonic_for_user User.create
+      end
+    end
+    it "gets the users as array" do
+      likes = Sonic.likes_of_sonic(@sonic.id)
+      #puts likes.to_json
+      expect(likes.count).to eq(5)
+    end
+  end
+
 end

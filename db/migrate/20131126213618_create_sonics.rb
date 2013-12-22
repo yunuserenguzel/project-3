@@ -5,7 +5,9 @@ class CreateSonics < ActiveRecord::Migration
       t.float :longitude
       t.boolean :is_private
       t.integer :user
-
+      t.integer :likes_count
+      t.integer :comments_count
+      t.integer :resonics_count
       t.timestamps
     end
     add_attachment :sonics, :sonic_data

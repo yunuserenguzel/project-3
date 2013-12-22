@@ -50,4 +50,10 @@ class SonicController < ApplicationController
     end
   end
 
+  prepare_params_for :likes,
+                     :sonic => [:required, :type=>Sonic]
+  def likes
+    @users = Sonic.likes_of_sonic params[:sonic]
+  end
+
 end

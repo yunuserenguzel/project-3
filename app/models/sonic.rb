@@ -46,16 +46,15 @@ end
 
 
   def like_sonic_for_user user
+    user = user.is_a?(User) ? user.id : user
     self.dislike_sonic_for_user user
-    like = Like.new
-    like.user = user
-    like.sonic = self
-    like.save
+    Like.create(:sonic_id => self.id, :user_id=>user)
     return true
   end
 
   def dislike_sonic_for_user user
-    Like.where(:sonic=>self, :user=>user).each do |like|
+    user = user.is_a?(User) ? user.id : user
+    Like.where(:sonic_id=>self.id, :user_id=>user).each do |like|
       like.destroy!
     end
     return true
@@ -65,6 +64,17 @@ end
     json = super.as_json options
     json["sonic_data"] = self.sonic_data
     return json
+  end
+
+  def self.likes_of_sonic sonic_id
+
+    sql = <<SQL
+      SELECT users.username,users.id,users.profile_image_file_name
+      FROM likes INNER JOIN users ON users.id = likes.user_id
+      WHERE likes.sonic_id=?
+      LIMIT 100
+SQL
+    return User.find_by_sql(sanitize_sql_array [sql,sonic_id])
   end
 
 

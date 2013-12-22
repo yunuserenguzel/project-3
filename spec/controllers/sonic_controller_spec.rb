@@ -129,4 +129,21 @@ describe SonicController do
       response.should be_redirect
     end
   end
+
+  context "lieks" do
+    before :each do
+      @sonic = Sonic.create
+      10.times do
+        @sonic.like_sonic_for_user User.create.id
+      end
+      @params = {:format => 'json',:sonic=>@sonic.id, :token => Authentication.authenticate_user(User.create)}
+    end
+
+    it "returns success" do
+      get :likes, @params
+      puts response.body
+      response.should be_successful
+      response.should_not be_redirect
+    end
+  end
 end

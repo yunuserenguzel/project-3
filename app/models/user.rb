@@ -84,6 +84,9 @@ class User < ActiveRecord::Base
   def as_json options = {}
     json = super.as_json
     json["id"] = self.id.to_s
+    json["profile_image"] = self.profile_image
+    #json.except!("passhash")
+    #json.except!("email")
     return json
   end
 end

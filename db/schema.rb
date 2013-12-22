@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 20131127172131) do
   end
 
   create_table "likes", force: true do |t|
-    t.integer  "sonic"
-    t.integer  "user"
+    t.integer  "sonic_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -62,6 +62,9 @@ ActiveRecord::Schema.define(version: 20131127172131) do
     t.float    "longitude"
     t.boolean  "is_private"
     t.integer  "user"
+    t.integer  "likes_count"
+    t.integer  "comments_count"
+    t.integer  "resonics_count"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "sonic_data_file_name"
