@@ -2,9 +2,9 @@ class User < ActiveRecord::Base
 
   before_create :generate_user_id
 
-  has_many :followeds, :class_name => 'Follow', :foreign_key => 'follower'
+  has_many :followeds, :class_name => 'Follow', :foreign_key => 'follower_user_id'
   has_many :followed_users, :through => :followeds, :class_name => 'User', :source => 'followed'
-  has_many :followers, :class_name => 'Follow', :foreign_key => 'followed'
+  has_many :followers, :class_name => 'Follow', :foreign_key => 'followed_user_id'
   has_many :follower_users, :through => :followers, :class_name => 'User', :source => 'follower'
 
   has_attached_file :profile_image, {
@@ -29,13 +29,13 @@ class User < ActiveRecord::Base
   def follow_user user
     self.unfollow_user user
     f = Follow.new
-    f.followed = user
-    f.follower = self
+    f.followed_user_id = user.is_a?(User) ? user.id : user
+    f.follower_user_id = self.id
     f.save!
   end
 
   def unfollow_user user
-    Follow.where(:followed => user, :follower => self).each do |f|
+    Follow.where(:followed_user_id => user, :follower_user_id => self).each do |f|
       f.destroy!
     end
   end

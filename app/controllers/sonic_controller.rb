@@ -7,7 +7,7 @@ class SonicController < ApplicationController
   def create_sonic
     @sonic = Sonic.new
     @sonic.sonic_data = params[:sonic_data]
-    @sonic.user = @authenticated_user
+    @sonic.owner_id = @authenticated_user
     #TODO: add latitude and longitude
     @sonic.save
   end
@@ -43,7 +43,7 @@ class SonicController < ApplicationController
                      :sonic => [:required, :type => Sonic]
   def delete_sonic
     sonic = Sonic.find(params[:sonic])
-    if sonic.user.id != @authenticated_user.id
+    if sonic.owner_id != @authenticated_user.id
       return show_error ErrorCodePermissionDenied, "sonic is not owned by the authenticated user"
     else
       sonic.destroy

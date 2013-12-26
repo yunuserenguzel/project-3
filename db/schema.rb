@@ -11,20 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131127172131) do
+ActiveRecord::Schema.define(version: 20131223191528) do
 
   create_table "authentications", force: true do |t|
     t.string   "token"
-    t.integer  "user"
+    t.integer  "user_id"
     t.string   "platform"
     t.string   "push_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "authentications", ["token"], name: "index_authentications_on_token"
+
+  create_table "comments", force: true do |t|
+    t.integer  "sonic_id"
+    t.integer  "user_id"
+    t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["sonic_id"], name: "index_comments_on_sonic_id"
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+
   create_table "follows", force: true do |t|
-    t.integer  "follower"
-    t.integer  "followed"
+    t.integer  "follower_user_id"
+    t.integer  "followed_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -35,6 +48,8 @@ ActiveRecord::Schema.define(version: 20131127172131) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "likes", ["sonic_id"], name: "index_likes_on_sonic_id"
 
   create_table "notifications", force: true do |t|
     t.integer  "user_id"
@@ -57,11 +72,18 @@ ActiveRecord::Schema.define(version: 20131127172131) do
   add_index "registration_requests", ["email"], name: "index_registration_requests_on_email", unique: true
   add_index "registration_requests", ["username"], name: "index_registration_requests_on_username", unique: true
 
+  create_table "resonics", force: true do |t|
+    t.integer "sonic_id"
+    t.integer "user_id"
+  end
+
+  add_index "resonics", ["user_id"], name: "index_resonics_on_user_id"
+
   create_table "sonics", force: true do |t|
+    t.integer  "user_id"
+    t.boolean  "is_private"
     t.float    "latitude"
     t.float    "longitude"
-    t.boolean  "is_private"
-    t.integer  "user"
     t.integer  "likes_count"
     t.integer  "comments_count"
     t.integer  "resonics_count"
@@ -77,7 +99,7 @@ ActiveRecord::Schema.define(version: 20131127172131) do
     t.string   "username"
     t.string   "email"
     t.string   "passhash"
-    t.string   "realname"
+    t.string   "fullname"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "profile_image_file_name"
@@ -85,5 +107,8 @@ ActiveRecord::Schema.define(version: 20131127172131) do
     t.integer  "profile_image_file_size"
     t.datetime "profile_image_updated_at"
   end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["username"], name: "index_users_on_username", unique: true
 
 end

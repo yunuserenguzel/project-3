@@ -1,5 +1,5 @@
 class Sonic < ActiveRecord::Base
-  belongs_to :user, :class_name => 'User', :foreign_key => 'user'
+  belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
 
   before_create :generate_sonic_id
 

@@ -76,7 +76,7 @@ describe SonicController do
       user.follow_user user
       pivot_sonic = nil
       30.times do |number|
-        sonic = Sonic.create(:user=>user)
+        sonic = Sonic.create(:owner_id=>user.id)
         sonic.created_at += number.hour
         sonic.save
         pivot_sonic = Sonic.find(sonic.id) if number == 13
@@ -106,13 +106,13 @@ describe SonicController do
   context "delete_sonic" do
     before :each do
       @user = User.create
-      @sonic = Sonic.create(:user => @user)
-
+      @sonic = Sonic.create(:owner_id => @user.id)
+      puts @sonic.to_json
       @params = {:format => 'json', :token =>Authentication.authenticate_user(@user), :sonic=>@sonic.id}
     end
     it "returns successful" do
       get :delete_sonic, @params
-      #puts response.body
+      puts response.body
       response.should be_successful
       response.should_not be_redirect
     end
@@ -123,14 +123,14 @@ describe SonicController do
       response.should be_redirect
     end
     it "returns error if user is not owned the sonic" do
-      @sonic.user = User.create
+      @sonic.owner_id = User.create
       @sonic.save
       get :delete_sonic, @params
       response.should be_redirect
     end
   end
 
-  context "lieks" do
+  context "likes" do
     before :each do
       @sonic = Sonic.create
       10.times do
