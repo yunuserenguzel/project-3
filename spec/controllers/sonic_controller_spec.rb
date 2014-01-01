@@ -5,13 +5,14 @@ describe SonicController do
   context "create_sonic" do
     before :each do
       sonic_data = fixture_file_upload('files/SNCKL001527e33e440a7c.snc', 'media/snc')
-      u = User.new
+      u = User.create
       token = Authentication.authenticate_user u
       @params = {:format => 'json', :token => token, :sonic_data => sonic_data}
     end
 
     it "creates a sonic data at server" do
       post :create_sonic, @params
+      #puts response.body
       response.should be_successful
     end
   end
@@ -76,7 +77,7 @@ describe SonicController do
       user.follow_user user
       pivot_sonic = nil
       30.times do |number|
-        sonic = Sonic.create(:owner_id=>user.id)
+        sonic = Sonic.create(:user_id=>user.id)
         sonic.created_at += number.hour
         sonic.save
         pivot_sonic = Sonic.find(sonic.id) if number == 13
@@ -106,13 +107,13 @@ describe SonicController do
   context "delete_sonic" do
     before :each do
       @user = User.create
-      @sonic = Sonic.create(:owner_id => @user.id)
-      puts @sonic.to_json
+      @sonic = Sonic.create(:user_id => @user.id)
+      #puts @sonic.to_json
       @params = {:format => 'json', :token =>Authentication.authenticate_user(@user), :sonic=>@sonic.id}
     end
     it "returns successful" do
       get :delete_sonic, @params
-      puts response.body
+      #puts response.body
       response.should be_successful
       response.should_not be_redirect
     end
@@ -123,7 +124,7 @@ describe SonicController do
       response.should be_redirect
     end
     it "returns error if user is not owned the sonic" do
-      @sonic.owner_id = User.create
+      @sonic.user_id = User.create
       @sonic.save
       get :delete_sonic, @params
       response.should be_redirect
@@ -141,9 +142,24 @@ describe SonicController do
 
     it "returns success" do
       get :likes, @params
-      puts response.body
+      #puts response.body
       response.should be_successful
       response.should_not be_redirect
+    end
+  end
+
+  context "write comment" do
+    before :each do
+      @sonic = Sonic.create
+      @params = {:format => 'json',
+                 :sonic=>@sonic.id,
+                 :token => Authentication.authenticate_user(User.create),
+                 :text => 'asdasdasdasd'
+      }
+    end
+    it "comments to a sonic" do
+      post :write_comment, @params
+      response.should be_successful
     end
   end
 end

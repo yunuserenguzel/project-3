@@ -21,7 +21,17 @@ class Sonic < ActiveRecord::Base
   end
 
   def self.get_sonic_feed_for_user user
-    return Sonic.joins(user: :followers).where(follows: {follower: user}).limit(20)
+
+    sql = <<SQL
+          SELECT sonics.*
+          FROM sonics
+          INNER JOIN follows ON follows.followed_user_id=sonics.user_id
+          WHERE follows.follower_user_id = ?
+          LIMIT 20
+SQL
+    return Sonic.find_by_sql(sanitize_sql_array([sql,user.id]))
+
+    #return Sonic.joins(user: :followers).where(follows: {follower: user}).limit(20)
   end
 
 
@@ -31,7 +41,16 @@ class Sonic < ActiveRecord::Base
     rescue
       return []
     end
-    return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at > ?",sonic.created_at).limit(20)
+    sql = <<SQL
+          SELECT sonics.*
+          FROM sonics
+          INNER JOIN follows ON follows.followed_user_id=sonics.user_id
+          WHERE follows.follower_user_id = ? AND sonics.created_at > ?
+          LIMIT 20
+SQL
+    return Sonic.find_by_sql(sanitize_sql_array([sql,user.id,sonic.created_at]))
+
+    #return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at > ?",sonic.created_at).limit(20)
   end
 
   def self.get_sonic_feed_for_user_before_sonic user, sonic
@@ -40,8 +59,16 @@ class Sonic < ActiveRecord::Base
   rescue
     return []
   end
-  return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at < ?",sonic.created_at).limit(20)
+  #return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at < ?",sonic.created_at).limit(20)
 
+    sql = <<SQL
+          SELECT sonics.*
+          FROM sonics
+          INNER JOIN follows ON follows.followed_user_id=sonics.user_id
+          WHERE follows.follower_user_id = ? AND sonics.created_at < ?
+          LIMIT 20
+SQL
+    return Sonic.find_by_sql(sanitize_sql_array([sql,user.id,sonic.created_at]))
 end
 
 
@@ -60,6 +87,7 @@ end
     return true
   end
 
+
   def as_json options = {}
     json = super.as_json options
     json["sonic_data"] = self.sonic_data
@@ -76,6 +104,7 @@ end
 SQL
     return User.find_by_sql(sanitize_sql_array [sql,sonic_id])
   end
+
 
 
 

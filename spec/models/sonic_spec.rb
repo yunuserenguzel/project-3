@@ -7,7 +7,7 @@ describe Sonic do
       5.times do
         u = User.create
         s = Sonic.create
-        s.owner_id = u.id
+        s.user_id = u.id
         s.save
         @user.follow_user u
       end
@@ -23,7 +23,7 @@ describe Sonic do
       @user = User.create
       @user.follow_user @user
       30.times do |number|
-        sonic = Sonic.create(:owner_id=>@user.id)
+        sonic = Sonic.create(:user_id=>@user.id)
         sonic.created_at += number.hour
         sonic.save
         @pivot_sonic = Sonic.find(sonic.id) if number == 13
@@ -39,7 +39,7 @@ describe Sonic do
       @user = User.create
       @user.follow_user @user
       30.times do |number|
-        sonic = Sonic.create(:owner_id=>@user.id)
+        sonic = Sonic.create(:user_id=>@user.id)
         sonic.created_at += number.hour
         sonic.save
         @pivot_sonic = Sonic.find(sonic.id) if number == 13
