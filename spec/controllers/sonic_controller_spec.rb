@@ -162,4 +162,25 @@ describe SonicController do
       response.should be_successful
     end
   end
+
+  context "comments" do
+    before :each do
+      @sonic = Sonic.create
+      5.times do
+        Comment.create(:user_id=>User.create.id,
+                       :sonic_id => @sonic.id,
+                       :text => 'asdasdasdasd'
+        )
+      end
+      @params = {:format => 'json',
+                 :sonic=>@sonic.id,
+                 :token => Authentication.authenticate_user(User.create)
+      }
+    end
+    it "comments to a sonic" do
+      post :comments, @params
+      #puts response.body
+      response.should be_successful
+    end
+  end
 end

@@ -19,7 +19,7 @@ Sonicraph::Application.routes.draw do
   get 'api/sonic/delete_sonic' => 'sonic#delete_sonic'
   get 'api/sonic/likes' => 'sonic#likes'
   post 'api/sonic/write_comment' => 'sonic#write_comment'
-  
+  get 'api/sonic/comments' => 'sonic#comments'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
