@@ -9,6 +9,8 @@ class Comment < ActiveRecord::Base
           FROM comments
           INNER JOIN users ON users.id = comments.user_id
           WHERE comments.sonic_id = ?
+          ORDER BY comments.created_at ASC
+          LIMIT 100
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,sonic_id]))
   end
