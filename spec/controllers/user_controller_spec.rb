@@ -18,7 +18,7 @@ describe UserController do
 
   context "validate" do
     before :each do
-      @validation_code = User.create_registration_request(:username=>'username',:email=>'email',:password=>'password')
+      @validation_code = User.register(:username=>'username',:email=>'email',:password=>'password')
       @params = {:format => 'json', :username => 'username', :validation_code => @validation_code, :email=>'email'}
     end
 

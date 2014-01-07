@@ -3,8 +3,7 @@ require 'spec_helper'
 describe User do
   context "generate_user_id" do
     it "generates a random unique id for user on create" do
-      u = User.new
-      u.save
+      u = User.create
       expect(u.id>=User.min_user_id && u.id<=User.max_user_id).to eq(true)
     end
   end
@@ -42,27 +41,24 @@ describe User do
       @username = "username"
       @email = "email@email.com"
       @passhash = "passhash"
-      @validation_code = User.create_registration_request({
+      @validation_code = User.register({
           :username => @username,
           :email => @email,
-          :passhash => @passhash })
+          :passhash => @passhash }).validation_code
     end
 
     context "create_registration_request" do
       it "creates a regisration request" do
-        expect(RegistrationRequest.first.username).to eq(@username)
+        expect(User.first.username).to eq(@username)
       end
       it "returns the validation code" do
-        expect(RegistrationRequest.first.validation_code).to eq(@validation_code)
+        expect(User.first.validation_code).to eq(@validation_code)
       end
     end
 
-    context "validate_registration_request" do
+    context "validate mail" do
       before :each do
-        @user = User.validate_registration_request @email, @validation_code
-      end
-      it "removes the registration request" do
-        expect(RegistrationRequest.first).to eq(nil)
+        @user = User.validate_email @email, @validation_code
       end
       it "creates a new user for the given request registration" do
         expect(User.first).to eq(@user)

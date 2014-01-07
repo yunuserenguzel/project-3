@@ -60,18 +60,6 @@ ActiveRecord::Schema.define(version: 20131223191528) do
     t.datetime "updated_at"
   end
 
-  create_table "registration_requests", force: true do |t|
-    t.string   "username"
-    t.string   "email"
-    t.string   "passhash"
-    t.string   "validation_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "registration_requests", ["email"], name: "index_registration_requests_on_email", unique: true
-  add_index "registration_requests", ["username"], name: "index_registration_requests_on_username", unique: true
-
   create_table "resonics", force: true do |t|
     t.integer "sonic_id"
     t.integer "user_id"
@@ -100,6 +88,11 @@ ActiveRecord::Schema.define(version: 20131223191528) do
     t.string   "email"
     t.string   "passhash"
     t.string   "fullname"
+    t.string   "validation_code"
+    t.boolean  "is_email_valid",             default: false
+    t.string   "website"
+    t.string   "location"
+    t.string   "bio"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "profile_image_file_name"

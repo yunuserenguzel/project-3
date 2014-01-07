@@ -14,7 +14,8 @@ class UserController < ApplicationController
     elsif User.exists?(:username => @username)
       return show_error ErrorCodeUsernameExists, "this username is already taken"
     else
-      @validation_code = User.create_registration_request params
+      @user = User.register(params)
+      @token = Authentication.authenticate_user @user
     end
   end
 
@@ -24,7 +25,7 @@ class UserController < ApplicationController
   def validate
     @email = params[:email]
     @validation_code = params[:validation_code]
-    @user = User.validate_registration_request @email, @validation_code
+    @user = User.validate_email @email, @validation_code
   end
 
   prepare_params_for :login,

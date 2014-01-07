@@ -40,28 +40,50 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.create_registration_request params
-    #TODO integrate with mail modules to sent mail
-    rr = RegistrationRequest.new
-    rr.username = params[:username]
-    rr.email = params[:email]
-    rr.passhash = User.hash_password params[:password]
-    rr.validation_code = rand(User.min_user_id..User.max_user_id).to_s
-    rr.save!
-    return rr.validation_code
-  end
+  #def self.create_registration_request params
+  #  rr = RegistrationRequest.new
+  #  rr.username = params[:username]
+  #  rr.email = params[:email]
+  #  rr.passhash = User.hash_password params[:password]
+  #  rr.validation_code = rand(User.min_user_id..User.max_user_id).to_s
+  #  rr.save!
+  #  return rr.validation_code
+  #end
 
-  def self.validate_registration_request email, validation_code
-    rr = RegistrationRequest.where(:email => email, :validation_code => validation_code).first
-    u = User.new
-    u.email = rr.email
-    u.username = rr.username
-    u.passhash = rr.passhash
+  def self.register params
+    u = User.create
+    u.email = params[:email]
+    u.username = params[:username]
+    u.passhash = User.hash_password params[:password]
+    u.validation_code = rand(User.min_user_id..User.max_user_id).to_s
     u.save!
     u.follow_user u
-    rr.destroy
     return u
   end
+
+  def self.validate_email email, validation_code
+    user = User.where(:email => email, :validation_code => validation_code).first
+    if user != nil
+      user.validation_code = nil
+      user.is_email_valid=true
+      user.save
+      return user
+    else
+      return false
+    end
+  end
+
+  #def self.validate_registration_request email, validation_code
+  #  rr = RegistrationRequest.where(:email => email, :validation_code => validation_code).first
+  #  u = User.new
+  #  u.email = rr.email
+  #  u.username = rr.username
+  #  u.passhash = rr.passhash
+  #  u.save!
+  #  u.follow_user u
+  #  rr.destroy
+  #  return u
+  #end
 
   def self.hash_password password
     return Digest::SHA1.hexdigest("sonic" + password.to_s + "craph")

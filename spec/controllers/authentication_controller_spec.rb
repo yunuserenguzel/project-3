@@ -7,8 +7,8 @@ render_views
       @username = 'username'
       @email = 'email'
       @password = 'password'
-      @validation_code = User.create_registration_request(:username => @username, :email=>@email, :password=>@password)
-      User.validate_registration_request @email, @validation_code
+      @validation_code = User.register(:username => @username, :email=>@email, :password=>@password)
+      User.validate_email @email, @validation_code
       @params = {:format =>'json', :username => "username", :password => 'password'}
     end
     it "gets the token" do

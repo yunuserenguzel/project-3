@@ -1,3 +1,4 @@
 {
-  :validation_code => @validation_code
+  :user => @user,
+  :token => @token
 }.to_json
