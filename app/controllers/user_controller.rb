@@ -49,6 +49,11 @@ class UserController < ApplicationController
     #returns the authenticated user
   end
 
+  prepare_params_for :followers,
+                     :user => [:required, :type => User]
+  def followers
+    @followers = User.get_followers_of_user_id params[:user]
+  end
 
 
 end

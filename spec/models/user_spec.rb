@@ -34,6 +34,11 @@ describe User do
         expect(@u2.follower_users[0]).to eq(nil)
       end
     end
+    context "get_followers_of_user_id" do
+      it "brings followers of user id" do
+        expect(User.get_followers_of_user_id(@u2.id).count).to eq(1)
+      end
+    end
   end
 
   context "registration" do
@@ -67,7 +72,7 @@ describe User do
         #expect(@user.passhash).to eq(@passhash)
       end
     end
-
-
   end
+
+
 end

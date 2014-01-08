@@ -11,6 +11,8 @@ Sonicraph::Application.routes.draw do
   get "api/user/check_is_token_valid" => 'user#check_is_token_valid'
   get 'api/user/login' => 'user#login'
   get 'api/authentication/get_token' => 'authentication#get_token'
+  get 'api/user/followers' => 'user#followers'
+
 
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'
   get 'api/sonic/like_sonic' => 'sonic#like_sonic'

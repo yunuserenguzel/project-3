@@ -40,15 +40,16 @@ class User < ActiveRecord::Base
     end
   end
 
-  #def self.create_registration_request params
-  #  rr = RegistrationRequest.new
-  #  rr.username = params[:username]
-  #  rr.email = params[:email]
-  #  rr.passhash = User.hash_password params[:password]
-  #  rr.validation_code = rand(User.min_user_id..User.max_user_id).to_s
-  #  rr.save!
-  #  return rr.validation_code
-  #end
+  def self.get_followers_of_user_id user
+    user = user.id if user.is_a?(User)
+    sql = <<SQL
+          SELECT users.*
+          FROM users
+          INNER JOIN follows ON follows.follower_user_id=users.id
+          WHERE follows.followed_user_id=?
+SQL
+    return User.find_by_sql(sanitize_sql_array([sql,user]))
+  end
 
   def self.register params
     u = User.create

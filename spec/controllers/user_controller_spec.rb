@@ -43,8 +43,23 @@ describe UserController do
       response.should be_successful
       response.body.should include(@user.to_json)
     end
+  end
 
-
+  context "followers" do
+    before :each do
+      @user = User.create(:username => 'yeg')
+      @token = Authentication.authenticate_user @user
+      u = User.create
+      5.times do
+        User.create.follow_user u
+      end
+      @params = {:format => 'json',:token => @token, :user=> u.id}
+    end
+    it "returns success" do
+      get :followers, @params
+      #puts response.body
+      response.should be_successful
+    end
   end
 
 end
