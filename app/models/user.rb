@@ -43,10 +43,13 @@ class User < ActiveRecord::Base
   def self.get_followers_of_user_id user
     user = user.id if user.is_a?(User)
     sql = <<SQL
-          SELECT users.*
+          SELECT DISTINCT users.*,
+            CASE WHEN follows2.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
           FROM users
           INNER JOIN follows ON follows.follower_user_id=users.id
+          LEFT JOIN follows AS follows2 ON (follows2.follower_user_id=follows.followed_user_id AND follows2.followed_user_id=users.id)
           WHERE follows.followed_user_id=?
+          GROUP BY users.id
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
   end
