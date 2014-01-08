@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
           INNER JOIN follows ON follows.follower_user_id=users.id
           LEFT JOIN follows AS follows2 ON (follows2.follower_user_id=follows.followed_user_id AND follows2.followed_user_id=users.id)
           WHERE follows.followed_user_id=?
-          GROUP BY users.id
+          GROUP BY users.id,follows2.followed_user_id
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
   end
