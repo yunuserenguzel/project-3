@@ -39,6 +39,11 @@ describe User do
         expect(User.get_followers_of_user_id(@u2.id).count).to eq(1)
       end
     end
+    context "get_followings_of_user_id" do
+      it "brings followed users" do
+        expect(User.get_followings_of_user_id(@u1.id).count).to eq(1)
+      end
+    end
   end
 
   context "registration" do

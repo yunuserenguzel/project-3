@@ -30,7 +30,7 @@ describe Sonic do
       end
     end
     it "get_sonic_feed" do
-      expect(Sonic.get_sonic_feed_for_user_after_sonic(@user,@pivot_sonic).count).to eq(17)
+      expect(Sonic.get_sonic_feed_for_user_after_sonic(@user,@pivot_sonic).count).to eq(16)
     end
   end
 

@@ -55,6 +55,12 @@ class UserController < ApplicationController
     @followers = User.get_followers_of_user_id params[:user]
   end
 
+  prepare_params_for :followings,
+                     :user => [:required, :type => User]
+  def followings
+    @followings = User.get_followings_of_user_id params[:user]
+  end
+
   prepare_params_for :follow,
                      :user=> [:required, :type=>User];
   def follow
