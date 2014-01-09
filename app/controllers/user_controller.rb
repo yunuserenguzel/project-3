@@ -60,5 +60,10 @@ class UserController < ApplicationController
   def follow
     @authenticated_user.follow_user params[:user]
   end
+  prepare_params_for :unfollow,
+                     :user=> [:required, :type=>User];
+  def unfollow
+    @authenticated_user.unfollow_user params[:user]
+  end
 
 end

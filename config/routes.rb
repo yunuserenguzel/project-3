@@ -13,6 +13,7 @@ Sonicraph::Application.routes.draw do
   get 'api/authentication/get_token' => 'authentication#get_token'
   get 'api/user/followers' => 'user#followers'
   get 'api/user/follow' => 'user#follow'
+  get 'api/user/unfollow' => 'user#unfollow'
 
 
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'
