@@ -62,4 +62,18 @@ describe UserController do
     end
   end
 
+  context "follow" do
+    before :each do
+      @u1 = User.create
+      token = Authentication.authenticate_user @u1
+      @u2 = User.create
+      @params = {:format=>'json',:token=>token,:user=>@u2.id}
+    end
+    it "returns success" do
+      get :follow, @params
+      response.should be_successful
+      expect(User.get_followers_of_user_id(@u2.id).count).to eq 1
+    end
+  end
+
 end
