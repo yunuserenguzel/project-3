@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   def self.get_followings_of_user_id user
     user = user.id if user.is_a? User
     sql = <<SQL
-          SELECT DISTINCT users.*
+          SELECT DISTINCT users.*,1 AS is_being_followed
           FROM users
           INNER JOIN follows ON follows.followed_user_id=users.id
           WHERE follows.follower_user_id=?

@@ -58,6 +58,7 @@ namespace :initializer do
 
     [stanley,house,scarlett,kunis,dexter].each do |user|
       user.passhash = User.hash_password('1234')
+      user.save
       user.follow_user yeguzel
       yeguzel.follow_user user
     end
