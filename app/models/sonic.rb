@@ -20,20 +20,27 @@ class Sonic < ActiveRecord::Base
     end
   end
 
-  def self.get_sonic_feed_for_user user
 
-    sql = <<SQL
-          SELECT sonics.*
-          FROM sonics
-          INNER JOIN follows ON follows.followed_user_id=sonics.user_id
-          WHERE follows.follower_user_id = ?
-          LIMIT 20
+  def self.sql_with_where where
+    <<SQL
+      SELECT sonics.*,
+        users.id AS user_id,
+        users.username,
+        users.fullname,
+        users.profile_image_file_name
+      FROM sonics
+      INNER JOIN follows ON follows.followed_user_id=sonics.user_id
+      INNER JOIN users ON users.id = sonics.user_id
+      WHERE #{where}
+      ORDER BY sonics.created_at DESC
+      LIMIT 20
 SQL
-    return Sonic.find_by_sql(sanitize_sql_array([sql,user.id]))
-
-    #return Sonic.joins(user: :followers).where(follows: {follower: user}).limit(20)
   end
 
+  def self.get_sonic_feed_for_user user
+    sql = Sonic.sql_with_where "follows.follower_user_id = ?"
+    return Sonic.find_by_sql(sanitize_sql_array([sql,user.id]))
+  end
 
   def self.get_sonic_feed_for_user_after_sonic user, sonic
     begin
@@ -41,35 +48,19 @@ SQL
     rescue
       return []
     end
-    sql = <<SQL
-          SELECT sonics.*
-          FROM sonics
-          INNER JOIN follows ON follows.followed_user_id=sonics.user_id
-          WHERE follows.follower_user_id = ? AND sonics.created_at > ?
-          LIMIT 20
-SQL
+    sql = Sonic.sql_with_where "follows.follower_user_id = ? AND sonics.created_at > ?"
     return Sonic.find_by_sql(sanitize_sql_array([sql,user.id,sonic.created_at]))
-
-    #return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at > ?",sonic.created_at).limit(20)
   end
 
   def self.get_sonic_feed_for_user_before_sonic user, sonic
     begin
-    sonic = Sonic.find(sonic) if !sonic.is_a?Sonic
-  rescue
-    return []
-  end
-  #return Sonic.joins(user: :followers).where(follows: {follower: user}).where("sonics.created_at < ?",sonic.created_at).limit(20)
-
-    sql = <<SQL
-          SELECT sonics.*
-          FROM sonics
-          INNER JOIN follows ON follows.followed_user_id=sonics.user_id
-          WHERE follows.follower_user_id = ? AND sonics.created_at < ?
-          LIMIT 20
-SQL
+      sonic = Sonic.find(sonic) if !sonic.is_a?Sonic
+    rescue
+      return []
+    end
+    sql = Sonic.sql_with_where "follows.follower_user_id = ? AND sonics.created_at < ?"
     return Sonic.find_by_sql(sanitize_sql_array([sql,user.id,sonic.created_at]))
-end
+  end
 
 
   def like_sonic_for_user user
@@ -104,7 +95,6 @@ end
 SQL
     return User.find_by_sql(sanitize_sql_array [sql,sonic_id])
   end
-
 
 
 
