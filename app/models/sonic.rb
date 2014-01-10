@@ -23,11 +23,7 @@ class Sonic < ActiveRecord::Base
 
   def self.sql_with_where where
     <<SQL
-      SELECT sonics.*,
-        users.id AS user_id,
-        users.username,
-        users.fullname,
-        users.profile_image_file_name
+      SELECT sonics.*
       FROM sonics
       INNER JOIN follows ON follows.followed_user_id=sonics.user_id
       INNER JOIN users ON users.id = sonics.user_id
@@ -39,7 +35,8 @@ SQL
 
   def self.get_sonic_feed_for_user user
     sql = Sonic.sql_with_where "follows.follower_user_id = ?"
-    return Sonic.find_by_sql(sanitize_sql_array([sql,user.id]))
+
+    return Sonic.includes(:user).find_by_sql(sanitize_sql_array([sql,user.id]))
   end
 
   def self.get_sonic_feed_for_user_after_sonic user, sonic
@@ -59,7 +56,7 @@ SQL
       return []
     end
     sql = Sonic.sql_with_where "follows.follower_user_id = ? AND sonics.created_at < ?"
-    return Sonic.find_by_sql(sanitize_sql_array([sql,user.id,sonic.created_at]))
+    return Sonic.includes(:user).find_by_sql(sanitize_sql_array([sql,user.id,sonic.created_at]))
   end
 
 
@@ -82,11 +79,11 @@ SQL
   def as_json options = {}
     json = super.as_json options
     json["sonic_data"] = self.sonic_data
+    json['user'] = self.user
     return json
   end
 
   def self.likes_of_sonic sonic_id
-
     sql = <<SQL
       SELECT users.username,users.id,users.profile_image_file_name
       FROM likes INNER JOIN users ON users.id = likes.user_id
