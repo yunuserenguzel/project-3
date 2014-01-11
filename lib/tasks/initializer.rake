@@ -5,7 +5,16 @@ namespace :initializer do
     if yeguzel == nil
       return
     end
-
+    ['stanley','house','scarlett','kunis','dexter'].each do |username|
+      user = User.where(:username => username).first
+      next if user == nil
+      Follow.destroy_all(:follower_user_id => user.id)
+      Follow.destroy_all(:followed_user_id => user.id)
+      Sonic.destroy_all(:user_id => user.id)
+      Like.destroy_all(:user_id =>user.id)
+      Comment.destroy_all(:user_id=>user.id)
+      user.destroy
+    end
     stanley = User.create(
       :username => 'stanley',
       :fullname => 'Stanley Kubrick',
