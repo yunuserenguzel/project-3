@@ -1,7 +1,8 @@
 class CreateDatabase < ActiveRecord::Migration
   def change
 
-    create_table :users do |t|
+    create_table :users, :id => false do |t|
+      t.integer :id, :limit => 8
       t.string :username
       t.string :email
       t.string :passhash
@@ -35,7 +36,8 @@ class CreateDatabase < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_table :sonics do |t|
+    create_table :sonics, :id => false do |t|
+      t.integer :id, :limit => 8
       t.integer :user_id
       t.boolean :is_private
       t.float :latitude

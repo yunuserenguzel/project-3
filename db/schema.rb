@@ -67,7 +67,8 @@ ActiveRecord::Schema.define(version: 20131223191528) do
 
   add_index "resonics", ["user_id"], name: "index_resonics_on_user_id"
 
-  create_table "sonics", force: true do |t|
+  create_table "sonics", id: false, force: true do |t|
+    t.integer  "id",                      limit: 8
     t.integer  "user_id"
     t.boolean  "is_private"
     t.float    "latitude"
@@ -84,13 +85,14 @@ ActiveRecord::Schema.define(version: 20131223191528) do
     t.datetime "sonic_data_updated_at"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", id: false, force: true do |t|
+    t.integer  "id",                         limit: 8
     t.string   "username"
     t.string   "email"
     t.string   "passhash"
     t.string   "fullname"
     t.string   "validation_code"
-    t.boolean  "is_email_valid",             default: false
+    t.boolean  "is_email_valid",                       default: false
     t.string   "website"
     t.string   "location"
     t.string   "bio"
