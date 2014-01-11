@@ -22,7 +22,6 @@ class Sonic < ActiveRecord::Base
     end
   end
 
-
   def self.sql_with_where where
     <<SQL
       SELECT sonics.*,
@@ -71,7 +70,6 @@ SQL
     return Sonic.includes(:user).find_by_sql(sanitize_sql_array([sql,user.id,sonic.created_at]))
   end
 
-
   def like_sonic_for_user user
     user = user.is_a?(User) ? user.id : user
     self.dislike_sonic_for_user user
@@ -89,6 +87,7 @@ SQL
 
   def as_json options = {}
     json = super.as_json options
+    json["id"] = self.id.to_s
     json["sonic_data"] = self.sonic_data
     json['user'] = self.user
     return json
@@ -107,7 +106,5 @@ SQL
   def update_sonic_count
     User.recalculate_and_save_sonic_count_for_user_id self.user_id
   end
-
-
 
 end
