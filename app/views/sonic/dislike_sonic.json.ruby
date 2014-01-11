@@ -1,3 +1,3 @@
 {
-    :sonic=>@sonic
+  :result => 'successful'
 }.to_json

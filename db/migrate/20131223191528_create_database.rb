@@ -11,6 +11,9 @@ class CreateDatabase < ActiveRecord::Migration
       t.string :website
       t.string :location
       t.string :bio
+      t.integer :sonic_count
+      t.integer :follower_count
+      t.integer :following_count
       t.timestamps
     end
     add_attachment :users, :profile_image
@@ -37,6 +40,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.boolean :is_private
       t.float :latitude
       t.float :longitude
+      t.string :tags
       t.integer :likes_count
       t.integer :comments_count
       t.integer :resonics_count

@@ -15,7 +15,7 @@ class Sonic < ActiveRecord::Base
 
   def generate_sonic_id
     self.id = loop do
-      id = rand(100000000..1000000000)
+      id = rand(1000000000000..9999999999999)
       break id unless User.exists?(id: id)
     end
   end
@@ -23,10 +23,20 @@ class Sonic < ActiveRecord::Base
 
   def self.sql_with_where where
     <<SQL
-      SELECT sonics.*
+      SELECT sonics.*,
+        CASE WHEN likes.user_id IS NULL THEN 0 ELSE 1 END AS liked_by_me,
+        CASE WHEN likes.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me
       FROM sonics
       INNER JOIN follows ON follows.followed_user_id=sonics.user_id
       INNER JOIN users ON users.id = sonics.user_id
+      LEFT JOIN likes ON (
+        likes.user_id = follows.follower_user_id AND
+        likes.sonic_id = sonics.id
+      )
+      LEFT JOIN resonics ON (
+        resonics.sonic_id = sonics.id AND
+        resonics.user_id = sonics.id
+      )
       WHERE #{where}
       ORDER BY sonics.created_at DESC
       LIMIT 20
@@ -74,7 +84,6 @@ SQL
     end
     return true
   end
-
 
   def as_json options = {}
     json = super.as_json options

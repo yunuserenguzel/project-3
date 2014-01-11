@@ -113,10 +113,10 @@ SQL
   end
 
   def self.min_user_id
-    return 100000000
+    return 100000000000
   end
   def self.max_user_id
-    return 1000000000
+    return 999999999999
   end
 
   def as_json options = {}
