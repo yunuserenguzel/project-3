@@ -95,10 +95,10 @@ SQL
 
   def self.likes_of_sonic sonic_id
     sql = <<SQL
-      SELECT users.username,users.id,users.profile_image_file_name
+      SELECT users.*
       FROM likes INNER JOIN users ON users.id = likes.user_id
       WHERE likes.sonic_id=?
-      LIMIT 100
+      LIMIT 20
 SQL
     return User.find_by_sql(sanitize_sql_array [sql,sonic_id])
   end
