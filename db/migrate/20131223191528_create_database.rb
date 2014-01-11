@@ -20,10 +20,11 @@ class CreateDatabase < ActiveRecord::Migration
     add_attachment :users, :profile_image
     add_index :users, :username, :unique => true
     add_index :users, :email, :unique => true
+    execute "ALTER TABLE users ADD PRIMARY KEY (id);"
 
     create_table :authentications do |t|
       t.string :token, :unique => true
-      t.integer :user_id
+      t.integer :user_id, :limit =>8
       t.string :platform
       t.string :push_token
       t.timestamps
@@ -31,14 +32,14 @@ class CreateDatabase < ActiveRecord::Migration
     add_index :authentications, :token
 
     create_table :follows do |t|
-      t.integer :follower_user_id
-      t.integer :followed_user_id
+      t.integer :follower_user_id, :limit =>8
+      t.integer :followed_user_id, :limit =>8
       t.timestamps
     end
 
     create_table :sonics, :id => false do |t|
       t.integer :id, :limit => 8
-      t.integer :user_id
+      t.integer :user_id, :limit =>8
       t.boolean :is_private
       t.float :latitude
       t.float :longitude
@@ -49,17 +50,18 @@ class CreateDatabase < ActiveRecord::Migration
       t.timestamps
     end
     add_attachment :sonics, :sonic_data
+    execute "ALTER TABLE sonics ADD PRIMARY KEY (id);"
 
     create_table :likes do |t|
-      t.integer :sonic_id
-      t.integer :user_id
+      t.integer :sonic_id, :limit =>8
+      t.integer :user_id, :limit =>8
       t.timestamps
     end
     add_index :likes, :sonic_id
 
     create_table :comments do |t|
-      t.integer :sonic_id
-      t.integer :user_id
+      t.integer :sonic_id, :limit =>8
+      t.integer :user_id, :limit =>8
       t.string :text
       t.timestamps
     end
@@ -67,13 +69,13 @@ class CreateDatabase < ActiveRecord::Migration
     add_index :comments, :user_id
 
     create_table :resonics do |t|
-      t.integer :sonic_id
-      t.integer :user_id
+      t.integer :sonic_id, :limit =>8
+      t.integer :user_id, :limit =>8
     end
     add_index :resonics, :user_id
 
     create_table :notifications do |t|
-      t.integer :user_id
+      t.integer :user_id, :limit =>8
       t.string :notification_type
       t.string :data
       t.boolean :is_read

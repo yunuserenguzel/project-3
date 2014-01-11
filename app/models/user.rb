@@ -78,7 +78,7 @@ SQL
   end
 
   def self.validate_email email, validation_code
-    user = User.where(:email => email, :validation_code => validation_code).first
+    user = User.where(:email => email, :validation_code => validation_code.to_s).first
     if user != nil
       user.validation_code = nil
       user.is_email_valid=true

@@ -13,46 +13,49 @@
 
 ActiveRecord::Schema.define(version: 20131223191528) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "authentications", force: true do |t|
     t.string   "token"
-    t.integer  "user_id"
+    t.integer  "user_id",    limit: 8
     t.string   "platform"
     t.string   "push_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "authentications", ["token"], name: "index_authentications_on_token"
+  add_index "authentications", ["token"], name: "index_authentications_on_token", using: :btree
 
   create_table "comments", force: true do |t|
-    t.integer  "sonic_id"
-    t.integer  "user_id"
+    t.integer  "sonic_id",   limit: 8
+    t.integer  "user_id",    limit: 8
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "comments", ["sonic_id"], name: "index_comments_on_sonic_id"
-  add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+  add_index "comments", ["sonic_id"], name: "index_comments_on_sonic_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "follows", force: true do |t|
-    t.integer  "follower_user_id"
-    t.integer  "followed_user_id"
+    t.integer  "follower_user_id", limit: 8
+    t.integer  "followed_user_id", limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "likes", force: true do |t|
-    t.integer  "sonic_id"
-    t.integer  "user_id"
+    t.integer  "sonic_id",   limit: 8
+    t.integer  "user_id",    limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "likes", ["sonic_id"], name: "index_likes_on_sonic_id"
+  add_index "likes", ["sonic_id"], name: "index_likes_on_sonic_id", using: :btree
 
   create_table "notifications", force: true do |t|
-    t.integer  "user_id"
+    t.integer  "user_id",           limit: 8
     t.string   "notification_type"
     t.string   "data"
     t.boolean  "is_read"
@@ -61,15 +64,15 @@ ActiveRecord::Schema.define(version: 20131223191528) do
   end
 
   create_table "resonics", force: true do |t|
-    t.integer "sonic_id"
-    t.integer "user_id"
+    t.integer "sonic_id", limit: 8
+    t.integer "user_id",  limit: 8
   end
 
-  add_index "resonics", ["user_id"], name: "index_resonics_on_user_id"
+  add_index "resonics", ["user_id"], name: "index_resonics_on_user_id", using: :btree
 
   create_table "sonics", id: false, force: true do |t|
-    t.integer  "id",                      limit: 8
-    t.integer  "user_id"
+    t.integer  "id",                      limit: 8, null: false
+    t.integer  "user_id",                 limit: 8
     t.boolean  "is_private"
     t.float    "latitude"
     t.float    "longitude"
@@ -86,7 +89,7 @@ ActiveRecord::Schema.define(version: 20131223191528) do
   end
 
   create_table "users", id: false, force: true do |t|
-    t.integer  "id",                         limit: 8
+    t.integer  "id",                         limit: 8,                 null: false
     t.string   "username"
     t.string   "email"
     t.string   "passhash"
@@ -107,7 +110,7 @@ ActiveRecord::Schema.define(version: 20131223191528) do
     t.datetime "profile_image_updated_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["username"], name: "index_users_on_username", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end
