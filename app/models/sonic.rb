@@ -2,6 +2,8 @@ class Sonic < ActiveRecord::Base
   belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
 
   before_create :generate_sonic_id
+  after_save :update_sonic_count
+  after_destroy :update_sonic_count
 
   has_attached_file :sonic_data, {
       :url => "/system/sonic/u:idh:hash.:extension",
@@ -100,6 +102,10 @@ SQL
       LIMIT 100
 SQL
     return User.find_by_sql(sanitize_sql_array [sql,sonic_id])
+  end
+
+  def update_sonic_count
+    User.recalculate_and_save_sonic_count_for_user_id self.user_id
   end
 
 

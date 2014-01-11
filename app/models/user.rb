@@ -27,12 +27,54 @@ class User < ActiveRecord::Base
   end
 
   def follow_user user
+    user = user.id if user.is_a?User
     self.unfollow_user user
-    f = Follow.new
-    f.followed_user_id = user.is_a?(User) ? user.id : user
-    f.follower_user_id = self.id
-    f.save!
+    f = Follow.create(
+      :followed_user_id => user,
+      :follower_user_id => self.id
+    )
+    User.recalculate_and_save_follower_count_for_user_id user
+    User.recalculate_and_save_following_count_for_user_id self.id
   end
+
+
+
+  def self.recalculate_and_save_follower_count_for_user_id user
+    user = user.id if user.is_a?User
+    sql = <<SQL
+      UPDATE users
+      SET follower_count = (
+        SELECT COUNT(*) FROM follows WHERE followed_user_id=users.id
+      )
+      WHERE users.id = ?
+SQL
+    ActiveRecord::Base.connection.execute sanitize_sql_array([sql,user])
+  end
+
+  def self.recalculate_and_save_following_count_for_user_id user
+    user = user.id if user.is_a?User
+    sql = <<SQL
+      UPDATE users
+      SET following_count = (
+        SELECT COUNT(*) FROM follows WHERE follower_user_id=users.id
+      )
+      WHERE users.id = ?
+SQL
+    ActiveRecord::Base.connection.execute sanitize_sql_array([sql,user])
+  end
+
+  def self.recalculate_and_save_sonic_count_for_user_id user
+    user = userr.id if user.is_a?User
+    sql = <<SQL
+    UPDATE users
+      SET sonic_count = (
+        SELECT COUNT(*) FROM sonics WHERE user_id=users.id
+      )
+      WHERE users.id = ?
+SQL
+    ActiveRecord::Base.connection.execute sanitize_sql_array([sql,user])
+  end
+
 
   def unfollow_user user
     Follow.where(:followed_user_id => user, :follower_user_id => self).each do |f|
@@ -89,18 +131,6 @@ SQL
     end
   end
 
-  #def self.validate_registration_request email, validation_code
-  #  rr = RegistrationRequest.where(:email => email, :validation_code => validation_code).first
-  #  u = User.new
-  #  u.email = rr.email
-  #  u.username = rr.username
-  #  u.passhash = rr.passhash
-  #  u.save!
-  #  u.follow_user u
-  #  rr.destroy
-  #  return u
-  #end
-
   def self.hash_password password
     return Digest::SHA1.hexdigest("sonic" + password.to_s + "craph")
   end
@@ -123,8 +153,8 @@ SQL
     json = super.as_json
     json["id"] = self.id.to_s
     json["profile_image"] = self.profile_image
-    #json.except!("passhash")
-    #json.except!("email")
+    json.except!("passhash")
+    json.except!("email")
     return json
   end
 end

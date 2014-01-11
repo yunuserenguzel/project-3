@@ -51,32 +51,22 @@ describe User do
       @username = "username"
       @email = "email@email.com"
       @passhash = "passhash"
-      @validation_code = User.register({
+      @user = User.register({
           :username => @username,
           :email => @email,
-          :passhash => @passhash }).validation_code
+          :passhash => @passhash })
+      @validation_code = @user.validation_code
     end
 
     context "create_registration_request" do
       it "creates a regisration request" do
-        expect(User.first.username).to eq(@username)
+        expect(User.find(@user.id).username).to eq(@username)
       end
       it "returns the validation code" do
-        expect(User.first.validation_code).to eq(@validation_code)
+        expect(User.find(@user.id).validation_code).to eq(@validation_code)
       end
     end
 
-    context "validate mail" do
-      before :each do
-        @user = User.validate_email @email, @validation_code
-      end
-      it "creates a new user for the given request registration" do
-        expect(User.first).to eq(@user)
-        expect(@user.username).to eq(@username)
-        expect(@user.email).to eq(@email)
-        #expect(@user.passhash).to eq(@passhash)
-      end
-    end
   end
 
 
