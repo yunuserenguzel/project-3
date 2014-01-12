@@ -28,8 +28,8 @@ class Sonic < ActiveRecord::Base
     where = sanitize_sql_array([' AND sonics.created_at < ? ',params[:before]]) if params.has_key? :before
     select = <<SLCT
       SELECT sonics.*,
-        CASE WHEN likes.user_id IS NULL THEN 0 ELSE 1 END AS liked_by_me,
-        CASE WHEN likes.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me,
+        CASE WHEN likes.user_id    IS NULL THEN 0 ELSE 1 END AS liked_by_me,
+        CASE WHEN resonics.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me,
 SLCT
     rest = <<RST
       LEFT JOIN likes ON (
