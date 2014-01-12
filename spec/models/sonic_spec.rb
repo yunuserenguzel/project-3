@@ -4,9 +4,10 @@ describe Sonic do
   context "get_sonic_feed_for_user" do
     before :each do
       @user = User.create
-      5.times do
+      5.times do |i|
         u = User.create
         s = Sonic.create
+        Sonic.resonic_for_sonic_and_user(s,@user) if i==2
         s.user_id = u.id
         s.save
         @user.follow_user u
@@ -14,7 +15,7 @@ describe Sonic do
     end
 
     it "gets the sonics of the followed users" do
-      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(5)
+      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(6)
     end
   end
 
