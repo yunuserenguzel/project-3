@@ -71,4 +71,14 @@ class SonicController < ApplicationController
   def comments
     @comments = Comment.get_comments_for_sonic_id params[:sonic]
   end
+
+  prepare_params_for :resonic,
+                     :sonic => [:required,:type=>Sonic]
+  def resonic
+    Sonic.resonic_for_sonic_and_user params[:sonic],@authenticated_user
+    @sonic = Sonic.find(params[:sonic])
+  end
+
+
+
 end

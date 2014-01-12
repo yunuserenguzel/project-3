@@ -183,4 +183,17 @@ describe SonicController do
       response.should be_successful
     end
   end
+
+  context "resonic" do
+    before :each do
+      sonic = Sonic.create
+      user = User.create
+      @params = {:format => 'json', :sonic => sonic.id, :token => Authentication.authenticate_user(user)}
+    end
+
+    it "returns http success" do
+      get :resonic, @params
+      response.should be_successful
+    end
+  end
 end
