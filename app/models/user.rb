@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   def follow_self
     self.follow_user self
   end
+
   def self.check_user_login username,password
     passhash = User.hash_password password
     user = User.where(:username => username, :passhash => passhash).first

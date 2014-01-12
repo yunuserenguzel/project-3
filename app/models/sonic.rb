@@ -119,10 +119,12 @@ SQL
     return Sonic.find_by_sql(sql)
   end
 
+  #TODO make "like" functions static
   def like_sonic_for_user user
     user = user.is_a?(User) ? user.id : user
     self.dislike_sonic_for_user user
     Like.create(:sonic_id => self.id, :user_id=>user)
+    Sonic.update_likes_count_for_sonic self.id
     return true
   end
 
@@ -131,6 +133,7 @@ SQL
     Like.where(:sonic_id=>self.id, :user_id=>user).each do |like|
       like.destroy!
     end
+    Sonic.update_likes_count_for_sonic self.id
     return true
   end
 
@@ -142,6 +145,44 @@ SQL
       :sonic_id => sonic
     )
   end
+
+  def self.update_likes_count_for_sonic sonic
+    sonic = sonic.id if sonic.is_a?Sonic
+    sql = <<SQL
+      UPDATE sonics
+      SET likes_count = (
+        SELECT COUNT(*) FROM likes WHERE sonic_id=sonics.id
+      )
+      WHERE sonics.id = ?
+SQL
+    ActiveRecord::Base.connection.execute sanitize_sql_array([sql,sonic])
+  end
+
+  def self.update_resonics_count_for_sonic sonic
+    sonic = sonic.id if sonic.is_a?Sonic
+    sql = <<SQL
+      UPDATE sonics
+      SET resonics_count = (
+        SELECT COUNT(*) FROM resonics WHERE sonic_id=sonics.id
+      )
+      WHERE sonics.id = ?
+SQL
+    ActiveRecord::Base.connection.execute sanitize_sql_array([sql,sonic])
+  end
+
+  def self.update_comments_count_for_sonic sonic
+    sonic = sonic.id if sonic.is_a?Sonic
+    sql = <<SQL
+      UPDATE sonics
+      SET comments_count = (
+        SELECT COUNT(*) FROM comments WHERE sonic_id=sonics.id
+      )
+      WHERE sonics.id = ?
+SQL
+    ActiveRecord::Base.connection.execute sanitize_sql_array([sql,sonic])
+  end
+
+
 
   def as_json options = {}
     json = super.as_json options
