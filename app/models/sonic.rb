@@ -22,6 +22,28 @@ class Sonic < ActiveRecord::Base
     end
   end
 
+  def self.retrieve_sonic_for_user sonic_id,user
+    sonic_id = sonic_id.id if sonic_id.is_a?Sonic
+    user = user.id if user.is_a?User
+    sql = <<SQL
+      SELECT sonics.*,
+        CASE WHEN likes.user_id    IS NULL THEN 0 ELSE 1 END AS liked_by_me,
+        CASE WHEN resonics.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me
+      FROM sonics
+      LEFT JOIN likes ON (
+        likes.user_id = ? AND
+        likes.sonic_id = sonics.id
+      )
+      LEFT JOIN resonics ON (
+        resonics.user_id = ? AND
+        resonics.sonic_id = sonics.id
+      )
+      WHERE sonics.id = ?
+      LIMIT 1
+SQL
+    Sonic.find_by_sql(sanitize_sql_array [sql, user,user,sonic_id]).first
+  end
+
   def self.sql_with_params params
     where = ""
     where = sanitize_sql_array([' AND sonics.created_at > ? ',params[:after]]) if params.has_key? :after

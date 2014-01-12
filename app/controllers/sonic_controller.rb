@@ -76,7 +76,7 @@ class SonicController < ApplicationController
                      :sonic => [:required,:type=>Sonic]
   def resonic
     Sonic.resonic_for_sonic_and_user params[:sonic],@authenticated_user
-    @sonic = Sonic.find(params[:sonic])
+    @sonic = Sonic.retrieve_sonic_for_user params[:sonic],@authenticated_user.id
   end
 
 
