@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 
   before_create :generate_user_id
-
+  after_create :follow_self
   has_many :followeds, :class_name => 'Follow', :foreign_key => 'follower_user_id'
   has_many :followed_users, :through => :followeds, :class_name => 'User', :source => 'followed'
   has_many :followers, :class_name => 'Follow', :foreign_key => 'followed_user_id'
@@ -16,7 +16,9 @@ class User < ActiveRecord::Base
           :secret_access_key => ENV['S3_SECRET']
       }
   }
-
+  def follow_self
+    self.follow_user self
+  end
   def self.check_user_login username,password
     passhash = User.hash_password password
     user = User.where(:username => username, :passhash => passhash).first
@@ -37,14 +39,12 @@ class User < ActiveRecord::Base
     User.recalculate_and_save_following_count_for_user_id self.id
   end
 
-
-
   def self.recalculate_and_save_follower_count_for_user_id user
     user = user.id if user.is_a?User
     sql = <<SQL
       UPDATE users
       SET follower_count = (
-        SELECT COUNT(*) FROM follows WHERE followed_user_id=users.id
+        SELECT COUNT(*) FROM follows WHERE followed_user_id=users.id AND followed_user_id<>follower_user_id
       )
       WHERE users.id = ?
 SQL
@@ -56,7 +56,7 @@ SQL
     sql = <<SQL
       UPDATE users
       SET following_count = (
-        SELECT COUNT(*) FROM follows WHERE follower_user_id=users.id
+        SELECT COUNT(*) FROM follows WHERE follower_user_id=users.id AND followed_user_id<>follower_user_id
       )
       WHERE users.id = ?
 SQL
@@ -69,6 +69,8 @@ SQL
     UPDATE users
       SET sonic_count = (
         SELECT COUNT(*) FROM sonics WHERE user_id=users.id
+      ) + (
+        SELECT COUNT(*) FROM resonics WHERE user_id=users.id
       )
       WHERE users.id = ?
 SQL
@@ -88,7 +90,7 @@ SQL
           SELECT DISTINCT users.*,1 AS is_being_followed
           FROM users
           INNER JOIN follows ON follows.followed_user_id=users.id
-          WHERE follows.follower_user_id=?
+          WHERE follows.follower_user_id=? AND follows.followed_user_id<>follows.follower_user_id
           GROUP BY users.id
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
@@ -102,7 +104,7 @@ SQL
           FROM users
           INNER JOIN follows ON follows.follower_user_id=users.id
           LEFT JOIN follows AS follows2 ON (follows2.follower_user_id=follows.followed_user_id AND follows2.followed_user_id=users.id)
-          WHERE follows.followed_user_id=?
+          WHERE follows.followed_user_id=? AND follows.followed_user_id<>follows.follower_user_id
           GROUP BY users.id,follows2.followed_user_id
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))

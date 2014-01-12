@@ -71,6 +71,7 @@ class CreateDatabase < ActiveRecord::Migration
     create_table :resonics do |t|
       t.integer :sonic_id, :limit =>8
       t.integer :user_id, :limit =>8
+      t.timestamps
     end
     add_index :resonics, :user_id
 
