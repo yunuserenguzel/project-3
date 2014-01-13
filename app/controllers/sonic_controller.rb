@@ -82,7 +82,7 @@ class SonicController < ApplicationController
   prepare_params_for :delete_resonic,
                      :sonic => [:required]
   def delete_resonic
-    Sonic.resonic_for_sonic_and_user params[:sonic],@authenticated_user.id
+    Sonic.delete_resonic_for_sonic_and_user params[:sonic],@authenticated_user.id
     @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user.id
   end
 
