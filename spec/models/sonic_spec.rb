@@ -67,7 +67,16 @@ describe Sonic do
       @sonic.like_sonic_for_user @user
       @sonic.like_sonic_for_user @user
       @sonic.like_sonic_for_user @user
-      expect(Like.all.count).to eq(1)
+      @sonic.like_sonic_for_user User.create
+      @sonic = Sonic.find(@sonic.id)
+      expect(@sonic.likes_count).to eq(2)
+      @sonic.like_sonic_for_user User.create
+      @sonic = Sonic.find(@sonic.id)
+      expect(@sonic.likes_count).to eq(3)
+      @sonic.like_sonic_for_user User.create
+      expect(Like.all.count).to eq(4)
+      @sonic = Sonic.find(@sonic.id)
+      expect(@sonic.likes_count).to eq(4)
     end
   end
 
@@ -94,6 +103,27 @@ describe Sonic do
       likes = Sonic.likes_of_sonic(@sonic.id)
       #puts likes.to_json
       expect(likes.count).to eq(5)
+    end
+  end
+
+  context "resonic" do
+    before :each do
+      @sonic = Sonic.create
+      @u1 = User.create
+      @u2 = User.create
+      Sonic.resonic_for_sonic_and_user @sonic,@u1
+      Sonic.resonic_for_sonic_and_user @sonic,@u2
+      @sonic = Sonic.find(@sonic.id)
+    end
+    it "resonics for user " do
+      expect(@sonic.resonics_count).to eq(2)
+      expect(Resonic.where(:sonic_id => @sonic.id).count).to eq(2)
+    end
+    it "deletes resonics for user and sonic" do 
+      Sonic.delete_resonic_for_sonic_and_user @sonic,@u1
+      expect(Resonic.where(:sonic_id => @sonic.id).count).to eq(1)
+      Sonic.delete_resonic_for_sonic_and_user @sonic,@u2
+      expect(Resonic.where(:sonic_id => @sonic.id).count).to eq(0)
     end
   end
 

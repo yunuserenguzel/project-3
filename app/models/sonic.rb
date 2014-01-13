@@ -102,7 +102,6 @@ SQL
     rescue
       return []
     end
-
     user = user.id if user.is_a?User
     sql = Sonic.sql_with_params :user_id => user, :after => sonic.created_at
     return Sonic.find_by_sql(sql)
@@ -122,17 +121,18 @@ SQL
   #TODO make "like" functions static
   def like_sonic_for_user user
     user = user.is_a?(User) ? user.id : user
-    self.dislike_sonic_for_user user
-    Like.create(:sonic_id => self.id, :user_id=>user)
-    Sonic.update_likes_count_for_sonic self.id
-    return true
+    if !Like.exists?(:sonic_id => self.id, :user_id => user)
+      Like.create(:sonic_id => self.id, :user_id=>user)
+      Sonic.update_likes_count_for_sonic self.id
+      return true
+    else
+      return false
+    end
   end
 
   def dislike_sonic_for_user user
     user = user.is_a?(User) ? user.id : user
-    Like.where(:sonic_id=>self.id, :user_id=>user).each do |like|
-      like.destroy!
-    end
+    Like.destroy_all(:sonic_id=>self.id, :user_id=>user)
     Sonic.update_likes_count_for_sonic self.id
     return true
   end
@@ -140,10 +140,17 @@ SQL
   def self.resonic_for_sonic_and_user sonic, user
     sonic = sonic.id if sonic.is_a?Sonic
     user = user.id if user.is_a?User
-    Resonic.create(
-      :user_id => user,
-      :sonic_id => sonic
-    )
+    if !Resonic.exists?(:user_id => user, :sonic_id => sonic)
+      Resonic.create(:user_id => user,:sonic_id => sonic)
+      Sonic.update_resonics_count_for_sonic sonic
+    end
+  end
+
+  def self.delete_resonic_for_sonic_and_user sonic, user
+    sonic = sonic.id if sonic.is_a?Sonic
+    user = user.id if user.is_a?User
+    Resonic.destroy_all(:user_id => user, :sonic_id => sonic)
+    update_resonics_count_for_sonic sonic
   end
 
   def self.update_likes_count_for_sonic sonic
@@ -181,8 +188,6 @@ SQL
 SQL
     ActiveRecord::Base.connection.execute sanitize_sql_array([sql,sonic])
   end
-
-
 
   def as_json options = {}
     json = super.as_json options
