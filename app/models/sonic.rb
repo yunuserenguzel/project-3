@@ -119,22 +119,38 @@ SQL
   end
 
   #TODO make "like" functions static
-  def like_sonic_for_user user
-    user = user.is_a?(User) ? user.id : user
-    if !Like.exists?(:sonic_id => self.id, :user_id => user)
-      Like.create(:sonic_id => self.id, :user_id=>user)
-      Sonic.update_likes_count_for_sonic self.id
-      return true
-    else
-      return false
+  #def like_sonic_for_user user
+  #  user = user.is_a?(User) ? user.id : user
+  #  if !Like.exists?(:sonic_id => self.id, :user_id => user)
+  #    Like.create(:sonic_id => self.id, :user_id=>user)
+  #    Sonic.update_likes_count_for_sonic self.id
+  #    return true
+  #  else
+  #    return false
+  #  end
+  #end
+
+  #def dislike_sonic_for_user user
+  #  user = user.is_a?(User) ? user.id : user
+  #  Like.destroy_all(:sonic_id=>self.id, :user_id=>user)
+  #  Sonic.update_likes_count_for_sonic self.id
+  #  return true
+  #end
+
+  def self.like_sonic_for_user sonic,user
+    sonic = sonic.id if sonic.is_a?Sonic
+    user = user.id if user.is_a?User
+    if !Like.exists?(:sonic_id => sonic, :user_id => user)
+      Like.create(:user_id => user, :sonic_id => sonic)
+      Sonic.update_likes_count_for_sonic sonic
     end
   end
 
-  def dislike_sonic_for_user user
-    user = user.is_a?(User) ? user.id : user
-    Like.destroy_all(:sonic_id=>self.id, :user_id=>user)
-    Sonic.update_likes_count_for_sonic self.id
-    return true
+  def self.unlike_sonic_for_user sonic,user
+    sonic = sonic.id if sonic.is_a?Sonic
+    user = user.id if user.is_a?User
+    Like.destroy_all(:user_id => user, :sonic_id => sonic)
+    update_likes_count_for_sonic sonic
   end
 
   def self.resonic_for_sonic_and_user sonic, user

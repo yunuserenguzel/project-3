@@ -135,7 +135,7 @@ describe SonicController do
     before :each do
       @sonic = Sonic.create
       10.times do
-        @sonic.like_sonic_for_user User.create.id
+        Sonic.like_sonic_for_user @sonic, User.create
       end
       @params = {:format => 'json',:sonic=>@sonic.id, :token => Authentication.authenticate_user(User.create)}
     end

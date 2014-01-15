@@ -15,15 +15,15 @@ class SonicController < ApplicationController
   prepare_params_for :like_sonic,
                      :sonic => [:required, :type => Sonic]
   def like_sonic
-    @sonic = Sonic.find(params[:sonic])
-    @sonic.like_sonic_for_user @authenticated_user
+    Sonic.like_sonic_for_user params[:sonic],@authenticated_user
+    @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user
   end
 
   prepare_params_for :dislike_sonic,
                      :sonic => [:required, :type => Sonic]
   def dislike_sonic
-    @sonic = Sonic.find(params[:sonic])
-    @sonic.dislike_sonic_for_user @authenticated_user
+    Sonic.unlike_sonic_for_user params[:sonic],@authenticated_user
+    @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user
   end
 
   prepare_params_for :get_sonics,

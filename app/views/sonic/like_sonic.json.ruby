@@ -1,3 +1,4 @@
 {
-    :result => 'successful'
+    :result => 'successful',
+    :sonic => @sonic
 }.to_json

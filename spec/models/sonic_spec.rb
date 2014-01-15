@@ -58,22 +58,22 @@ describe Sonic do
       @user = User.create
     end
     it "likes a sonic" do
-      @sonic.like_sonic_for_user @user
+      Sonic.like_sonic_for_user @sonic, @user
       expect(Like.first.sonic).to eq(@sonic)
       expect(Like.first.user).to eq(@user)
     end
     it "creates only one like object for a like" do
-      @sonic.like_sonic_for_user @user
-      @sonic.like_sonic_for_user @user
-      @sonic.like_sonic_for_user @user
-      @sonic.like_sonic_for_user @user
-      @sonic.like_sonic_for_user User.create
+      Sonic.like_sonic_for_user @sonic, @user
+      Sonic.like_sonic_for_user @sonic, @user
+      Sonic.like_sonic_for_user @sonic, @user
+      Sonic.like_sonic_for_user @sonic, @user
+      Sonic.like_sonic_for_user @sonic, User.create
       @sonic = Sonic.find(@sonic.id)
       expect(@sonic.likes_count).to eq(2)
-      @sonic.like_sonic_for_user User.create
+      Sonic.like_sonic_for_user @sonic, User.create
       @sonic = Sonic.find(@sonic.id)
       expect(@sonic.likes_count).to eq(3)
-      @sonic.like_sonic_for_user User.create
+      Sonic.like_sonic_for_user @sonic, User.create
       expect(Like.all.count).to eq(4)
       @sonic = Sonic.find(@sonic.id)
       expect(@sonic.likes_count).to eq(4)
@@ -84,10 +84,10 @@ describe Sonic do
     before :each do
       @sonic = Sonic.create
       @user = User.create
-      @sonic.like_sonic_for_user @user
+      Sonic.like_sonic_for_user @sonic, @user
     end
     it "unlikes a sonic" do
-      @sonic.dislike_sonic_for_user @user
+      Sonic.unlike_sonic_for_user @sonic, @user
       expect(Like.all.count).to eq(0)
     end
   end
@@ -96,7 +96,8 @@ describe Sonic do
     before :each do
       @sonic = Sonic.create
       5.times do
-        @sonic.like_sonic_for_user User.create
+        Sonic.like_sonic_for_user @sonic,User.create
+        #@sonic.like_sonic_for_user User.create
       end
     end
     it "gets the users as array" do
