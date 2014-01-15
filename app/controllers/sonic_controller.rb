@@ -64,6 +64,7 @@ class SonicController < ApplicationController
                    :text => params[:text],
                    :user_id => @authenticated_user.id
     )
+    @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user
   end
 
   prepare_params_for :comments,

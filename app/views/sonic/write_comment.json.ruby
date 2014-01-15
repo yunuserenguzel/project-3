@@ -1,3 +1,4 @@
 {
-  :comment => @comment
+  :comment => @comment,
+  :sonic => @sonic,
 }.to_json
