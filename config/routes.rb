@@ -25,6 +25,7 @@ Sonicraph::Application.routes.draw do
   post 'api/sonic/write_comment' => 'sonic#write_comment'
   get 'api/sonic/comments' => 'sonic#comments'
   get 'api/sonic/resonic' => 'sonic#resonic'
+  get 'api/sonic/resonics' => 'sonic#resonics'
   get 'api/sonic/delete_resonic' => 'sonic#delete_resonic'
 
   # Example of regular route:
