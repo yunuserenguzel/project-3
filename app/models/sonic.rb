@@ -140,8 +140,9 @@ SQL
   def self.comment_sonic_for_user text,sonic,user
     sonic = sonic.id if sonic.is_a?Sonic
     user = user.id if user.is_a?User
-    Comment.create(:user_id => user, :sonic_id => sonic, :text => text)
+    comment = Comment.create(:user_id => user, :sonic_id => sonic, :text => text)
     update_comments_count_for_sonic sonic
+    return comment
   end
 
   def self.like_sonic_for_user sonic,user

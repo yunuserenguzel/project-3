@@ -60,7 +60,7 @@ class SonicController < ApplicationController
                      :sonic => [:required, :type=>Sonic],
                      :text => [:required, :not_empty, :type => String]
   def write_comment
-    Sonic.comment_sonic_for_user params[:text],params[:sonic],@authenticated_user
+    @comment = Sonic.comment_sonic_for_user params[:text],params[:sonic],@authenticated_user
     @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user
   end
 
