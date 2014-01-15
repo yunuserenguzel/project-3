@@ -137,12 +137,19 @@ SQL
   #  return true
   #end
 
+  def self.comment_sonic_for_user text,sonic,user
+    sonic = sonic.id if sonic.is_a?Sonic
+    user = user.id if user.is_a?User
+    Comment.create(:user_id => user, :sonic_id => sonic, :text => text)
+    update_comments_count_for_sonic sonic
+  end
+
   def self.like_sonic_for_user sonic,user
     sonic = sonic.id if sonic.is_a?Sonic
     user = user.id if user.is_a?User
     if !Like.exists?(:sonic_id => sonic, :user_id => user)
       Like.create(:user_id => user, :sonic_id => sonic)
-      Sonic.update_likes_count_for_sonic sonic
+      update_likes_count_for_sonic sonic
     end
   end
 
@@ -158,7 +165,7 @@ SQL
     user = user.id if user.is_a?User
     if !Resonic.exists?(:user_id => user, :sonic_id => sonic)
       Resonic.create(:user_id => user,:sonic_id => sonic)
-      Sonic.update_resonics_count_for_sonic sonic
+      update_resonics_count_for_sonic sonic
     end
   end
 
@@ -211,16 +218,6 @@ SQL
     json["sonic_data"] = self.sonic_data
     json['user'] = self.user
     return json
-  end
-
-  def self.likes_of_sonic sonic_id
-    sql = <<SQL
-      SELECT users.*
-      FROM likes INNER JOIN users ON users.id = likes.user_id
-      WHERE likes.sonic_id=?
-      LIMIT 20
-SQL
-    return User.find_by_sql(sanitize_sql_array [sql,sonic_id])
   end
 
   def update_sonic_count

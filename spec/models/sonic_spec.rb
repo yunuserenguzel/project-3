@@ -101,7 +101,7 @@ describe Sonic do
       end
     end
     it "gets the users as array" do
-      likes = Sonic.likes_of_sonic(@sonic.id)
+      likes = Like.likes_of_sonic(@sonic.id)
       #puts likes.to_json
       expect(likes.count).to eq(5)
     end

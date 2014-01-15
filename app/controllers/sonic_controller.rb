@@ -53,17 +53,14 @@ class SonicController < ApplicationController
   prepare_params_for :likes,
                      :sonic => [:required, :type=>Sonic]
   def likes
-    @users = Sonic.likes_of_sonic params[:sonic]
+    @users = Like.likes_of_sonic params[:sonic]
   end
 
   prepare_params_for :write_comment,
                      :sonic => [:required, :type=>Sonic],
                      :text => [:required, :not_empty, :type => String]
   def write_comment
-    @comment = Comment.create(:sonic_id => params[:sonic],
-                   :text => params[:text],
-                   :user_id => @authenticated_user.id
-    )
+    Sonic.comment_sonic_for_user params[:text],params[:sonic],@authenticated_user
     @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user
   end
 
