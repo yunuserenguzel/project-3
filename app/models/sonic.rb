@@ -46,8 +46,14 @@ SQL
 
   def self.sql_with_params params
     where = ""
-    where = sanitize_sql_array([' AND sonics.created_at > ? ',params[:after]]) if params.has_key? :after
-    where = sanitize_sql_array([' AND sonics.created_at < ? ',params[:before]]) if params.has_key? :before
+    where = sanitize_sql_array([' sonics.created_at > (SELECT created_at FROM sonics where sonics.id = ?)',params[:after]]) if params.has_key? :after
+    where = sanitize_sql_array([' sonics.created_at < (SELECT created_at FROM sonics where sonics.id = ?) ',params[:before]]) if params.has_key? :before
+    where += " AND " if where.length > 1
+    if params.has_key? :of_user
+      where += sanitize_sql_array [' sonics.user_id = ? ', params[:of_user]]
+    else
+      where += sanitize_sql_array [' follows.follower_user_id = ?', params[:user_id]]
+    end
     select = <<SLCT
       SELECT sonics.*,
         CASE WHEN likes.user_id    IS NULL THEN 0 ELSE 1 END AS liked_by_me,
@@ -55,18 +61,18 @@ SQL
 SLCT
     rest = <<RST
       LEFT JOIN likes ON (
-        likes.user_id = follows.follower_user_id AND
+        likes.user_id = ? AND
         likes.sonic_id = sonics.id
       )
       LEFT JOIN resonics ON (
-        resonics.sonic_id = sonics.id AND
-        resonics.user_id = follows.follower_user_id
+        resonics.user_id = ? AND
+        resonics.sonic_id = sonics.id
       )
-      WHERE follows.follower_user_id = ? #{where}
+      WHERE #{where}
       ORDER BY sonics.created_at DESC
       LIMIT 20
 RST
-    sql = <<SQL
+    sql = <<SQL1
       (
         #{select}
           NULL AS resoniced_by_username,
@@ -78,43 +84,32 @@ RST
     UNION
       (
         #{select}
-          resonicers.username AS resoniced_by_username,
-          resonicers.id AS resoniced_by_user_id
+          resonicers.username::varchar(255) AS resoniced_by_username,
+          resonicers.id::int8 AS resoniced_by_user_id
         FROM follows
         INNER JOIN resonics AS RS ON RS.user_id = follows.followed_user_id
         INNER JOIN users AS resonicers ON resonicers.id=RS.user_id
         INNER JOIN sonics ON sonics.id = RS.sonic_id
         #{rest}
       )
-SQL
-    sanitize_sql_array [sql,params[:user_id],params[:user_id]]
-  end
-
-  def self.get_sonic_feed_for_user user
-    user = user.id if user.is_a?User
-    sql = Sonic.sql_with_params :user_id => user
-    return Sonic.find_by_sql(sql)
-  end
-
-  def self.get_sonic_feed_for_user_after_sonic user, sonic
-    begin
-      sonic = Sonic.find(sonic) if !sonic.is_a?Sonic
-    rescue
-      return []
+SQL1
+    if params.has_key? :of_user
+      sql = <<SQL2
+        #{select}
+          NULL::varchar(255) AS resoniced_by_username,
+          NULL::int8 AS resoniced_by_user_id
+        FROM sonics
+        #{rest}
+SQL2
+      return sanitize_sql_array [sql,params[:user_id],params[:user_id]]
     end
-    user = user.id if user.is_a?User
-    sql = Sonic.sql_with_params :user_id => user, :after => sonic.created_at
-    return Sonic.find_by_sql(sql)
+    sanitize_sql_array [sql,params[:user_id],params[:user_id],params[:user_id],params[:user_id]]
   end
 
-  def self.get_sonic_feed_for_user_before_sonic user, sonic
-    begin
-      sonic = Sonic.find(sonic) if !sonic.is_a?Sonic
-    rescue
-      return []
-    end
+  def self.get_sonic_feed_for_user user, params = {}
     user = user.id if user.is_a?User
-    sql = Sonic.sql_with_params :user_id => user, :before => sonic.created_at
+    params[:user_id] = user
+    sql = Sonic.sql_with_params params
     return Sonic.find_by_sql(sql)
   end
 

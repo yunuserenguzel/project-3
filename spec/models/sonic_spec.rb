@@ -13,7 +13,6 @@ describe Sonic do
         @user.follow_user u
       end
     end
-
     it "gets the sonics of the followed users" do
       expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(6)
     end
@@ -31,7 +30,7 @@ describe Sonic do
       end
     end
     it "get_sonic_feed" do
-      expect(Sonic.get_sonic_feed_for_user_after_sonic(@user,@pivot_sonic).count).to eq(16)
+      expect(Sonic.get_sonic_feed_for_user(@user,:after=>@pivot_sonic.id).count).to eq(16)
     end
   end
 
@@ -47,10 +46,30 @@ describe Sonic do
       end
     end
     it "get_sonic_feed" do
-      expect(Sonic.get_sonic_feed_for_user_before_sonic(@user,@pivot_sonic).count).to eq(13)
+      expect(Sonic.get_sonic_feed_for_user(@user,:before=>@pivot_sonic.id).count).to eq(13)
     end
   end
 
+  context 'get_sonic_feed_for_user of_user' do
+    before :each do
+      @user = User.create
+      @user1 = User.create
+      @user2 = User.create
+      @user1 = User.create
+      @user2 = User.create
+      20.times do |number|
+        if number >= 7
+          Sonic.create(:user_id => @user1.id)
+        else
+          Sonic.create(:user_id => @user2.id)
+        end
+      end
+    end
+    it "gets sonics of user" do
+      expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user1.id).count).to eq(13)
+      expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user2.id).count).to eq(7)
+    end
+  end
 
   context "like_sonic" do
     before :each do
@@ -97,12 +116,10 @@ describe Sonic do
       @sonic = Sonic.create
       5.times do
         Sonic.like_sonic_for_user @sonic,User.create
-        #@sonic.like_sonic_for_user User.create
       end
     end
     it "gets the users as array" do
       likes = Like.likes_of_sonic(@sonic.id)
-      #puts likes.to_json
       expect(likes.count).to eq(5)
     end
   end
