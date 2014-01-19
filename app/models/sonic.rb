@@ -57,8 +57,8 @@ SQL
     end
     select = <<SLCT
       SELECT sonics.*,
-        CASE WHEN likes.user_id    IS NULL THEN 0 ELSE 1 END AS liked_by_me,
-        CASE WHEN resonics.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me
+        CASE WHEN likes.user_id    IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS liked_by_me,
+        CASE WHEN resonics.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS resoniced_by_me
 SLCT
     left_joins = <<LFT
       LEFT JOIN likes ON (
@@ -75,23 +75,12 @@ LFT
       LIMIT 20
 RST
     sql = <<SQL1
-      (
-        #{select}
-        FROM follows
-        INNER JOIN sonics ON sonics.user_id = follows.followed_user_id
-        #{left_joins}
-        WHERE sonics.is_resonic=false AND (#{where})
-        #{rest}
-      )
-    UNION
-      (
-        #{select}
-        FROM follows
-        INNER JOIN sonics ON sonics.user_id = follows.followed_user_id
-        #{left_joins}
-        WHERE sonics.is_resonic=true AND (#{where})
-        #{rest}
-      )
+      #{select}
+      FROM follows
+      INNER JOIN sonics ON sonics.user_id = follows.followed_user_id
+      #{left_joins}
+      WHERE #{where}
+      #{rest}
 SQL1
     if params.has_key? :of_user
       sql = <<SQL2
@@ -101,9 +90,8 @@ SQL1
         WHERE #{where}
         #{rest}
 SQL2
-      return sanitize_sql_array [sql,params[:user_id],params[:user_id]]
     end
-    sanitize_sql_array [sql,params[:user_id],params[:user_id],params[:user_id],params[:user_id]]
+    return sanitize_sql_array [sql,params[:user_id],params[:user_id]]
   end
 
   def self.get_sonic_feed_for_user user, params = {}
