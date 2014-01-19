@@ -67,7 +67,7 @@ SLCT
       )
       LEFT JOIN sonics AS resonics ON (
         resonics.user_id = ? AND
-        resonics.id = sonics.id
+        resonics.original_sonic_id = sonics.id
       )
 LFT
     left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id] ]
