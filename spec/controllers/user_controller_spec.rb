@@ -72,7 +72,7 @@ describe UserController do
     it "returns success" do
       get :follow, @params
       response.should be_successful
-      expect(User.get_followers_of_user_id(@u2.id).count).to eq 1
+      expect(User.followers_of_user_for_user(@u2.id).count).to eq 1
     end
   end
 
@@ -88,7 +88,7 @@ describe UserController do
     it "returns success" do
       get :followings, @params
       response.should be_successful
-      expect(User.get_followings_of_user_id(@user.id).count).to eq 5
+      expect(User.followings_of_user_for_user(@user.id).count).to eq 5
     end
 
   end

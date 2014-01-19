@@ -52,13 +52,13 @@ class UserController < ApplicationController
   prepare_params_for :followers,
                      :user => [:required, :type => User]
   def followers
-    @followers = User.get_followers_of_user_id params[:user]
+    @followers = User.followers_of_user_for_user params[:user], @authenticated_user.id
   end
 
   prepare_params_for :followings,
                      :user => [:required, :type => User]
   def followings
-    @followings = User.get_followings_of_user_id params[:user]
+    @followings = User.followings_of_user_for_user params[:user], @authenticated_user.id
   end
 
   prepare_params_for :follow,

@@ -83,28 +83,52 @@ SQL
     end
   end
 
-  def self.get_followings_of_user_id user
-    user = user.id if user.is_a? User
+  def self.followings_of_user_for_user user, for_user = nil
+    user = user.id if user.is_a?(User)
+    for_user = for_user.id if for_user.is_a?User
+    if for_user == nil
+      select_case = ""
+      left_join = ""
+      group_by = ""
+    else
+      select_case = ",CASE WHEN follows2.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed"
+      left_join ="LEFT JOIN follows AS follows2 ON (follows2.follower_user_id=? AND follows2.followed_user_id=users.id)"
+      left_join = sanitize_sql_array [left_join,for_user]
+      group_by = ",follows2.followed_user_id"
+    end
     sql = <<SQL
-          SELECT DISTINCT users.*,1 AS is_being_followed
-          FROM users
-          INNER JOIN follows ON follows.followed_user_id=users.id
-          WHERE follows.follower_user_id=? AND follows.followed_user_id<>follows.follower_user_id
-          GROUP BY users.id
+      SELECT DISTINCT users.*
+        #{select_case}
+      FROM users
+      INNER JOIN follows ON follows.followed_user_id=users.id
+      #{left_join}
+      WHERE follows.follower_user_id=? AND follows.followed_user_id<>follows.follower_user_id
+      GROUP BY users.id #{group_by}
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
   end
 
-  def self.get_followers_of_user_id user
+  def self.followers_of_user_for_user user, for_user = nil
     user = user.id if user.is_a?(User)
+    for_user = for_user.id if for_user.is_a?User
+    if for_user == nil
+      select_case = ""
+      left_join = ""
+      group_by = ""
+    else
+      select_case = ",CASE WHEN follows2.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed"
+      left_join ="LEFT JOIN follows AS follows2 ON (follows2.follower_user_id=? AND follows2.followed_user_id=users.id)"
+      left_join = sanitize_sql_array [left_join,for_user]
+      group_by = ",follows2.followed_user_id"
+    end
     sql = <<SQL
-          SELECT DISTINCT users.*,
-            CASE WHEN follows2.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
-          FROM users
-          INNER JOIN follows ON follows.follower_user_id=users.id
-          LEFT JOIN follows AS follows2 ON (follows2.follower_user_id=follows.followed_user_id AND follows2.followed_user_id=users.id)
-          WHERE follows.followed_user_id=? AND follows.followed_user_id<>follows.follower_user_id
-          GROUP BY users.id,follows2.followed_user_id
+      SELECT DISTINCT users.*
+        #{select_case}
+      FROM users
+      INNER JOIN follows ON follows.follower_user_id=users.id
+      #{left_join}
+      WHERE follows.followed_user_id=? AND follows.followed_user_id<>follows.follower_user_id
+      GROUP BY users.id #{group_by}
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
   end
