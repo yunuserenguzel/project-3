@@ -80,7 +80,7 @@ RST
       FROM follows
       INNER JOIN sonics ON sonics.user_id = follows.followed_user_id
       #{left_joins}
-      WHERE (sonics.user_id<>follows.follower_user_id OR sonics.is_resonic<>true) AND
+      WHERE (sonics.is_resonic=true AND sonics.user_id<>follows.follower_user_id OR sonics.is_resonic=false) AND
       (#{where})
       #{rest}
 SQL1
