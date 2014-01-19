@@ -198,7 +198,7 @@ SQL
     json["sonic_data"] = self.sonic_data
     json['user'] = self.user
     if(self.is_resonic)
-      json['original_sonic'] = self.original_sonic
+      json['original_sonic'] = Sonic.retrieve_sonic_for_user self.original_sonic_id, params[:for_user]
     end
     return json
   end
