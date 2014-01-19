@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131223191528) do
+ActiveRecord::Schema.define(version: 20140119125751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,15 +63,8 @@ ActiveRecord::Schema.define(version: 20131223191528) do
     t.datetime "updated_at"
   end
 
-  create_table "resonics", force: true do |t|
-    t.integer "sonic_id", limit: 8
-    t.integer "user_id",  limit: 8
-  end
-
-  add_index "resonics", ["user_id"], name: "index_resonics_on_user_id", using: :btree
-
   create_table "sonics", id: false, force: true do |t|
-    t.integer  "id",                      limit: 8, null: false
+    t.integer  "id",                      limit: 8,                 null: false
     t.integer  "user_id",                 limit: 8
     t.boolean  "is_private"
     t.float    "latitude"
@@ -86,7 +79,12 @@ ActiveRecord::Schema.define(version: 20131223191528) do
     t.string   "sonic_data_content_type"
     t.integer  "sonic_data_file_size"
     t.datetime "sonic_data_updated_at"
+    t.boolean  "is_resonic",                        default: false
+    t.integer  "original_sonic_id",       limit: 8
   end
+
+  add_index "sonics", ["is_resonic"], name: "index_sonics_on_is_resonic", using: :btree
+  add_index "sonics", ["original_sonic_id"], name: "index_sonics_on_original_sonic_id", using: :btree
 
   create_table "users", id: false, force: true do |t|
     t.integer  "id",                         limit: 8,                 null: false

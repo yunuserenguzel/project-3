@@ -1,5 +1,6 @@
 class Sonic < ActiveRecord::Base
   belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
+  belongs_to :original_sonic, :class_name => 'Sonic', :foreign_key => 'original_sonic_id'
 
   before_create :generate_sonic_id
   after_save :update_sonic_count
@@ -34,9 +35,9 @@ class Sonic < ActiveRecord::Base
         likes.user_id = ? AND
         likes.sonic_id = sonics.id
       )
-      LEFT JOIN resonics ON (
+      LEFT JOIN sonics AS resonics ON (
         resonics.user_id = ? AND
-        resonics.sonic_id = sonics.id
+        resonics.original_sonic_id = sonics.id
       )
       WHERE sonics.id = ?
       LIMIT 1
@@ -57,48 +58,47 @@ SQL
     select = <<SLCT
       SELECT sonics.*,
         CASE WHEN likes.user_id    IS NULL THEN 0 ELSE 1 END AS liked_by_me,
-        CASE WHEN resonics.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me,
+        CASE WHEN resonics.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me
 SLCT
-    rest = <<RST
+    left_joins = <<LFT
       LEFT JOIN likes ON (
         likes.user_id = ? AND
         likes.sonic_id = sonics.id
       )
-      LEFT JOIN resonics ON (
+      LEFT JOIN sonics AS resonics ON (
         resonics.user_id = ? AND
-        resonics.sonic_id = sonics.id
+        resonics.id = sonics.id
       )
-      WHERE #{where}
+LFT
+    rest = <<RST
       ORDER BY sonics.created_at DESC
       LIMIT 20
 RST
     sql = <<SQL1
       (
         #{select}
-          NULL AS resoniced_by_username,
-          NULL AS resoniced_by_user_id
         FROM follows
         INNER JOIN sonics ON sonics.user_id = follows.followed_user_id
+        #{left_joins}
+        WHERE sonics.is_resonic=false AND (#{where})
         #{rest}
       )
     UNION
       (
         #{select}
-          resonicers.username::varchar(255) AS resoniced_by_username,
-          resonicers.id::int8 AS resoniced_by_user_id
         FROM follows
-        INNER JOIN resonics AS RS ON RS.user_id = follows.followed_user_id
-        INNER JOIN users AS resonicers ON resonicers.id=RS.user_id
-        INNER JOIN sonics ON sonics.id = RS.sonic_id
+        INNER JOIN sonics ON sonics.user_id = follows.followed_user_id
+        #{left_joins}
+        WHERE sonics.is_resonic=true AND (#{where})
         #{rest}
       )
 SQL1
     if params.has_key? :of_user
       sql = <<SQL2
         #{select}
-          NULL::varchar(255) AS resoniced_by_username,
-          NULL::int8 AS resoniced_by_user_id
         FROM sonics
+        #{left_joins}
+        WHERE #{where}
         #{rest}
 SQL2
       return sanitize_sql_array [sql,params[:user_id],params[:user_id]]
@@ -113,24 +113,6 @@ SQL2
     return Sonic.find_by_sql(sql)
   end
 
-  #TODO make "like" functions static
-  #def like_sonic_for_user user
-  #  user = user.is_a?(User) ? user.id : user
-  #  if !Like.exists?(:sonic_id => self.id, :user_id => user)
-  #    Like.create(:sonic_id => self.id, :user_id=>user)
-  #    Sonic.update_likes_count_for_sonic self.id
-  #    return true
-  #  else
-  #    return false
-  #  end
-  #end
-
-  #def dislike_sonic_for_user user
-  #  user = user.is_a?(User) ? user.id : user
-  #  Like.destroy_all(:sonic_id=>self.id, :user_id=>user)
-  #  Sonic.update_likes_count_for_sonic self.id
-  #  return true
-  #end
 
   def self.comment_sonic_for_user text,sonic,user
     sonic = sonic.id if sonic.is_a?Sonic
@@ -159,8 +141,8 @@ SQL2
   def self.resonic_for_sonic_and_user sonic, user
     sonic = sonic.id if sonic.is_a?Sonic
     user = user.id if user.is_a?User
-    if !Resonic.exists?(:user_id => user, :sonic_id => sonic)
-      Resonic.create(:user_id => user,:sonic_id => sonic)
+    if !Sonic.exists?(:user_id => user, :original_sonic_id => sonic, :is_resonic=>true)
+      Sonic.create(:user_id => user,:original_sonic_id => sonic, :is_resonic=>true)
       update_resonics_count_for_sonic sonic
     end
   end
@@ -168,7 +150,7 @@ SQL2
   def self.delete_resonic_for_sonic_and_user sonic, user
     sonic = sonic.id if sonic.is_a?Sonic
     user = user.id if user.is_a?User
-    Resonic.destroy_all(:user_id => user, :sonic_id => sonic)
+    Sonic.destroy_all(:user_id => user, :original_sonic_id => sonic, :is_resonic => true)
     update_resonics_count_for_sonic sonic
   end
 
@@ -179,7 +161,7 @@ SQL2
       SET likes_count = (
         SELECT COUNT(*) FROM likes WHERE sonic_id=sonics.id
       )
-      WHERE sonics.id = ?
+      WHERE sonics.id = ? AND sonics.is_resonic=false
 SQL
     ActiveRecord::Base.connection.execute sanitize_sql_array([sql,sonic])
   end
@@ -189,9 +171,11 @@ SQL
     sql = <<SQL
       UPDATE sonics
       SET resonics_count = (
-        SELECT COUNT(*) FROM resonics WHERE sonic_id=sonics.id
+        SELECT COUNT(*)
+        FROM sonics AS resonics
+        WHERE resonics.original_sonic_id=sonics.id AND resonics.is_resonic=true
       )
-      WHERE sonics.id = ?
+      WHERE sonics.id = ? AND sonics.is_resonic=false
 SQL
     ActiveRecord::Base.connection.execute sanitize_sql_array([sql,sonic])
   end
@@ -203,7 +187,7 @@ SQL
       SET comments_count = (
         SELECT COUNT(*) FROM comments WHERE sonic_id=sonics.id
       )
-      WHERE sonics.id = ?
+      WHERE sonics.id = ? AND sonics.is_resonic=false
 SQL
     ActiveRecord::Base.connection.execute sanitize_sql_array([sql,sonic])
   end
@@ -213,11 +197,26 @@ SQL
     json["id"] = self.id.to_s
     json["sonic_data"] = self.sonic_data
     json['user'] = self.user
+    if(self.is_resonic)
+      json['original_sonic'] = self.original_sonic
+    end
     return json
   end
 
   def update_sonic_count
     User.recalculate_and_save_sonic_count_for_user_id self.user_id
+  end
+
+  def self.get_users_resoniced_sonic sonic
+    sonic = sonic.id if sonic.is_a?Sonic
+    sql = <<SQL
+      SELECT users.*
+      FROM sonics
+      INNER JOIN users ON users.id = sonics.user_id
+      WHERE sonics.original_sonic_id=? AND sonics.is_resonic=true
+      LIMIT 20
+SQL
+    return User.find_by_sql(sanitize_sql_array [sql,sonic])
   end
 
 end

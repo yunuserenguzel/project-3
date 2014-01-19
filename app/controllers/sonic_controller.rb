@@ -75,7 +75,7 @@ class SonicController < ApplicationController
   prepare_params_for :resonics,
                      :sonic => [:required, :type => Sonic]
   def resonics
-    @users = Resonic.get_users_resoniced_sonic params[:sonic]
+    @users = Sonic.get_users_resoniced_sonic params[:sonic]
   end
 
   prepare_params_for :delete_resonic,

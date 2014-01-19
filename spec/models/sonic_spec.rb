@@ -135,13 +135,39 @@ describe Sonic do
     end
     it "resonics for user " do
       expect(@sonic.resonics_count).to eq(2)
-      expect(Resonic.where(:sonic_id => @sonic.id).count).to eq(2)
+      expect(Sonic.where(:original_sonic_id => @sonic.id, :is_resonic => true).count).to eq(2)
     end
     it "deletes resonics for user and sonic" do 
       Sonic.delete_resonic_for_sonic_and_user @sonic,@u1
-      expect(Resonic.where(:sonic_id => @sonic.id).count).to eq(1)
+      expect(Sonic.where(:original_sonic_id=> @sonic.id).count).to eq(1)
       Sonic.delete_resonic_for_sonic_and_user @sonic,@u2
-      expect(Resonic.where(:sonic_id => @sonic.id).count).to eq(0)
+      expect(Sonic.where(:original_sonic_id => @sonic.id).count).to eq(0)
+    end
+  end
+
+  context "resonics in feeds" do
+    before :each do
+      u1 = User.create
+      u2 = User.create
+      u3 = User.create
+      u4 = User.create
+      u5 = User.create
+      u1.follow_user u2
+      u1.follow_user u3
+      u1.follow_user u4
+      u1.follow_user u5
+      s1 = Sonic.create :user_id => u1.id
+      s2 = Sonic.create :user_id => u2.id
+      s3 = Sonic.create :user_id => u3.id
+      Sonic.resonic_for_sonic_and_user s2.id, u1.id
+      Sonic.resonic_for_sonic_and_user s2.id, u3.id
+      Sonic.resonic_for_sonic_and_user s2.id, u4.id
+      Sonic.resonic_for_sonic_and_user s2.id, u5.id
+      Sonic.resonic_for_sonic_and_user s3.id, u5.id
+      @user = u1
+    end
+    it "brings sonics and resonics" do
+      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(8)
     end
   end
 

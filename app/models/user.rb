@@ -70,8 +70,6 @@ SQL
     UPDATE users
       SET sonic_count = (
         SELECT COUNT(*) FROM sonics WHERE user_id=users.id
-      ) + (
-        SELECT COUNT(*) FROM resonics WHERE user_id=users.id
       )
       WHERE users.id = ?
 SQL
