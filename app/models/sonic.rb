@@ -79,7 +79,8 @@ RST
       FROM follows
       INNER JOIN sonics ON sonics.user_id = follows.followed_user_id
       #{left_joins}
-      WHERE #{where}
+      WHERE (sonics.user_id<>follows.follower_user_id OR sonics.is_resonic<>true) AND
+      (#{where})
       #{rest}
 SQL1
     if params.has_key? :of_user

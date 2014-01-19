@@ -14,7 +14,7 @@ describe Sonic do
       end
     end
     it "gets the sonics of the followed users" do
-      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(6)
+      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(5)
     end
   end
 
@@ -167,7 +167,7 @@ describe Sonic do
       @user = u1
     end
     it "brings sonics and resonics" do
-      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(8)
+      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(7)
     end
   end
 
