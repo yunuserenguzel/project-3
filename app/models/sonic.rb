@@ -70,6 +70,7 @@ SLCT
         resonics.id = sonics.id
       )
 LFT
+    left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id] ]
     rest = <<RST
       ORDER BY sonics.created_at DESC
       LIMIT 20
@@ -92,7 +93,7 @@ SQL1
         #{rest}
 SQL2
     end
-    return sanitize_sql_array [sql,params[:user_id],params[:user_id]]
+    return sql
   end
 
   def self.get_sonic_feed_for_user user, params = {}
