@@ -52,6 +52,8 @@ SQL
     where += " AND " if where.length > 1
     if params.has_key? :of_user
       where += sanitize_sql_array [' sonics.user_id = ? ', params[:of_user]]
+    elsif params.has_key? :me_liked
+      where += sanitize_sql_array [' likes.user_id = ?', params[:user_id]]
     else
       where += sanitize_sql_array [' follows.follower_user_id = ?', params[:user_id]]
     end
@@ -90,6 +92,18 @@ SQL1
         FROM sonics
         #{left_joins}
         WHERE #{where}
+        #{rest}
+SQL2
+    elsif params.has_key? :me_liked
+      sql = <<SQL2
+        #{select}
+        FROM likes
+        INNER JOIN sonics ON sonics.id = likes.sonic_id
+        LEFT JOIN sonics AS resonics ON (
+          resonics.user_id = likes.user_id AND
+          resonics.original_sonic_id = sonics.id
+        )
+        WHERE sonics.is_resonic = false AND #{where}
         #{rest}
 SQL2
     end

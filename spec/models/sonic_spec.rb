@@ -171,4 +171,19 @@ describe Sonic do
     end
   end
 
+  context "get sonics i liked" do
+    before :each do
+      @u = User.create
+      10.times do |i|
+        s = Sonic.create
+        if i >= 3
+          Sonic.like_sonic_for_user s.id,@u.id
+        end
+      end
+    end
+    it "returns liked sonics" do
+      expect(Sonic.get_sonic_feed_for_user(@u, :me_liked=>true).count).to eq 7
+    end
+  end
+
 end

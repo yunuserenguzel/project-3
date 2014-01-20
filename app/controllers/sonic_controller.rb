@@ -29,7 +29,8 @@ class SonicController < ApplicationController
   prepare_params_for :get_sonics,
                      :after => [:not_empty, :type=>Sonic],
                      :before => [:not_empty, :type=>Sonic],
-                     :of_user => [:not_empty, :type=>User]
+                     :of_user => [:not_empty, :type=>User],
+                     :me_liked => [:not_empty]
   def get_sonics
     @sonics = Sonic.get_sonic_feed_for_user @authenticated_user, params
   end
