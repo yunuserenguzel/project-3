@@ -65,6 +65,16 @@ class SonicController < ApplicationController
     @comments = Comment.get_comments_for_sonic_id params[:sonic]
   end
 
+  prepare_params_for :delete_comment,
+                     :comment => [:required]
+  def delete_comment
+    Comment.where(:id => params[:comment]).each do |comment|
+      if comment.user_id == @authenticated_user.id || comment.sonic.user_id == @authenticated_user.id
+        comment.destroy
+      end
+    end
+  end
+
   prepare_params_for :resonic,
                      :sonic => [:required,:type=>Sonic]
   def resonic

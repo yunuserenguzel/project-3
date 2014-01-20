@@ -184,6 +184,43 @@ describe SonicController do
     end
   end
 
+  context "delete comment" do
+    before :each do
+      @user1 = User.create
+      @user2 = User.create
+      @user3 = User.create
+      @sonic = Sonic.create(:user_id => @user1.id)
+      @comment1 = Sonic.comment_sonic_for_user 'asd', @sonic.id, @user1.id
+      @comment2 = Sonic.comment_sonic_for_user 'asd', @sonic.id, @user2.id
+      @comment3 = Sonic.comment_sonic_for_user 'asd', @sonic.id, @user3.id
+    end
+    it "can delete own sonic's own comment" do
+      get :delete_comment, {
+        :format => 'json',
+        :token => Authentication.authenticate_user(@user1),
+        :comment => @comment1.id
+      }
+      response.should be_successful
+    end
+    it "can delete own comment" do
+      get :delete_comment, {
+        :format => 'json',
+        :token => Authentication.authenticate_user(@user2),
+        :comment => @comment2.id
+      }
+      response.should be_successful
+    end
+    it "can delete own sonic's other's comment" do
+      get :delete_comment, {
+        :format => 'json',
+        :token => Authentication.authenticate_user(@user1),
+        :comment => @comment3.id
+      }
+      response.should be_successful
+    end
+
+  end
+
   context "resonic" do
     before :each do
       sonic = Sonic.create

@@ -27,6 +27,7 @@ Sonicraph::Application.routes.draw do
   get 'api/sonic/resonic' => 'sonic#resonic'
   get 'api/sonic/resonics' => 'sonic#resonics'
   get 'api/sonic/delete_resonic' => 'sonic#delete_resonic'
+  get 'api/sonic/delete_comment' => 'sonic#delete_comment'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

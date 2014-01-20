@@ -1,6 +1,9 @@
 class Comment < ActiveRecord::Base
   belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
   belongs_to :sonic, :class_name => 'Sonic', :foreign_key => 'sonic_id'
+
+  after_destroy :update_sonic
+
   def self.get_comments_for_sonic_id sonic_id
     sql = <<SQL
           SELECT comments.*
@@ -18,4 +21,9 @@ SQL
     json['user'] = self.user
     return json
   end
+
+  def update_sonic
+    Sonic.update_comments_count_for_sonic self.sonic_id
+  end
+
 end
