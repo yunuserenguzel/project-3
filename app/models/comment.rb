@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
           ORDER BY comments.created_at ASC
           LIMIT 20
 SQL
-    return User.find_by_sql(sanitize_sql_array([sql,sonic_id]))
+    return Comment.find_by_sql(sanitize_sql_array([sql,sonic_id]))
   end
 
   def as_json options = {}
