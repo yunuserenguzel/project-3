@@ -3,15 +3,19 @@ class Comment < ActiveRecord::Base
   belongs_to :sonic, :class_name => 'Sonic', :foreign_key => 'sonic_id'
   def self.get_comments_for_sonic_id sonic_id
     sql = <<SQL
-          SELECT  users.username,
-                  users.profile_image_file_name,
-                  comments.text, comments.created_at, comments.user_id, comments.id AS comment_id
+          SELECT comments.*
           FROM comments
           INNER JOIN users ON users.id = comments.user_id
           WHERE comments.sonic_id = ?
           ORDER BY comments.created_at ASC
-          LIMIT 100
+          LIMIT 20
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,sonic_id]))
+  end
+
+  def as_json options = {}
+    json = super.as_json options
+    json['user'] = self.user
+    return json
   end
 end
