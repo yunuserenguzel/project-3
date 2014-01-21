@@ -3,11 +3,18 @@ class SonicController < ApplicationController
   before_filter :require_authentication
 
   prepare_params_for :create_sonic,
-                     :sonic_data => [:required]
+                     :sonic_data => [:required],
+                     :latitude => [:not_empty],
+                     :longitude => [:not_empty],
+                     :tags => [:required, :type => String]
   def create_sonic
     @sonic = Sonic.new
     @sonic.sonic_data = params[:sonic_data]
     @sonic.user_id = @authenticated_user.id
+    tags = params[:tags].strip
+    if tags.length > 0
+      @sonic.tags = tags
+    end
     #TODO: add latitude and longitude
     @sonic.save
   end
