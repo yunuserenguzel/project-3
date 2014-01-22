@@ -190,13 +190,14 @@ SQL
     end
     user = user.id if user.is_a?User
     sql = <<SQL
-      SELECT users.*,
+      SELECT set_limit(0.8);
+      SELECT users.*, similarity(users.username, ?) AS similarity,
         CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
       FROM users
       LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
-      WHERE users.username = ?
+      WHERE users.username % ?
       LIMIT 20;
 SQL
-    return User.find_by_sql sanitize_sql_array([sql, user, query ])
+    return User.find_by_sql sanitize_sql_array([sql, query, user, query ])
   end
 end
