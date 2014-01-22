@@ -243,7 +243,7 @@ SQL
       ORDER BY similarity DESC
       LIMIT 20;
 SQL
-    return Sonic.find_by_sql sanitize_sql_array([sql, query, query, user, user])
+    return Sonic.find_by_sql sanitize_sql_array([sql, query, user, user, query])
   end
 
 end
