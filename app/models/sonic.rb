@@ -226,8 +226,7 @@ SQL
   def self.search_for query
     sql = <<SQL
       SELECT set_limit(0.5);
-
-      SELECT sonics.*, similarity(n1.name, ?) AS similarity
+      SELECT sonics.*, similarity(sonics.tags, ?) AS similarity
       FROM   soncis
       ORDER  BY similarity DESC;
 SQL
