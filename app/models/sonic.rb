@@ -224,9 +224,14 @@ SQL
   end
 
   def self.search_for query
-    query.split.each do |word|
+    sql = <<SQL
+      SELECT set_limit(0.5);
 
-    end
+      SELECT sonics.*, similarity(n1.name, ?) AS similarity
+      FROM   soncis
+      ORDER  BY similarity DESC;
+SQL
+    return Sonic.find_by_sql sanitize_sql_array([sql, query])
   end
 
 end
