@@ -226,7 +226,7 @@ SQL
   def self.search_query_for_user query, user
     user = user.id if user.is_a?User
     sql = <<SQL
-      SELECT set_limit(0.5);
+      SELECT set_limit(0.05);
       SELECT sonics.*, similarity(sonics.tags, ?) AS similarity,
         CASE WHEN likes.user_id    IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS liked_by_me,
         CASE WHEN resonics.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS resoniced_by_me
