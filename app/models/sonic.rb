@@ -228,8 +228,9 @@ SQL
       SELECT set_limit(0.5);
       SELECT sonics.*, similarity(sonics.tags, ?) AS similarity
       FROM   sonics
-      WHERE sonics.tags IS NOT NULL
+      WHERE sonics.tags IS NOT NULL AND similarity > 0.0
       ORDER  BY similarity DESC;
+      LIMIT 20
 SQL
     return Sonic.find_by_sql sanitize_sql_array([sql, query])
   end
