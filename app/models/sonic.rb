@@ -223,16 +223,27 @@ SQL
     return User.find_by_sql(sanitize_sql_array [sql,sonic])
   end
 
-  def self.search_for query
+  def self.search_query_for_user query, user
+    user = user.id if user.is_a?User
     sql = <<SQL
       SELECT set_limit(0.5);
-      SELECT sonics.*, similarity(sonics.tags, ?) AS similarity
+      SELECT sonics.*, similarity(sonics.tags, ?) AS similarity,
+        CASE WHEN likes.user_id    IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS liked_by_me,
+        CASE WHEN resonics.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS resoniced_by_me
       FROM sonics
+      LEFT JOIN likes ON (
+        likes.user_id = ? AND
+        likes.sonic_id = sonics.id
+      )
+      LEFT JOIN sonics AS resonics ON (
+        resonics.user_id = ? AND
+        resonics.original_sonic_id = sonics.id
+      )
       WHERE sonics.tags IS NOT NULL
       ORDER BY similarity DESC
       LIMIT 20;
 SQL
-    return Sonic.find_by_sql sanitize_sql_array([sql, query])
+    return Sonic.find_by_sql sanitize_sql_array([sql, query, user, user])
   end
 
 end
