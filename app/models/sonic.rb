@@ -223,4 +223,10 @@ SQL
     return User.find_by_sql(sanitize_sql_array [sql,sonic])
   end
 
+  def self.search_for query
+    query.split.each do |word|
+
+    end
+  end
+
 end
