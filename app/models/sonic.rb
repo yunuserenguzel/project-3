@@ -227,7 +227,7 @@ SQL
     sql = <<SQL
       SELECT set_limit(0.5);
       SELECT sonics.*, similarity(sonics.tags, ?) AS similarity
-      FROM   soncis
+      FROM   sonics
       ORDER  BY similarity DESC;
 SQL
     return Sonic.find_by_sql sanitize_sql_array([sql, query])
