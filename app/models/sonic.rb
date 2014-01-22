@@ -239,11 +239,11 @@ SQL
         resonics.user_id = ? AND
         resonics.original_sonic_id = sonics.id
       )
-      WHERE sonics.tags IS NOT NULL
+      WHERE sonics.tags IS NOT NULL AND sonics.tags % ?
       ORDER BY similarity DESC
       LIMIT 20;
 SQL
-    return Sonic.find_by_sql sanitize_sql_array([sql, query, user, user])
+    return Sonic.find_by_sql sanitize_sql_array([sql, query, query, user, user])
   end
 
 end

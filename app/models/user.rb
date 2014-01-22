@@ -182,4 +182,21 @@ SQL
     json.except!("email")
     return json
   end
+
+  def self.search_query_for_user query, user
+    query = query.strip
+    if query.length < 4
+      return []
+    end
+    user = user.id if user.is_a?User
+    sql = <<SQL
+      SELECT users.*,
+        CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
+      FROM users
+      LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
+      WHERE users.username = ?
+      LIMIT 20;
+SQL
+    return User.find_by_sql sanitize_sql_array([sql, user, query ])
+  end
 end
