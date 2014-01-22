@@ -103,6 +103,11 @@ class SonicController < ApplicationController
     @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user.id
   end
 
+  prepare_params_for :search,
+                     :query => [:required, :not_empty]
+  def search
+    @sonics = Sonic.search_query_for_user params[:query], @authenticated_user
+  end
 
 
 end

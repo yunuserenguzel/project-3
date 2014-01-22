@@ -239,7 +239,7 @@ SQL
         resonics.user_id = ? AND
         resonics.original_sonic_id = sonics.id
       )
-      WHERE sonics.tags IS NOT NULL AND sonics.tags % ?
+      WHERE sonics.is_resonic = false AND sonics.tags IS NOT NULL AND sonics.tags % ?
       ORDER BY similarity DESC
       LIMIT 20;
 SQL

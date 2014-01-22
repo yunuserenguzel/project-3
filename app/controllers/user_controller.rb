@@ -72,4 +72,10 @@ class UserController < ApplicationController
     @authenticated_user.unfollow_user params[:user]
   end
 
+  prepare_params_for :search,
+                     :query => [:required, :not_empty]
+  def search
+    @users = User.search_query_for_user params[:query], @authenticated_user
+  end
+
 end

@@ -15,6 +15,7 @@ Sonicraph::Application.routes.draw do
   get 'api/user/followings' => 'user#followings'
   get 'api/user/follow' => 'user#follow'
   get 'api/user/unfollow' => 'user#unfollow'
+  get 'api/user/search' => 'user#search'
 
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'
   get 'api/sonic/like_sonic' => 'sonic#like_sonic'
@@ -28,6 +29,7 @@ Sonicraph::Application.routes.draw do
   get 'api/sonic/resonics' => 'sonic#resonics'
   get 'api/sonic/delete_resonic' => 'sonic#delete_resonic'
   get 'api/sonic/delete_comment' => 'sonic#delete_comment'
+  get 'api/sonic/search' => 'sonic#search'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
