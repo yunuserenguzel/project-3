@@ -86,7 +86,7 @@ namespace :initializer do
     #  :bio => 'American actor'
     #)
 
-    [stanley,house,scarlett,kunis,ceren].each do |user|
+    [stanley,house,scarlett,kunis,ceren,yunus,dincer].each do |user|
       user.passhash = User.hash_password('1234')
       user.save
     end
