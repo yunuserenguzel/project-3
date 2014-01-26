@@ -2,7 +2,7 @@ namespace :initializer do
 
   task :start => :environment do
 
-    ['stanley','house','scarlett','kunis','dexter'].each do |username|
+    ['stanley','house','scarlett','kunis','dexter','danny','yeguzel','ceren'].each do |username|
       user = User.where(:username => username).first
       next if user == nil
       Follow.destroy_all(:follower_user_id => user.id)
