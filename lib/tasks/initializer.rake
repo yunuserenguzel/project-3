@@ -61,6 +61,24 @@ namespace :initializer do
       :email => 'ceren@sonicraph.com',
     )
 
+    dincer = User.create(
+      :username => 'danny',
+      :fullname => 'Dinçer Hazar',
+      :email => 'dincer@sonicraph.com',
+      :profile_image => 'https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-frc3/t1/430369_281875421878591_1583705225_n.jpg',
+      :website => 'sonicraph.com',
+      :location => 'Ankara TR'
+    )
+
+    yunus = User.create(
+      :username => 'yeguzel',
+      :fullname => 'Yunus Eren Güzel',
+      :email => 'exculuber@gmail.com',
+      :profile_image => 'http://images.ak.instagram.com/profiles/profile_415543736_75sq_1383719434.jpg',
+      :website => 'yunuserenguzel.com.tr',
+      :location => 'Ankara'
+    )
+
     #dexter = User.create(
     #  :username => 'dexter',
     #  :fullname => 'Micheal C. Hall',
