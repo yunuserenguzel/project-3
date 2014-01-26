@@ -55,21 +55,25 @@ namespace :initializer do
       :bio => 'American actress and voice artist..'
     )
 
-    dexter = User.create(
-      :username => 'dexter',
-      :fullname => 'Micheal C. Hall',
-      :email => 'mic@hall.com',
-      :profile_image => 'http://img2-3.timeinc.net/ew/i/2013/06/06/Michael-C-Hall.jpg',
-      :website => 'en.wikipedia.org/wiki/Michael_C._Hall',
-      :location => 'Miami USA',
-      :bio => 'American actor'
+    ceren = User.create(
+      :username => 'ceren',
+      :fullname => 'Ceren Turan',
+      :email => 'ceren@sonicraph.com',
     )
 
-    [stanley,house,scarlett,kunis,dexter].each do |user|
+    #dexter = User.create(
+    #  :username => 'dexter',
+    #  :fullname => 'Micheal C. Hall',
+    #  :email => 'mic@hall.com',
+    #  :profile_image => 'http://img2-3.timeinc.net/ew/i/2013/06/06/Michael-C-Hall.jpg',
+    #  :website => 'en.wikipedia.org/wiki/Michael_C._Hall',
+    #  :location => 'Miami USA',
+    #  :bio => 'American actor'
+    #)
+
+    [stanley,house,scarlett,kunis,ceren].each do |user|
       user.passhash = User.hash_password('1234')
       user.save
-      user.follow_user yeguzel
-      yeguzel.follow_user user
     end
 
 

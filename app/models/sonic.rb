@@ -148,6 +148,7 @@ SQL2
     if !Sonic.exists?(:user_id => user, :original_sonic_id => sonic, :is_resonic=>true)
       Sonic.create(:user_id => user,:original_sonic_id => sonic, :is_resonic=>true)
       update_resonics_count_for_sonic sonic
+      Notification.createResonicNotification Sonic.find(sonic).user_id, sonic, user
     end
   end
 

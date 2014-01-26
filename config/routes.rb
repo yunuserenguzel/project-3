@@ -31,6 +31,9 @@ Sonicraph::Application.routes.draw do
   get 'api/sonic/delete_comment' => 'sonic#delete_comment'
   get 'api/sonic/search' => 'sonic#search'
 
+  get 'api/noitifications/get_last_notifications' => 'notification#get_last_notifications'
+  post 'api/noitifications/mark_as_read' => 'notification#mark_as_read'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
