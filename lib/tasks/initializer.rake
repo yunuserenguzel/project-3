@@ -1,10 +1,7 @@
 namespace :initializer do
 
   task :start => :environment do
-    yeguzel = User.where(:username => 'yeguzel').first
-    if yeguzel == nil
-      return
-    end
+
     ['stanley','house','scarlett','kunis','dexter'].each do |username|
       user = User.where(:username => username).first
       next if user == nil
