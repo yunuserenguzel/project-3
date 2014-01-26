@@ -93,4 +93,29 @@ describe UserController do
 
   end
 
+  context "edit" do
+    before :each do
+      @user = User.create(
+        :passhash => User.hash_password('1234')
+      )
+      @params = {
+        :format => 'json',
+        :token => Authentication.authenticate_user(@user),
+        :username => 'mmmm',
+        :email => 'asd@asd',
+        :password => '4321',
+        :old_password => '1234',
+        :location => 'Anywhere',
+        :website => 'yunuserenguzel.com.tr',
+        :gender => 'male',
+        :date_of_birth => '1989-04-24',
+        :fullname => 'Yunus ERen Guzel'
+      }
+    end
+    it "returns successful" do
+      post :edit, @params
+      response.should be_successful
+    end
+  end
+
 end

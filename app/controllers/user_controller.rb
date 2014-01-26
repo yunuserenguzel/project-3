@@ -42,6 +42,54 @@ class UserController < ApplicationController
     end
   end
 
+
+  prepare_params_for :edit,
+                     :username => [:not_empty],
+                     :password => [:not_empty],
+                     :old_password => [:not_empty],
+                     :email => [:not_empty],
+                     :website => [:not_empty],
+                     :profile_image => [:not_empty],
+                     :location => [:not_empty],
+                     :fullname => [:not_empty],
+                     :gender => [:not_empty],
+                     :date_of_birth => [:not_empty]
+  def edit
+    if params.has_key? :username
+      @authenticated_user.username = params[:username]
+    end
+    if params.has_key? :password
+      if !params.has_key? :old_password
+        return show_error ErrorCodeMissingParameter, "old_password should be given for changing password"
+      end
+      if @authenticated_user.passhash == User.hash_password(params[:old_password])
+        @authenticated_user.passhash=User.hash_password(params[:password])
+      end
+    end
+    if params.has_key? :email
+      @authenticated_user.email = params[:email]
+    end
+    if params.has_key? :website
+      @authenticated_user.website = params[:website]
+    end
+    if params.has_key? :profile_image
+      @authenticated_user.profile_image = params[:profile_image]
+    end
+    if params.has_key? :location
+      @authenticated_user.location = params[:location]
+    end
+    if params.has_key? :fullname
+      @authenticated_user.fullname = params[:fullname]
+    end
+    if params.has_key? :gender
+      @authenticated_user.gender = params[:gender]
+    end
+    if params.has_key? :date_of_birth
+      @authenticated_user.date_of_birth = params[:date_of_birth]
+    end
+    @authenticated_user.save
+  end
+
   prepare_params_for :check_is_token_valid,
                      :token => [:required, :not_empty]
   def check_is_token_valid

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140125091533) do
+ActiveRecord::Schema.define(version: 20140126183135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,7 +98,6 @@ ActiveRecord::Schema.define(version: 20140125091533) do
     t.boolean  "is_email_valid",                       default: false
     t.string   "website"
     t.string   "location"
-    t.string   "bio"
     t.integer  "sonic_count"
     t.integer  "follower_count"
     t.integer  "following_count"
