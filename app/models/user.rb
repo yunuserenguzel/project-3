@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 
   before_create :generate_user_id
   after_create :follow_self
+  before_save :on_save
   has_many :followeds, :class_name => 'Follow', :foreign_key => 'follower_user_id'
   has_many :followed_users, :through => :followeds, :class_name => 'User', :source => 'followed'
   has_many :followers, :class_name => 'Follow', :foreign_key => 'followed_user_id'
@@ -16,6 +17,12 @@ class User < ActiveRecord::Base
           :secret_access_key => ENV['S3_SECRET']
       }
   }
+
+  def on_save
+    self.search_index = (self.username ? self.username : '') + ' ' + (self.fullname ? self.fullname : '')
+    return true
+  end
+
   def follow_self
     self.follow_user self
   end
@@ -163,7 +170,7 @@ SQL
   def generate_user_id
     self.id = loop do
       id = rand(User.min_user_id..User.max_user_id)
-      break id unless User.exists?(id: id)
+      break id unless User.exists?(:id => id)
     end
   end
 
@@ -190,12 +197,12 @@ SQL
     end
     user = user.id if user.is_a?User
     sql = <<SQL
-      SELECT set_limit(0.5);
-      SELECT users.*, similarity(users.username, ?) AS similarity,
+      SELECT set_limit(0.3);
+        SELECT users.*, similarity(users.search_index, ?) AS similarity,
         CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
       FROM users
       LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
-      WHERE users.username % ?
+      WHERE users.search_index % ?
       LIMIT 20;
 SQL
     return User.find_by_sql sanitize_sql_array([sql, query, user, query ])

@@ -53,23 +53,22 @@ describe Notification do
     end
   end
 
-  #context "get_unread_notifications_for_user" do
-  #  it "brings the unread notifications of user" do
-  #    5.times do
-  #      n = Notification.createFollowNotification User.create, @user
-  #      puts n
-  #    end
-  #    puts Notification.get_unread_notifications_for_user(@user)
-  #    expect(Notification.get_unread_notifications_for_user(@user).count).to eq 5
-  #    Notification.last.read
-  #    expect(Notification.get_unread_notifications_for_user(@user).count).to eq 4
-  #  end
-  #end
+  context "deletes notifications for the type" do
+    before :each do
+      @user = User.create
+      @by_user = User.create
+      Notification.createFollowNotification @user, @by_user
+    end
+    it 'deletes' do
+      expect(Notification.get_last_notifications_for_user(@user).count).to eq 1
+      Notification.deleteFollowNotification @user, @by_user
+      expect(Notification.get_last_notifications_for_user(@user).count).to eq 0
+    end
+  end
 
   context "get_last_notifications_for_user" do
     it "brings last 20 notifications" do
       30.times do
-        #Notification.notify @user, "type", {}.to_json
         Notification.createFollowNotification @user, User.create
       end
       expect(Notification.get_last_notifications_for_user(@user).count).to eq(20)

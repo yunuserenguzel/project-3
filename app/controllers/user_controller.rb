@@ -42,6 +42,17 @@ class UserController < ApplicationController
     end
   end
 
+  prepare_params_for :register_device_token,
+                     :device_token => [:required, :not_empty],
+                     :platform => [:required, :not_empty]
+  def register_device_token
+    Authentication.where(:token => params[:token]).each do |auth|
+      auth.push_token = params[:device_token]
+      auth.platform = params[:platform]
+      auth.save
+    end
+  end
+
 
   prepare_params_for :edit,
                      :username => [:not_empty],
@@ -90,10 +101,8 @@ class UserController < ApplicationController
     @authenticated_user.save
   end
 
-  prepare_params_for :check_is_token_valid,
-                     :token => [:required, :not_empty]
   def check_is_token_valid
-    token = params[token]
+    #token = params[token]
     #returns the authenticated user
   end
 
@@ -114,6 +123,7 @@ class UserController < ApplicationController
   def follow
     @authenticated_user.follow_user params[:user]
   end
+
   prepare_params_for :unfollow,
                      :user=> [:required, :type=>User];
   def unfollow

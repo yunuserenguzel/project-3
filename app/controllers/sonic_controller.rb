@@ -1,7 +1,6 @@
 class SonicController < ApplicationController
 
   before_filter :require_authentication
-
   prepare_params_for :create_sonic,
                      :sonic_data => [:required],
                      :latitude => [:not_empty],

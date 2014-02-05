@@ -15,11 +15,12 @@ class Sonic < ActiveRecord::Base
           :secret_access_key => ENV['S3_SECRET']
       }
   }
+  validates_attachment_content_type :sonic_data, :content_type => ['media/snc']
 
   def generate_sonic_id
     self.id = loop do
       id = rand(1000000000000..9999999999999)
-      break id unless User.exists?(id: id)
+      break id unless User.exists?(:id => id)
     end
   end
 
@@ -157,6 +158,7 @@ SQL2
     user = user.id if user.is_a?User
     Sonic.destroy_all(:user_id => user, :original_sonic_id => sonic, :is_resonic => true)
     update_resonics_count_for_sonic sonic
+    Notification.deleteResonicNotification Sonic.find(sonic).user_id, sonic, user
   end
 
   def self.update_likes_count_for_sonic sonic

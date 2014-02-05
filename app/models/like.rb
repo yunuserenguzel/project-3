@@ -3,11 +3,17 @@ class Like < ActiveRecord::Base
   belongs_to :sonic, :class_name => 'Sonic', :foreign_key => 'sonic_id'
 
   after_create :on_created
+  after_destroy :on_destroy
 
   def on_created
-    Notification.createLikeNotification self.sonic.user_id, self.sonic_id, self.user_id
+    if self.sonic.user_id != self.user_id
+      Notification.createLikeNotification self.sonic.user_id, self.sonic_id, self.user_id
+    end
   end
 
+  def on_destroy
+    Notification.deleteLikeNotification self.sonic.user_id, self.sonic_id, self.user_id
+  end
   def self.likes_of_sonic sonic_id
     sql = <<SQL
       SELECT users.*

@@ -54,7 +54,7 @@ class Notification < ActiveRecord::Base
 
   def self.get_last_notifications_for_user user
     user = user.id if user.is_a?User
-    return Notification.where(:user_id=>user).order(id: :desc).limit(20)
+    return Notification.where(:user_id=>user).order(:id=> :desc).limit(20)
   end
 
   def self.createLikeNotification user, sonic, by_user
@@ -62,6 +62,18 @@ class Notification < ActiveRecord::Base
     sonic = sonic.id if sonic.is_a?Sonic
     by_user = by_user.id if by_user.is_a?User
     return Notification.create(
+      :notification_type => 'like',
+      :user_id => user,
+      :to_sonic_id => sonic,
+      :by_user_id => by_user
+    )
+  end
+
+  def self.deleteLikeNotification user, sonic, by_user
+    user = user.id if user.is_a?User
+    sonic = sonic.id if sonic.is_a?Sonic
+    by_user = by_user.id if by_user.is_a?User
+    Notification.delete_all(
       :notification_type => 'like',
       :user_id => user,
       :to_sonic_id => sonic,
@@ -83,6 +95,20 @@ class Notification < ActiveRecord::Base
     )
   end
 
+  def self.deleteCommentNotification user, sonic, comment, by_user
+    user = user.id if user.is_a?User
+    sonic = sonic.id if sonic.is_a?Sonic
+    comment = comment.id if comment.is_a?Comment
+    by_user = by_user.id if by_user.is_a?User
+    Notification.delete_all(
+      :notification_type => 'comment',
+      :user_id => user,
+      :to_sonic_id => sonic,
+      :comment_id => comment,
+      :by_user_id => by_user
+    )
+  end
+
   def self.createResonicNotification user, sonic, by_user
     user = user.id if user.is_a?User
     sonic = sonic.id if sonic.is_a?Sonic
@@ -95,10 +121,32 @@ class Notification < ActiveRecord::Base
     )
   end
 
+  def self.deleteResonicNotification user, sonic, by_user
+    user = user.id if user.is_a?User
+    sonic = sonic.id if sonic.is_a?Sonic
+    by_user = by_user.id if by_user.is_a?User
+    Notification.delete_all(
+      :notification_type => 'resonic',
+      :user_id => user,
+      :to_sonic_id => sonic,
+      :by_user_id => by_user
+    )
+  end
+
   def self.createFollowNotification user, by_user
     user = user.id if user.is_a?User
     by_user = by_user.id if by_user.is_a?User
     return Notification.create(
+      :notification_type => 'follow',
+      :user_id => user,
+      :by_user_id => by_user
+    )
+  end
+
+  def self.deleteFollowNotification user, by_user
+    user = user.id if user.is_a?User
+    by_user = by_user.id if by_user.is_a?User
+    Notification.delete_all(
       :notification_type => 'follow',
       :user_id => user,
       :by_user_id => by_user
