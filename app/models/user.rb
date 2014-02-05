@@ -197,7 +197,7 @@ SQL
     end
     user = user.id if user.is_a?User
     sql = <<SQL
-      SELECT set_limit(0.3);
+      SELECT set_limit(0.1);
         SELECT users.*, similarity(users.search_index, ?) AS similarity,
         CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
       FROM users
