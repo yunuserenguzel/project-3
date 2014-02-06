@@ -16,7 +16,6 @@ class SonicController < ApplicationController
     if tags.length > 0
       @sonic.tags = tags
     end
-    #TODO: add latitude and longitude
     @sonic.save
   end
 

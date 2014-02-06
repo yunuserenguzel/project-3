@@ -15,7 +15,6 @@ class Sonic < ActiveRecord::Base
           :secret_access_key => ENV['S3_SECRET']
       }
   }
-  validates_attachment_content_type :sonic_data, :content_type => ['media/snc']
 
   def generate_sonic_id
     self.id = loop do

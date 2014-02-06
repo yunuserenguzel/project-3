@@ -6,7 +6,7 @@ ruby '2.1.0'
 gem 'rails', '4.0.0'
 
 
-gem 'paperclip'
+gem 'paperclip', '3.5.2'
 gem 'aws-sdk'
 
 # Use sqlite3 as the database for Active Record
