@@ -7,7 +7,11 @@ describe SonicController do
       sonic_data = fixture_file_upload('files/SNCKL001527e33e440a7c.snc', 'media/snc')
       u = User.create
       token = Authentication.authenticate_user u
-      @params = {:format => 'json', :token => token, :sonic_data => sonic_data, :tags => 'asd'}
+      @params = {:format => 'json', :token => token,
+                 :sonic_data => sonic_data,
+                 :tags => 'asd',
+                 :latitude => '1.123123123123',
+                 :longitude => '2.123123123'}
     end
 
     it "creates a sonic data at server" do

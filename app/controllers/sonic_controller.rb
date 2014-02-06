@@ -10,6 +10,8 @@ class SonicController < ApplicationController
     @sonic = Sonic.new
     @sonic.sonic_data = params[:sonic_data]
     @sonic.user_id = @authenticated_user.id
+    @sonic.latitude = params[:latitude]
+    @sonic.longitude = params[:longitude]
     tags = params[:tags].strip
     if tags.length > 0
       @sonic.tags = tags
