@@ -6,6 +6,9 @@ Sonicraph::Application.routes.draw do
   # root 'welcome#index'
   get 'error' => 'error#index'
   post 'error' => 'error#index'
+
+  get 'sonic' => 'sonic#index'
+
   post 'api/user/register' => 'user#register'
   get 'api/user/validate' => 'user#validate'
   get "api/user/check_is_token_valid" => 'user#check_is_token_valid'
