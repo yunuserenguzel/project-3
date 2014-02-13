@@ -10,15 +10,18 @@
   <meta property="og:site_name" content="Sonicraph"/>
 
   <!-- Video player specific OG tags -->
-  <meta property="og:video" content="http://sonicraph.herokuapp.com/sonicplayer.v.0.1.2.swf" />
-  <meta property="og:video:secure_url" content="https://sonicraph.herokuapp.com/sonicplayer.v.0.1.2.swf">
+  <meta property="og:video" content="http://sonicraph.herokuapp.com/sonicplayer.v.0.1.3.swf" />
+  <meta property="og:video:secure_url" content="https://sonicraph.herokuapp.com/sonicplayer.v.0.1.3.swf">
   <meta property="og:video:width" content="320" />
   <meta property="og:video:height" content="320" />
   <meta property="og:video:type" content="application/x-shockwave-flash" />
 
 </head>
 <body>
-<object width="320" height="320" data="/sonicplayer.v.0.1.2.swf"></object>
+<object width="320" height="320">
+  <param name='src' value='/sonicplayer.v.0.1.3.swf'/>
+  <param name='flashVars' value='sonic_url=<%= @sonic.sonic_data%>&sonic_id=<%= @sonic.id%>'/>
+</object>
 </body>
 </html>
 
