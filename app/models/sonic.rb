@@ -7,13 +7,22 @@ class Sonic < ActiveRecord::Base
   after_destroy :update_sonic_count
 
   has_attached_file :sonic_data, {
-      :url => "/system/sonic/u:idh:hash.:extension",
-      :hash_secret => 'askdjfbhakjsfbkajsbglkajsbg',
-      :bucket => ENV['S3_BUCKET_NAME'],
-      :s3_credentials => {
-          :access_key_id => ENV['S3_KEY'],
-          :secret_access_key => ENV['S3_SECRET']
-      }
+    :url => "/system/sonic/u:idh:hash.:extension",
+    :hash_secret => 'askdjfbhakjsfbkajsbglkajsbg',
+    :bucket => ENV['S3_BUCKET_NAME'],
+    :s3_credentials => {
+      :access_key_id => ENV['S3_KEY'],
+      :secret_access_key => ENV['S3_SECRET']
+    }
+  }
+  has_attached_file :sonic_thumbnail, {
+    :url => "/system/sonic_thumbnail/u:idh:hash.:extension",
+    :hash_secret => '1bb8d9303ns8d8d04n4n4gu7hs',
+    :bucket => ENV['S3_BUCKET_NAME'],
+    :s3_credentials => {
+      :access_key_id => ENV['S3_KEY'],
+      :secret_access_key => ENV['S3_SECRET']
+    }
   }
 
   def generate_sonic_id

@@ -14,6 +14,7 @@ class SonicController < ApplicationController
   def create_sonic
     @sonic = Sonic.new
     @sonic.sonic_data = params[:sonic_data]
+    @sonic.sonic_thumbnail = params[:sonic_thumbnail]
     @sonic.user_id = @authenticated_user.id
     @sonic.latitude = params[:latitude]
     @sonic.longitude = params[:longitude]
