@@ -2,8 +2,12 @@ class SonicController < ApplicationController
 
   before_filter :require_authentication, :except => [:index]
 
+  prepare_params_for :index,
+                     :s => [:required, :type => Sonic]
   def index
+    @sonic = Sonic.find(params[:s])
     render :layout => false
+
   end
 
   prepare_params_for :create_sonic,
