@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140204201006) do
+ActiveRecord::Schema.define(version: 20140213074917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(version: 20140204201006) do
   end
 
   create_table "sonics", id: false, force: true do |t|
-    t.integer  "id",                      limit: 8,                 null: false
-    t.integer  "user_id",                 limit: 8
+    t.integer  "id",                           limit: 8,                 null: false
+    t.integer  "user_id",                      limit: 8
     t.boolean  "is_private"
     t.float    "latitude"
     t.float    "longitude"
@@ -81,8 +81,12 @@ ActiveRecord::Schema.define(version: 20140204201006) do
     t.string   "sonic_data_content_type"
     t.integer  "sonic_data_file_size"
     t.datetime "sonic_data_updated_at"
-    t.boolean  "is_resonic",                        default: false
-    t.integer  "original_sonic_id",       limit: 8
+    t.boolean  "is_resonic",                             default: false
+    t.integer  "original_sonic_id",            limit: 8
+    t.string   "sonic_thumbnail_file_name"
+    t.string   "sonic_thumbnail_content_type"
+    t.integer  "sonic_thumbnail_file_size"
+    t.datetime "sonic_thumbnail_updated_at"
   end
 
   add_index "sonics", ["is_resonic"], name: "index_sonics_on_is_resonic", using: :btree

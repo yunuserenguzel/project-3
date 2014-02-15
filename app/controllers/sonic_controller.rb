@@ -1,3 +1,4 @@
+require 'base64'
 class SonicController < ApplicationController
 
   before_filter :require_authentication, :except => [:index]
@@ -17,8 +18,15 @@ class SonicController < ApplicationController
                      :tags => [:required, :type => String]
   def create_sonic
     @sonic = Sonic.new
+    base64image =  JSON.parse(params[:sonic_data].read)['image']
+    thumbnailImageData = StringIO.new(Base64.decode64(base64image))
+    thumbnailImageData.class_eval do
+      attr_accessor :content_type, :original_filename
+    end
+    thumbnailImageData.content_type = params[:sonic_data].content_type
+    thumbnailImageData.original_filename = params[:sonic_data].original_filename
+    @sonic.sonic_thumbnail = thumbnailImageData
     @sonic.sonic_data = params[:sonic_data]
-    @sonic.sonic_thumbnail = params[:sonic_thumbnail]
     @sonic.user_id = @authenticated_user.id
     @sonic.latitude = params[:latitude]
     @sonic.longitude = params[:longitude]
