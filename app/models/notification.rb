@@ -155,8 +155,8 @@ class Notification < ActiveRecord::Base
 
   def as_json options = {}
     json = super.as_json options
-    json['by_user'] = self.by_user.as_json options if self.by_user_id
-    json['to_sonic'] = self.to_sonic.as_json options if self.to_sonic_id
+    json['by_user'] = User.retrieve_user_for_user(self.by_user_id,options[:for_user].id).as_json options if self.by_user_id
+    json['to_sonic'] = Sonic.retrieve_sonic_for_user(self.to_sonic_id,options[:for_user].id).as_json options if self.to_sonic_id
     json['comment'] = self.comment.as_json options if self.comment_id
     return json
   end

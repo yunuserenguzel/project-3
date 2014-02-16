@@ -192,6 +192,20 @@ SQL
     return json
   end
 
+  def self.retrieve_user_for_user user, for_user
+    user = user.id if user.is_a?User
+    for_user = for_user.id if for_user.is_a?User
+    sql = <<SQL
+      SELECT users.*,
+        CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
+      FROM users
+      LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
+      WHERE users.id = ?
+      LIMIT 20;
+SQL
+    return User.find_by_sql(sanitize_sql_array([sql,for_user, user])).first
+  end
+
   def self.search_query_for_user query, user
     query = query.strip
     if query.length < 4

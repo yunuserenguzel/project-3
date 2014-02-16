@@ -1,3 +1,3 @@
 {
   :notifications => @notifications
-}.to_json
+}.to_json :for_user => @authenticated_user
