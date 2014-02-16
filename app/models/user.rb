@@ -47,6 +47,14 @@ class User < ActiveRecord::Base
     User.recalculate_and_save_following_count_for_user_id self.id
   end
 
+
+  def unfollow_user user
+    Follow.where(:followed_user_id => user, :follower_user_id => self).each do |f|
+      f.destroy!
+    end
+    User.recalculate_and_save_follower_count_for_user_id user
+    User.recalculate_and_save_following_count_for_user_id self.id
+  end
   def self.recalculate_and_save_follower_count_for_user_id user
     user = user.id if user.is_a?User
     sql = <<SQL
@@ -83,12 +91,6 @@ SQL
     ActiveRecord::Base.connection.execute sanitize_sql_array([sql,user])
   end
 
-
-  def unfollow_user user
-    Follow.where(:followed_user_id => user, :follower_user_id => self).each do |f|
-      f.destroy!
-    end
-  end
 
   def self.followings_of_user_for_user user, for_user = nil
     user = user.id if user.is_a?(User)
