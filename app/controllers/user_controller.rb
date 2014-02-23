@@ -70,7 +70,7 @@ class UserController < ApplicationController
       @authenticated_user.username = params[:username]
       begin
         @authenticated_user.save
-      rescue 'ActiveRecord::RecordNotUnique'
+      rescue ActiveRecord::RecordNotUnique
         return show_error ErrorCodeUsernameExists, 'username is already exist'
       end
     end
@@ -78,7 +78,7 @@ class UserController < ApplicationController
       @authenticated_user.email = params[:email]
       begin
         @authenticated_user.save
-      rescue 'ActiveRecord::RecordNotUnique'
+      rescue ActiveRecord::RecordNotUnique
         return show_error ErrorCodeEmailExists, 'email is already exist'
       end
     end
