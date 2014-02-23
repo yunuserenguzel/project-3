@@ -68,6 +68,19 @@ class UserController < ApplicationController
   def edit
     if params.has_key? :username
       @authenticated_user.username = params[:username]
+      begin
+        @authenticated_user.save
+      rescue 'ActiveRecord::RecordNotUnique'
+        return show_error ErrorCodeUsernameExists, 'username is already exist'
+      end
+    end
+    if params.has_key? :email
+      @authenticated_user.email = params[:email]
+      begin
+        @authenticated_user.save
+      rescue 'ActiveRecord::RecordNotUnique'
+        return show_error ErrorCodeEmailExists, 'email is already exist'
+      end
     end
     if params.has_key? :password
       if !params.has_key? :old_password
@@ -76,9 +89,6 @@ class UserController < ApplicationController
       if @authenticated_user.passhash == User.hash_password(params[:old_password])
         @authenticated_user.passhash=User.hash_password(params[:password])
       end
-    end
-    if params.has_key? :email
-      @authenticated_user.email = params[:email]
     end
     if params.has_key? :website
       @authenticated_user.website = params[:website]
@@ -98,6 +108,7 @@ class UserController < ApplicationController
     if params.has_key? :date_of_birth
       @authenticated_user.date_of_birth = params[:date_of_birth]
     end
+
     @authenticated_user.save
   end
 
