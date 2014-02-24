@@ -46,7 +46,7 @@ class UserController < ApplicationController
                      :device_token => [:required, :not_empty],
                      :platform => [:required, :not_empty]
   def register_device_token
-    Authentication.where(:token => params[:token]).each do |auth|
+    Authentication.where(:token => Authentication.hash_token(params[:token])).each do |auth|
       auth.push_token = params[:device_token]
       auth.platform = params[:platform]
       auth.save
