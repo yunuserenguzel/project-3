@@ -26,7 +26,9 @@ class Notification < ActiveRecord::Base
       return true
     end
     Authentication.where(:user_id => self.user_id).each do |auth|
-      PNManager.send_new_notification_notification auth, message
+      if auth && auth.push_token && auth.platform
+        PNManager.send_new_notification_notification auth, message
+      end
     end
     return true
   end
