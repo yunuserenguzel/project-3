@@ -1,18 +1,9 @@
+require 'pn_manager'
 class Notification < ActiveRecord::Base
   belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
   belongs_to :by_user, :class_name => 'User', :foreign_key => 'by_user_id'
   belongs_to :to_sonic, :class_name => 'Sonic', :foreign_key => 'to_sonic_id'
   belongs_to :comment, :class_name => 'Comment', :foreign_key => 'comment_id'
-
-  #
-  #def self.notify user, notification_type, data
-  #  user = user.id if user.is_a?User
-  #  notification = Notification.create(:user_id=>user,
-  #                                     :notification_type=>notification_type,
-  #                                     :data=>data,
-  #                                     :is_read=>false)
-  #  return notification
-  #end
 
   before_create :on_before_create
   after_create :on_after_create
@@ -23,7 +14,21 @@ class Notification < ActiveRecord::Base
   end
 
   def on_after_create
-  #  TODO: send push notification
+    if notification_type = 'like'
+      message = "#{self.by_user.fullname} liked your sonic"
+    elsif notification_type= 'comment'
+      message = "#{self.by_user.fullname} commented on your sonic"
+    elsif notification_type='resonic'
+      message = "#{self.by_user.fullname} resoniced your sonic"
+    elsif notification_type='follow'
+      message = "#{self.by_user.fullname} is now following you"
+    else
+      return
+    end
+    auth = Authentication.where(:user_id => self.user_id).last
+    if auth && auth.platform && auth.push_token
+      PNManager.send_new_notification_notification auth, message
+    end
   end
 
   def self.read notifications

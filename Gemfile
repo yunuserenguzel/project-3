@@ -8,6 +8,8 @@ gem 'rails', '4.0.0'
 gem 'paperclip', '3.5.2'
 gem 'aws-sdk'
 
+gem 'apns'
+
 # Use sqlite3 as the database for Active Record
 group :production do
   gem 'pg'

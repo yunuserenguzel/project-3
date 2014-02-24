@@ -20,6 +20,7 @@ Sonicraph::Application.routes.draw do
   get 'api/user/unfollow' => 'user#unfollow'
   get 'api/user/search' => 'user#search'
   post 'api/user/edit' => 'user#edit'
+  post 'api/user/register_device_token' => 'user#register_device_token'
 
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'
   get 'api/sonic/like_sonic' => 'sonic#like_sonic'
