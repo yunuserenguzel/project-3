@@ -14,21 +14,21 @@ class Notification < ActiveRecord::Base
   end
 
   def on_after_create
-    if notification_type = 'like'
+    if notification_type == 'like'
       message = "#{self.by_user.fullname} liked your sonic"
-    elsif notification_type= 'comment'
+    elsif notification_type == 'comment'
       message = "#{self.by_user.fullname} commented on your sonic"
-    elsif notification_type='resonic'
+    elsif notification_type == 'resonic'
       message = "#{self.by_user.fullname} resoniced your sonic"
-    elsif notification_type='follow'
+    elsif notification_type == 'follow'
       message = "#{self.by_user.fullname} is now following you"
     else
-      return
+      return true
     end
-    auth = Authentication.where(:user_id => self.user_id).last
-    if auth && auth.platform && auth.push_token
+    Authentication.where(:user_id => self.user_id).each do |auth|
       PNManager.send_new_notification_notification auth, message
     end
+    return true
   end
 
   def self.read notifications
