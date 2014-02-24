@@ -25,10 +25,17 @@ class Notification < ActiveRecord::Base
     else
       return true
     end
-    Authentication.where(:user_id => self.user_id).each do |auth|
-      if auth && auth.push_token && auth.platform
-        PNManager.send_new_notification_notification auth, message
+    if Rails.env.production?
+      Authentication.where(:user_id => self.user_id).each do |auth|
+        if auth && auth.push_token && auth.platform
+          PNManager.send_new_notification_notification auth, message
+        end
       end
+    else
+      a = Authentication.new
+      a.platform = 'ios'
+      a.push_token = '94aa6819a2b61c9b7608b7d1f0d36d77622948e623941cc5ac3fd3cb118869c1'
+      PNManager.send_new_notification_notification a, message
     end
     return true
   end

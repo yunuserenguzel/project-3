@@ -32,7 +32,7 @@ class PNManager
       return false
     elsif auth.platform == 'ios'
       puts "Sending iOS notification" if !Rails.env.test?
-      PNManager.send_notification auth.push_token,auth.platform.platform,{
+      PNManager.send_notification auth.push_token,auth.platform,{
         :other => {
           'aps' => {
             'alert' => self.truncate_message(message),
