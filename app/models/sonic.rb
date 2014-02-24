@@ -84,7 +84,7 @@ LFT
     left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id] ]
     rest = <<RST
       ORDER BY sonics.created_at DESC
-      LIMIT 20
+      LIMIT 10
 RST
     sql = <<SQL1
       #{select}
