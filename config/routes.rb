@@ -21,6 +21,7 @@ Sonicraph::Application.routes.draw do
   get 'api/user/search' => 'user#search'
   post 'api/user/edit' => 'user#edit'
   post 'api/user/register_device_token' => 'user#register_device_token'
+  get 'api/user/destroy_authentication' => 'user#destroy_authentication'
 
   post 'api/sonic/create_sonic' => 'sonic#create_sonic'
   get 'api/sonic/like_sonic' => 'sonic#like_sonic'

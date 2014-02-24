@@ -42,6 +42,10 @@ class UserController < ApplicationController
     end
   end
 
+  def destroy_authentication
+    Authentication.destroy_all(:token => Authentication.hash_token(params[:token]))
+  end
+
   prepare_params_for :register_device_token,
                      :device_token => [:required, :not_empty],
                      :platform => [:required, :not_empty]

@@ -26,8 +26,10 @@ class Notification < ActiveRecord::Base
       return true
     end
     if Rails.env.production?
+      sent_device_tokens = []
       Authentication.where(:user_id => self.user_id).each do |auth|
-        if auth && auth.push_token && auth.platform
+        if auth && auth.push_token && auth.platform && !sent_device_tokens.include?(auth.push_token)
+          sent_device_tokens.push auth.push_token
           PNManager.send_new_notification_notification auth, message
         end
       end
