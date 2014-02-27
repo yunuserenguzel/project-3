@@ -211,8 +211,11 @@ SQL
     json = super.as_json options
     json["id"] = self.id.to_s
     json["sonic_data"] = self.sonic_data
+    json['sonic_thumbnail'] = self.sonic_thumbnail
     json['user'] = self.user
+    json['share_url'] = "http://sonicraph.herokuapp.com/sonic?s=#{self.id}"
     if(self.is_resonic)
+      json['share_url'] = "http://sonicraph.herokuapp.com/sonic?s=#{self.original_sonic_id}"
       json['original_sonic'] = Sonic.retrieve_sonic_for_user self.original_sonic_id, options[:for_user]
     end
     return json
