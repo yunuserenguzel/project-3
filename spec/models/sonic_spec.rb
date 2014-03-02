@@ -22,15 +22,15 @@ describe Sonic do
     before :each do
       @user = User.create
       @user.follow_user @user
-      30.times do |number|
+      10.times do |number|
         sonic = Sonic.create(:user_id=>@user.id)
         sonic.created_at += number.hour
         sonic.save
-        @pivot_sonic = Sonic.find(sonic.id) if number == 13
+        @pivot_sonic = Sonic.find(sonic.id) if number == 3
       end
     end
     it "get_sonic_feed" do
-      expect(Sonic.get_sonic_feed_for_user(@user,:after=>@pivot_sonic.id).count).to eq(16)
+      expect(Sonic.get_sonic_feed_for_user(@user,:after=>@pivot_sonic.id).count).to eq(6)
     end
   end
 
@@ -38,15 +38,15 @@ describe Sonic do
     before :each do
       @user = User.create
       @user.follow_user @user
-      30.times do |number|
+      10.times do |number|
         sonic = Sonic.create(:user_id=>@user.id)
         sonic.created_at += number.hour
         sonic.save
-        @pivot_sonic = Sonic.find(sonic.id) if number == 13
+        @pivot_sonic = Sonic.find(sonic.id) if number == 3
       end
     end
     it "get_sonic_feed" do
-      expect(Sonic.get_sonic_feed_for_user(@user,:before=>@pivot_sonic.id).count).to eq(13)
+      expect(Sonic.get_sonic_feed_for_user(@user,:before=>@pivot_sonic.id).count).to eq(3)
     end
   end
 
@@ -57,7 +57,7 @@ describe Sonic do
       @user2 = User.create
       @user1 = User.create
       @user2 = User.create
-      20.times do |number|
+      10.times do |number|
         if number >= 7
           Sonic.create(:user_id => @user1.id)
         else
@@ -66,7 +66,7 @@ describe Sonic do
       end
     end
     it "gets sonics of user" do
-      expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user1.id).count).to eq(13)
+      expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user1.id).count).to eq(3)
       expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user2.id).count).to eq(7)
     end
   end

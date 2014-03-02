@@ -63,12 +63,8 @@ class UserController < ApplicationController
                      :password => [:not_empty],
                      :old_password => [:not_empty],
                      :email => [:not_empty],
-                     :website => [:not_empty],
                      :profile_image => [:not_empty],
-                     :location => [:not_empty],
-                     :fullname => [:not_empty],
-                     :gender => [:not_empty],
-                     :date_of_birth => [:not_empty]
+                     :fullname => [:not_empty]
   def edit
     if params.has_key? :username
       @authenticated_user.username = params[:username]

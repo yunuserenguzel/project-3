@@ -208,6 +208,7 @@ SQL
   end
 
   def as_json options = {}
+    self.user = User.retrieve_user_for_user self.user_id, options[:for_user]
     json = super.as_json options
     json["id"] = self.id.to_s
     json["sonic_data"] = self.sonic_data

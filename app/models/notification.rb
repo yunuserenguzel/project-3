@@ -14,6 +14,10 @@ class Notification < ActiveRecord::Base
   end
 
   def on_after_create
+    if self.by_user == nil
+      return false
+    end
+
     if notification_type == 'like'
       message = "#{self.by_user.fullname} liked your sonic"
     elsif notification_type == 'comment'
