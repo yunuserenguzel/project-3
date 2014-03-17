@@ -88,7 +88,10 @@ class UserController < ApplicationController
       end
       if @authenticated_user.passhash == User.hash_password(params[:old_password])
         @authenticated_user.passhash=User.hash_password(params[:password])
+      else
+        return show_error ErrorCodePasswordMismatch, "old password is not your current password"
       end
+
     end
     if params.has_key? :website
       @authenticated_user.website = params[:website]
