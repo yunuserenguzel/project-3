@@ -36,6 +36,7 @@ Sonicraph::Application.routes.draw do
   get 'api/sonic/delete_resonic' => 'sonic#delete_resonic'
   get 'api/sonic/delete_comment' => 'sonic#delete_comment'
   get 'api/sonic/search' => 'sonic#search'
+  get 'api/sonic/get_sonic' => 'sonic#get_sonic'
 
   get 'api/noitifications/get_last_notifications' => 'notification#get_last_notifications'
   post 'api/noitifications/mark_as_read' => 'notification#mark_as_read'

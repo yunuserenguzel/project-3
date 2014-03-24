@@ -1,7 +1,7 @@
 require 'base64'
 class SonicController < ApplicationController
 
-  before_filter :require_authentication, :except => [:index]
+  before_filter :require_authentication, :except => [:index,:get_sonic]
 
   prepare_params_for :index,
                      :s => [:required, :type => Sonic]
@@ -58,6 +58,16 @@ class SonicController < ApplicationController
                      :me_liked => [:not_empty]
   def get_sonics
     @sonics = Sonic.get_sonic_feed_for_user @authenticated_user, params
+  end
+
+  prepare_params_for :get_sonic,
+                     :sonic => [:not_empty, :required, :type => Sonic]
+  def get_sonic
+    if @authenticated_user
+      @sonic = Sonic.retrieve_sonic_for_user params[:sonic], @authenticated_user
+    else
+      @sonic = Sonic.find(params[:sonic])
+    end
   end
 
   prepare_params_for :delete_sonic,
