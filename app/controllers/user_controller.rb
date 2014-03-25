@@ -4,15 +4,11 @@ class UserController < ApplicationController
 
   prepare_params_for :register,
                      :email => [:required,:not_empty],
-                     :password => [:required, :not_empty],
-                     :username => [:required, :not_empty]
+                     :password => [:required, :not_empty]
   def register
     @email = params[:email]
-    @username = params[:username]
     if User.exists?(:email => @email)
       return show_error ErrorCodeEmailExists, "this email is already taken"
-    elsif User.exists?(:username => @username)
-      return show_error ErrorCodeUsernameExists, "this username is already taken"
     else
       @user = User.register(params)
       @token = Authentication.authenticate_user @user
