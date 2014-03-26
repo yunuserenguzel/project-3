@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UserController do
+describe Api::UserController do
   render_views
   context "register" do
 

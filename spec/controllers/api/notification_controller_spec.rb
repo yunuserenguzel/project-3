@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NotificationController do
+describe Api::NotificationController do
   render_views
   context "get_last_notifications" do
     before :each do

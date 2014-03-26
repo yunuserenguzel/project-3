@@ -1,4 +1,4 @@
-class UserController < ApplicationController
+class Api::UserController < ApplicationController
 
   before_filter :require_authentication, :except => [:register,:validate,:login]
 

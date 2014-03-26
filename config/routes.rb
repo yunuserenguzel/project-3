@@ -4,8 +4,6 @@ Sonicraph::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
-  get 'error' => 'error#index'
-  post 'error' => 'error#index'
 
   get 'sonic' => 'sonic#index'
 
@@ -41,6 +39,9 @@ Sonicraph::Application.routes.draw do
 
     get 'noitifications/get_last_notifications' => 'notification#get_last_notifications'
     post 'noitifications/mark_as_read' => 'notification#mark_as_read'
+
+    get 'error' => 'error#index'
+    post 'error' => 'error#index'
   end
 
 

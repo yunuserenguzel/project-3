@@ -1,4 +1,4 @@
-class ErrorController < ApplicationController
+class Api::ErrorController < ApplicationController
 
   def index
     @error_code = params[:error_code]

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe AuthenticationController do
+describe Api::AuthenticationController do
 render_views
   context "get_token" do
     before :each do

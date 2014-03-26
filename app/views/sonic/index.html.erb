@@ -1,29 +1,38 @@
 <html>
 <head>
+  <% if @sonic%>
   <meta property="fb:app_id" content="676721915713071" />
   <meta property="og:title" content="<%= @sonic.tags %>" />
   <meta property="og:description" content="A new dimension to photography" />
   <meta property="og:type" content="website" />
   <!--<meta property="og:url" content="https://sonicraph.herokuapp.com/sonicplayer.swf"/>-->
-  <meta property="og:url" content="https://sonicraph.herokuapp.com/sonic?s=<%= params[:s]%>"/>
+  <meta property="og:url" content="https://www.sonicraph.com/sonic?s=<%= params[:s]%>"/>
   <meta property="og:image" content="<%= @sonic.sonic_thumbnail %>"/>
   <meta property="og:site_name" content="Sonicraph"/>
-
-  <!-- Video player specific OG tags -->
-  <!--<meta property="og:video" content="http://sonicraph.herokuapp.com/sonicplayer.v.0.1.3.swf?sonic_url=<%= @sonic.sonic_data%>&sonic_id=<%= @sonic.id%>" />-->
-  <!--<meta property="og:video:secure_url" content="https://sonicraph.herokuapp.com/sonicplayer.v.0.1.3.swf?sonic_url=<%= @sonic.sonic_data%>&sonic_id=<%= @sonic.id%>">-->
-  <!--<meta property="og:video:width" content="320" />-->
-  <!--<meta property="og:video:height" content="320" />-->
-  <!--<meta property="og:video:type" content="application/x-shockwave-flash" />-->
-
+  <%else %>
+  <title>Sonicraph</title>
+  <% end %>
+  <% if @isIphone %>
+    <META http-equiv="refresh" content="0;URL=<%= @iphoneUrl%>">
+  <%end%>
 </head>
 <body>
-<object width="640" height="640">
-  <param name='src' value='/sonicplayer.v.0.1.3.swf'/>
-  <param name='flashVars' value='sonic_url=<%= @sonic.sonic_data%>&sonic_id=<%= @sonic.id%>'/>
-</object>
 
-<a href="sonicraph://sonic/<%= @sonic.id%>">Open in app</a>
+<% if @sonic %>
+
+  <% if @isIphone %>
+    <a href="<%= @iphoneUrl%>">Open in app</a>
+  <% else %>
+    <object width="640" height="640">
+      <param name='src' value='/sonicplayer.v.0.1.3.swf'/>
+      <param name='flashVars' value='sonic_url=<%= @sonic.sonic_data%>&sonic_id=<%= @sonic.id%>'/>
+    </object>
+  <%end%>
+
+<% else %>
+  <strong>No sonic specified </strong>
+<% end%>
+
 </body>
 </html>
 

@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20140213074917) do
     t.boolean  "is_email_valid",                       default: false
     t.string   "website"
     t.string   "location"
+    t.string   "bio"
     t.integer  "sonic_count"
     t.integer  "follower_count"
     t.integer  "following_count"

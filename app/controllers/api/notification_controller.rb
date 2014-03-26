@@ -1,4 +1,4 @@
-class NotificationController < ApplicationController
+class Api::NotificationController < ApplicationController
   before_action :require_authentication
 
   def get_last_notifications

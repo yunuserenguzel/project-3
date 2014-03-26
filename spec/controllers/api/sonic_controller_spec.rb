@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SonicController do
+describe Api::SonicController do
   render_views
   context "create_sonic" do
     before :each do

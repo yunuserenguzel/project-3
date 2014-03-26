@@ -1,4 +1,4 @@
-class AuthenticationController < ApplicationController
+class Api::AuthenticationController < ApplicationController
 
   prepare_params_for :get_token,
                      :username => [:required, :not_empty],

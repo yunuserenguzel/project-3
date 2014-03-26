@@ -1,15 +1,9 @@
 require 'base64'
-class SonicController < ApplicationController
+class Api::SonicController < ApplicationController
 
   before_filter :require_authentication, :except => [:index,:get_sonic]
 
-  prepare_params_for :index,
-                     :s => [:required, :type => Sonic]
-  def index
-    @sonic = Sonic.find(params[:s])
-    render :layout => false
 
-  end
 
   prepare_params_for :create_sonic,
                      :sonic_data => [:required],
