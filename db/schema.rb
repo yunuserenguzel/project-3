@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140213074917) do
+ActiveRecord::Schema.define(version: 20140326175206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,13 @@ ActiveRecord::Schema.define(version: 20140213074917) do
 
   add_index "comments", ["sonic_id"], name: "index_comments_on_sonic_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
+  create_table "emails", force: true do |t|
+    t.string   "address"
+    t.string   "ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "follows", force: true do |t|
     t.integer  "follower_user_id", limit: 8
@@ -102,7 +109,6 @@ ActiveRecord::Schema.define(version: 20140213074917) do
     t.boolean  "is_email_valid",                       default: false
     t.string   "website"
     t.string   "location"
-    t.string   "bio"
     t.integer  "sonic_count"
     t.integer  "follower_count"
     t.integer  "following_count"

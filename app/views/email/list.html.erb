@@ -1,0 +1,11 @@
+
+<table>
+<% @emails.each do |email| %>
+
+    <tr>
+      <td><%= email.address %></td>
+      <td><%= email.ip %></td>
+      <td><%= email.created_at %></td>
+    </tr>
+<%end%>
+</table>

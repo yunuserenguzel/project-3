@@ -7,6 +7,12 @@ Sonicraph::Application.routes.draw do
 
   get 'sonic' => 'sonic#index'
 
+  get '/' => 'application#index'
+  post '/' => 'application#index'
+
+  post 'email' => 'email#save_email'
+  get 'email/list/741285' => 'email#list'
+
   namespace 'api' do
     post 'user/register' => 'user#register'
     get 'user/validate' => 'user#validate'
