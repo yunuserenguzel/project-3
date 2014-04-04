@@ -22,15 +22,12 @@ class UserController < ApplicationController
 
     reset_request = ResetPasswordRequest.where(:email => @email, :request_code => params[:validation_code]).first
     if reset_request
-
       if @password == @repassword
         user = User.where(:email => params[:email]).first
         if user
           user.passhash= User.hash_password @password
           user.save
           reset_request.destroy
-          warn "your password is successfully changed"
-          return
         end
       else
         warn "passwords does not match. please try again."
