@@ -28,7 +28,7 @@ class Authentication < ActiveRecord::Base
   def generate_token
     self.token = loop do
       random_token = SecureRandom.urlsafe_base64(nil, false)
-      break random_token unless Authentication.exists?(token: random_token)
+      break random_token unless Authentication.exists?(:token => random_token)
     end
   end
 

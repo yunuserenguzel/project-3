@@ -1,4 +1,5 @@
 Sonicraph::Application.routes.draw do
+  get "user_controller/new_password"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -6,6 +7,9 @@ Sonicraph::Application.routes.draw do
   # root 'welcome#index'
 
   get 'sonic' => 'sonic#index'
+
+  get 'new_password' => 'user#new_password'
+  post 'set_new_password' => 'user#set_new_password'
 
   get '/' => 'application#index'
   post '/' => 'application#index'
@@ -27,6 +31,7 @@ Sonicraph::Application.routes.draw do
     post 'user/edit' => 'user#edit'
     post 'user/register_device_token' => 'user#register_device_token'
     get 'user/destroy_authentication' => 'user#destroy_authentication'
+    get 'user/reset_password'
 
     post 'sonic/create_sonic' => 'sonic#create_sonic'
     get 'sonic/like_sonic' => 'sonic#like_sonic'

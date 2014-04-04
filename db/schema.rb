@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140326175206) do
+ActiveRecord::Schema.define(version: 20140328083053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,11 @@ ActiveRecord::Schema.define(version: 20140326175206) do
     t.integer  "to_sonic_id",       limit: 8
     t.integer  "by_user_id",        limit: 8
     t.integer  "comment_id"
+  end
+
+  create_table "reset_password_requests", force: true do |t|
+    t.string "email"
+    t.string "request_code"
   end
 
   create_table "sonics", id: false, force: true do |t|

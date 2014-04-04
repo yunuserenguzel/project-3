@@ -1,6 +1,6 @@
 class Api::UserController < ApplicationController
 
-  before_filter :require_authentication, :except => [:register,:validate,:login]
+  before_filter :require_authentication, :except => [:register,:validate,:login,:reset_password]
 
   prepare_params_for :register,
                      :email => [:required,:not_empty],
@@ -22,6 +22,17 @@ class Api::UserController < ApplicationController
     @email = params[:email]
     @validation_code = params[:validation_code]
     @user = User.validate_email @email, @validation_code
+  end
+
+  prepare_params_for :reset_password,
+                     :email => [:required, :not_empty]
+  def reset_password
+    @email = params[:email]
+    rpr = ResetPasswordRequest.create(:email => params[:email], :request_code => Random.rand(100000..1000000))
+
+    #PMailer.sms_fail_mail(phone).deliver!
+    SonicraphMailer.reset_password(rpr.email, rpr.request_code).deliver!
+
   end
 
   prepare_params_for :login,
