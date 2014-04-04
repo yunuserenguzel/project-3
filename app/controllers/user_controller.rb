@@ -27,9 +27,13 @@ class UserController < ApplicationController
         user = User.where(:email => params[:email]).first
         if user
           user.passhash= User.hash_password @password
+          user.save
+          reset_request.destroy
+          warn "your password is successfully changed"
+          return
         end
       else
-        warn "passwords does not match"
+        warn "passwords does not match. please try again."
         return
       end
     end

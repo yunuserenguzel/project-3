@@ -1,5 +1,5 @@
 class SonicraphMailer < ActionMailer::Base
-  default :from => "Sonicraph / sonicraph.com <app23392587@heroku.com>"
+  default :from => "Sonicraph.com <app23392587@heroku.com>"
 
   #def email_validation email, validation_code
   #  @email = email

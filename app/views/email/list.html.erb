@@ -1,8 +1,13 @@
 
 <table>
-<% @emails.each do |email| %>
+<%
+   i = 0
+  @emails.each do |email|
+    i += 1
+    %>
 
     <tr>
+      <td><%= i%></td>
       <td><%= email.address %></td>
       <td><%= email.ip %></td>
       <td><%= email.created_at %></td>

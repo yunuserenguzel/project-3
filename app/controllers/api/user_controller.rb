@@ -27,6 +27,8 @@ class Api::UserController < ApplicationController
   prepare_params_for :reset_password,
                      :email => [:required, :not_empty]
   def reset_password
+
+    #TODO check if the mail is valid
     @email = params[:email]
     rpr = ResetPasswordRequest.create(:email => params[:email], :request_code => Random.rand(100000..1000000))
 
