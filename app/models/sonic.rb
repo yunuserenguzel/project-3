@@ -36,9 +36,10 @@ class Sonic < ActiveRecord::Base
     sonic_id = sonic_id.id if sonic_id.is_a?Sonic
     user = user.id if user.is_a?User
     sql = <<SQL
-      SELECT sonics.*,
+      SELECT DISTINCT sonics.*,
         CASE WHEN likes.user_id    IS NULL THEN 0 ELSE 1 END AS liked_by_me,
-        CASE WHEN resonics.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me
+        CASE WHEN resonics.user_id IS NULL THEN 0 ELSE 1 END AS resoniced_by_me,
+        CASE WHEN comments.user_id IS NULL THEN 0 ELSE 1 END AS commented_by_me
       FROM sonics
       LEFT JOIN likes ON (
         likes.user_id = ? AND
@@ -48,10 +49,14 @@ class Sonic < ActiveRecord::Base
         resonics.user_id = ? AND
         resonics.original_sonic_id = sonics.id
       )
+      LEFT JOIN comments ON (
+        comments.user_id = ? AND
+        comments.sonic_id = sonics.id
+      )
       WHERE sonics.id = ?
       LIMIT 1
 SQL
-    Sonic.find_by_sql(sanitize_sql_array [sql, user,user,sonic_id]).first
+    Sonic.find_by_sql(sanitize_sql_array [sql, user,user,user,sonic_id]).first
   end
 
   def self.sql_with_params params
@@ -66,10 +71,14 @@ SQL
     else
       where += sanitize_sql_array [' follows.follower_user_id = ?', params[:user_id]]
     end
-    select = <<SLCT
+    select_likes = <<SLCT
       SELECT sonics.*,
         CASE WHEN likes.user_id    IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS liked_by_me,
         CASE WHEN resonics.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS resoniced_by_me
+SLCT
+    select = <<SLCT
+      #{select_likes},
+        CASE WHEN comments.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS commented_by_me
 SLCT
     left_joins = <<LFT
       LEFT JOIN likes ON (
@@ -80,8 +89,12 @@ SLCT
         resonics.user_id = ? AND
         resonics.original_sonic_id = sonics.id
       )
+      LEFT JOIN comments ON (
+        comments.user_id = ? AND
+        comments.sonic_id = sonics.id
+      )
 LFT
-    left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id] ]
+    left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id], params[:user_id] ]
     rest = <<RST
       ORDER BY sonics.created_at DESC
       LIMIT 10
@@ -105,7 +118,7 @@ SQL1
 SQL2
     elsif params.has_key? :me_liked
       sql = <<SQL2
-        #{select}
+        #{select_likes}
         FROM likes
         INNER JOIN sonics ON sonics.id = likes.sonic_id
         LEFT JOIN sonics AS resonics ON (
@@ -244,7 +257,8 @@ SQL
       SELECT set_limit(0.1);
       SELECT sonics.*, similarity(sonics.tags, ?) AS similarity,
         CASE WHEN likes.user_id    IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS liked_by_me,
-        CASE WHEN resonics.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS resoniced_by_me
+        CASE WHEN resonics.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS resoniced_by_me,
+        CASE WHEN comments.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS commented_by_me
       FROM sonics
       LEFT JOIN likes ON (
         likes.user_id = ? AND
@@ -253,6 +267,10 @@ SQL
       LEFT JOIN sonics AS resonics ON (
         resonics.user_id = ? AND
         resonics.original_sonic_id = sonics.id
+      )
+      LEFT JOIN comments ON (
+        comments.user_id = ? AND
+        comments.sonic_id = sonics.id
       )
       WHERE sonics.is_resonic = false AND sonics.tags IS NOT NULL AND sonics.tags % ?
       ORDER BY similarity DESC
