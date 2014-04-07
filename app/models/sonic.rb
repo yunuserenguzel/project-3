@@ -4,7 +4,7 @@ class Sonic < ActiveRecord::Base
 
   before_create :generate_sonic_id
   after_save :update_sonic_count
-  after_destroy :update_sonic_count
+  after_destroy :on_destroy
 
   has_attached_file :sonic_data, {
     :url => "/system/sonic/u:idh:hash.:extension",
@@ -233,6 +233,13 @@ SQL
       json['original_sonic'] = Sonic.retrieve_sonic_for_user self.original_sonic_id, options[:for_user]
     end
     return json
+  end
+
+  def on_destroy
+    update_sonic_count
+    Sonic.where(:original_sonic_id => self.id).each do |sonic|
+      sonic.destroy
+    end
   end
 
   def update_sonic_count
