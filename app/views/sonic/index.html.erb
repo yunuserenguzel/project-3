@@ -1,5 +1,6 @@
 <html>
 <head>
+<title>Sonicraph</title>
 <% if @sonic%>
   <meta property="fb:app_id" content="676721915713071" />
   <meta property="og:title" content="<%= @sonic.tags %>" />
@@ -9,8 +10,6 @@
   <meta property="og:url" content="https://www.sonicraph.com/sonic?s=<%= params[:s]%>"/>
   <meta property="og:image" content="<%= @sonic.sonic_thumbnail %>"/>
   <meta property="og:site_name" content="Sonicraph"/>
-<%else %>
-  <title>Sonicraph</title>
 <% end %>
 <% if @isIphone %>
   <META http-equiv="refresh" content="0;URL=<%= @iphoneUrl%>">
@@ -87,6 +86,15 @@
     background-color: #fff;
     text-align: center;
     color: #888;
+  }
+  #profile > h3{
+    font-size: 20px;
+  }
+  #profile > h4 {
+    font-size: 16px;
+  }
+  #profile > h5{
+    font-size: 12px;
   }
   #sonic-container{
     width: 440px;
