@@ -105,7 +105,7 @@
     padding: 0;
     border-radius: 15px;
     overflow: hidden;
-    background-image: url(/image/640x640.jpg);
+    /*background-image: url(/image/640x640.jpg);*/
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -114,7 +114,7 @@
   #profile_image{
     width: 160px;
     height: 160px;
-    background-image: url(/image/sonic_page_user_avatar.png);
+    background-image: url(/image/sonic_page_user_avatar_placeholder.png);
     background-repeat: no-repeat;
     background-size: cover;
     margin: auto;
@@ -245,7 +245,7 @@
     <div>
       <h3><%= @sonic.user.fullname%></h3>
       <h4>@<%= @sonic.user.username%></h4>
-      <h5><%= @sonic.user.location%>></h5>
+      <h5><%= @sonic.user.location%></h5>
     </div>
   </div>
   <div id="sonic-container">
