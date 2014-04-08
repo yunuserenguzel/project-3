@@ -186,6 +186,7 @@
 
   $(document).ready(function(){
     loadSonic("<%= @sonic.sonic_data%>");
+    $("#profile_image").css({backgroundImage : "url(<%= @sonic.user.profile_image%>)"})
   });
 
   setInterval(function(){
@@ -242,9 +243,9 @@
 
     </div>
     <div>
-      <h3>Kazim Kazim</h3>
-      <h4>@kazim</h4>
-      <h5>Yozgat, TR</h5>
+      <h3><%= @sonic.user.fullname%>></h3>
+      <h4>@<%= @sonic.user.username%></h4>
+      <h5><%= @sonic.user.location%>></h5>
     </div>
   </div>
   <div id="sonic-container">
