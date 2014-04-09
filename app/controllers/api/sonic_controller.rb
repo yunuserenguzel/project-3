@@ -101,6 +101,7 @@ class Api::SonicController < ApplicationController
     Comment.where(:id => params[:comment]).each do |comment|
       if comment.user_id == @authenticated_user.id || comment.sonic.user_id == @authenticated_user.id
         comment.destroy
+        @sonic = Sonic.retrieve_sonic_for_user comment.sonic_id, @authenticated_user.id
       end
     end
   end
