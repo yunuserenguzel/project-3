@@ -15,7 +15,7 @@ ErrorCodeUsernameExists = 212
 
 ErrorCodePasswordMismatch = 220
 
-ErrorCodeAuthenticationRequired = 300
+ErrorCodeAuthenticationRequired = 401
 
 
 ErrorCodeActiveRecordNotFound = 6000
