@@ -198,9 +198,11 @@
   }
 
   $(document).ready(function(){
-    loadSonic("<%= @sonic.sonic_data%>");
-    <% if @sonic.user.profile_image %>
+    <% if @sonic %>
+      loadSonic("<%= @sonic.sonic_data%>");
+      <% if @sonic.user.profile_image %>
       $("#profile_image").css({backgroundImage : "url(<%= @sonic.user.profile_image%>)"})
+      <% end %>
     <% end %>
   });
 
@@ -258,9 +260,11 @@
 
     </div>
     <div>
-      <h3><%= @sonic.user.fullname%></h3>
-      <h4>@<%= @sonic.user.username%></h4>
-      <h5><%= @sonic.user.location%></h5>
+      <% if @sonic %>
+        <h3><%= @sonic.user.fullname%></h3>
+        <h4>@<%= @sonic.user.username%></h4>
+        <h5><%= @sonic.user.location%></h5>
+      <% end %>
     </div>
   </div>
   <div id="sonic-container">
@@ -274,7 +278,7 @@
       <%end%>
 
     <% else %>
-      <strong>No sonic specified </strong>
+      <strong>Sonic not found </strong>
     <% end%>
 
     <div id="progress_bar"></div>
