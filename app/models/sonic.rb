@@ -7,7 +7,7 @@ class Sonic < ActiveRecord::Base
   after_destroy :on_destroy
 
   has_attached_file :sonic_data, {
-    :url => "/system/sonic/u:idh:hash.:extension",
+    :url => "/system/sonic/s:idh:hash.:extension",
     :hash_secret => 'askdjfbhakjsfbkajsbglkajsbg',
     :bucket => ENV['S3_BUCKET_NAME'],
     :s3_credentials => {
@@ -16,7 +16,7 @@ class Sonic < ActiveRecord::Base
     }
   }
   has_attached_file :sonic_thumbnail, {
-    :url => "/system/sonic_thumbnail/u:idh:hash.:extension",
+    :url => "/system/sonic_thumbnail/st:idh:hash.:extension",
     :hash_secret => '1bb8d9303ns8d8d04n4n4gu7hs',
     :bucket => ENV['S3_BUCKET_NAME'],
     :s3_credentials => {

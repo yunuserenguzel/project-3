@@ -199,7 +199,9 @@
 
   $(document).ready(function(){
     loadSonic("<%= @sonic.sonic_data%>");
-    $("#profile_image").css({backgroundImage : "url(<%= @sonic.user.profile_image%>)"})
+    <% if @sonic.user.profile_image %>
+      $("#profile_image").css({backgroundImage : "url(<%= @sonic.user.profile_image%>)"})
+    <% end %>
   });
 
   setInterval(function(){
