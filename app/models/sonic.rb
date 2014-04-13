@@ -97,7 +97,7 @@ LFT
     left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id], params[:user_id] ]
     rest = <<RST
       ORDER BY sonics.created_at DESC
-      LIMIT 10
+      LIMIT 9
 RST
     sql = <<SQL1
       #{select}
@@ -281,7 +281,7 @@ SQL
       )
       WHERE sonics.is_resonic = false AND sonics.tags IS NOT NULL AND sonics.tags % ?
       ORDER BY similarity DESC
-      LIMIT 20;
+      LIMIT 21;
 SQL
     return Sonic.find_by_sql sanitize_sql_array([sql, query, user, user, query])
   end

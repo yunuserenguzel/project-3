@@ -200,7 +200,7 @@
   $(document).ready(function(){
     <% if @sonic %>
       loadSonic("<%= @sonic.sonic_data%>");
-      <% if @sonic.user.profile_image %>
+      <% if @sonic.user.profile_image_file_name %>
       $("#profile_image").css({backgroundImage : "url(<%= @sonic.user.profile_image%>)"})
       <% end %>
     <% end %>
