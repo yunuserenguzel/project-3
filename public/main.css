@@ -29,7 +29,15 @@ body{
     text-align: center;
 }
 
-
+#content {
+    position: relative;
+    top: 0px;
+    margin-left: auto;
+    width: 850px;
+    height: 100%;
+    text-align: center;
+    overflow: hidden;
+}
 #background{
     position: absolute;
     top: 0px;
@@ -42,27 +50,20 @@ body{
     width: 100%;
     z-index: -1;
     overflow: hidden;
-
-    /*-webkit-transform:scale(1.2);*/
-    /*-moz-transform:scale(1.2);*/
-    /*-o-transform:scale(1.2);*/
-    /*transform:scale(1.2);*/
-
-    /*-webkit-transition:  -webkit-transform 0.9s .9s ease-out;*/
-    /*-moz-transition: -moz-transform 0.9s .9s ease-out;*/
-    /*-o-transition: -o-transform 0.9s .9s ease-out;*/
-    /*-ms-transition: -ms-transform 0.9s .9s ease-out;*/
-    /*transition: transform 0.9s .9s ease-out;*/
 }
 #logo{
     margin: auto;
-    margin-top: 3%;
+    margin-top: 150px;
     display: block;
     padding: 0;
+    width: 500px;
+    height: auto;
 }
 #moment{
     margin: auto;
-    margin-top: 5%;
+    margin-top: 40px;
+    width: 400px;
+    height: auto;
 }
 
 #form{
@@ -71,12 +72,12 @@ body{
     background-size: contain;
     background-position: center;
     background-color: rgba(0,0,0,0.10);
-    border-radius: 15px;
-    width: 610px;
+    /*border-radius: 15px;*/
+    width: 500px;
     min-height: 68px;
     height: auto;
     margin: auto;
-    margin-top: 2%;
+    margin-top: 100px;
     padding: 0;
     line-height: 24px;
     position: relative;
@@ -99,12 +100,13 @@ body{
     background-color: rgba(0,0,0,0);
     /*border: 2px solid #f00;*/
     border: 0;
-    height: 68px;
+    height: 42px;
     outline: none;
     margin: 0;
+    margin-top: 10px;
     padding: 0;
-    line-height: 68px;
-    font-size: 24px;
+    line-height: 48px;
+    font-size: 20px;
     color: #fff;
     font-family: HelveticaNeueLTPro45;
     /*font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;*/
@@ -115,29 +117,40 @@ body{
     top: 2px;
     left: 0px;
     width: 430px;
-    line-height: 60px;
+    /*line-height: 60px;*/
     padding-left: 20px;
 }
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #999;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #999;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #999;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #999;
+}
+
 #notify{
     top: 2px;
-    left: 441px;
+    left: 379px;
     background-image: url(image/Notify.png);
     background-position: center;
     background-repeat: no-repeat;
-    width: 160px;
+    /*height: 20px;*/
+    width: 120px;
     display: block;
 }
 #amazing{
-    margin: auto;
-    margin-top: 5%;
+    position: absolute;
+    bottom: 40px;
     display: block;
-    width: 621px;
-}
-#iphone{
-    margin: auto;
-    margin-top: 1%;
-    display: block;
-    width: 863px;
+    width: 250px;
+    left: 50%;
+    margin-left: -125px;
+    height: auto;
 }
 
 

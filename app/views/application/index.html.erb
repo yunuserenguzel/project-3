@@ -53,8 +53,8 @@
       document.getElementById('notify').disabled = false;
     }
     var setBackground = function(){
-      var number = Math.ceil(Math.random()*3);
-      var imageUrl = "image/background-"+number+".jpg";
+//      var number = Math.ceil(Math.random()*3);
+      var imageUrl = "image/background-0.jpg";
       $("#background").css({"background-image":"url("+imageUrl+")"});
       console.log("I'm here");
       $('head').append('<img src="'+imageUrl+'" onload="document.getElementById(\'background\').className=\'animate\'">');
@@ -74,17 +74,18 @@
 <body>
 
 <div id="background" ></div>
+<div id="content">
+  <img id="logo" src="image/Sonicraph.png">
+  <img id="moment" src="image/momentscreatememories.png">
 
-<img id="logo" src="image/Sonicraph.png">
-<img id="moment" src="image/momentscreatememories.png">
+  <div id="form">
+    <input id="email" type="email" name="email" autocomplete="off" placeholder="your@email.com" onkeyup="keyUpForEmail(event);">
+    <input id="notify" type="button" onclick="notify();">
+  </div>
 
-<div id="form">
-  <input id="email" type="email" name="email" autocomplete="off" placeholder="Enter your email address" onkeyup="keyUpForEmail(event);">
-  <input id="notify" type="button" onclick="notify();">
+  <img id="amazing" src="image/SomethingAmazing.png" >
+
 </div>
-
-<img id="amazing" src="image/SomethingAmazing.png" >
-<img id="iphone" src="image/SonicraphforiPhone.png">
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
