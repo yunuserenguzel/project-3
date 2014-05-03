@@ -6,7 +6,7 @@ class PNManager
     end
     if platform == 'ios'
       APNS.host = 'gateway.sandbox.push.apple.com'
-      APNS.pem  = 'config/sonicraph_ios.pem'
+      APNS.pem  = 'config/sonicraph_ios_03_05_2014.pem'
       APNS.pass = 'Sonic2014'
       APNS.send_notification(push_token, notification)
     elsif platform == 'android'
