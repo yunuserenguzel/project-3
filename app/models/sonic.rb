@@ -246,16 +246,18 @@ SQL
     User.recalculate_and_save_sonic_count_for_user_id self.user_id
   end
 
-  def self.get_users_resoniced_sonic sonic
+  def self.get_users_resoniced_sonic_for_user sonic,user_id
     sonic = sonic.id if sonic.is_a?Sonic
     sql = <<SQL
-      SELECT users.*
+      SELECT users.*,
+        CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
       FROM sonics
       INNER JOIN users ON users.id = sonics.user_id
+      LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
       WHERE sonics.original_sonic_id=? AND sonics.is_resonic=true
       LIMIT 20
 SQL
-    return User.find_by_sql(sanitize_sql_array [sql,sonic])
+    return User.find_by_sql(sanitize_sql_array [sql,user_id,sonic])
   end
 
   def self.search_query_for_user query, user

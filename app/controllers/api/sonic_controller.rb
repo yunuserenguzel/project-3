@@ -78,7 +78,7 @@ class Api::SonicController < ApplicationController
   prepare_params_for :likes,
                      :sonic => [:required, :type=>Sonic]
   def likes
-    @users = Like.likes_of_sonic params[:sonic]
+    @users = Like.likes_of_sonic_for_user params[:sonic], @authenticated_user.id
   end
 
   prepare_params_for :write_comment,
@@ -116,7 +116,7 @@ class Api::SonicController < ApplicationController
   prepare_params_for :resonics,
                      :sonic => [:required, :type => Sonic]
   def resonics
-    @users = Sonic.get_users_resoniced_sonic params[:sonic]
+    @users = Sonic.get_users_resoniced_sonic_for_user params[:sonic],@authenticated_user.id
   end
 
   prepare_params_for :delete_resonic,

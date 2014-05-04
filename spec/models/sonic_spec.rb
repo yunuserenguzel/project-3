@@ -119,7 +119,7 @@ describe Sonic do
       end
     end
     it "gets the users as array" do
-      likes = Like.likes_of_sonic(@sonic.id)
+      likes = Like.likes_of_sonic_for_user(@sonic.id,User.create.id)
       expect(likes.count).to eq(5)
     end
   end
