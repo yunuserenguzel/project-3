@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 
   before_create :generate_user_id
-  after_create :follow_self
+  after_create :follow_self_and_sonicraph
   before_save :on_save
   has_many :followeds, :class_name => 'Follow', :foreign_key => 'follower_user_id'
   has_many :followed_users, :through => :followeds, :class_name => 'User', :source => 'followed'
@@ -23,8 +23,12 @@ class User < ActiveRecord::Base
     return true
   end
 
-  def follow_self
+  def follow_self_and_sonicraph
     self.follow_user self
+    sonicraph = User.where(:username => 'Sonicraph').first
+    if sonicraph
+      self.follow_user sonicraph
+    end
   end
 
   def self.check_user_login username,password
