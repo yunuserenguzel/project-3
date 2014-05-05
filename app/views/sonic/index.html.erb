@@ -17,9 +17,17 @@
 
 <script src="http://code.jquery.com/jquery-2.1.0.min.js" type="text/javascript"></script>
 
+
+<% content_width = "900px"%>
 <style type="text/css">
+  @font-face
+  {
+    font-family: HelveticaNeueLTPro45;
+    src: url(HelveticaNeueLTPro-Lt.otf);
+  }
   *{
-    font-family: Arial, Helvetica, sans-serif !important;
+    /*font-family: Arial, Helvetica, sans-serif !important;*/
+    font-family: HelveticaNeueLTPro45;
   }
   body,html{
     background-color: #eee;
@@ -28,15 +36,16 @@
     text-align: center;
   }
   #header{
-    height: 25%;
-    background-image: url(/image/sonic_page_header.jpg);
+    height: 80px;
+    /*background-image: url(/image/sonic_page_header.jpg);*/
+    background-color: rgb(221, 90, 98);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
   }
   #header-inline{
     position: relative;
-    width: 700px;
+    width: <%= content_width%>;
     height: 100%;
     margin: auto;
   }
@@ -48,7 +57,7 @@
     text-align: left;
   }
   #logo img{
-    width: 300px;
+    width: 240px;
     height: auto;
   }
   #social{
@@ -56,18 +65,19 @@
     position: absolute;
     right: 0px;
     bottom: 10px;
+    padding-right: 40px;
     text-align: right;
   }
   #social img{
-    width: 40px;
+    width: 30px;
     margin-left: 10px;
   }
   #content{
-    width: 700px;
-    height: 440px;
+    width: <%= content_width%>;
+    height: 600px;
     margin: auto;
     padding: 0;
-    padding-top: 1%;
+    padding-top: 50px;
   }
   #content > div{
     float: left;
@@ -75,38 +85,63 @@
     padding: 0;
   }
   #profile{
-    width: 240px;
+    width: 260px;
     height: 100%;
     border-radius: 10px;
     box-sizing: border-box;
-    margin-right: 20px !important;
-    border-width: 20px;
-    border-color: #fff;
-    border-style: solid;
-    background-color: #fff;
+    /*padding-top: 30px !important;*/
+    /*margin-right: 20px !important;*/
+    /*border-width: 20px;*/
+    /*border-color: #fff;*/
+    /*border-style: solid;*/
+    /*background-color: #fff;*/
     text-align: center;
-    color: #888;
+  }
+  /*#profile > div {*/
+    /*float: left;*/
+  /*}*/
+  #profile_image{
+    width: 80px;
+    height:80px;
+    background-image: url(/image/sonic_page_user_avatar_placeholder.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 80px;
+  }
+  #user_info {
+    width: 100%;
+    float: left;
+    height: 90px;
+    overflow: hidden;
+    /*text-align: right;*/
   }
   #profile  h3{
-    font-size: 20px;
+    font-size: 18px;
     font-weight: normal;
     margin-bottom: 5px;
+    color: #888;
+
   }
   #profile  h4 {
-    font-size: 16px;
-    margin-top: 5px;
+    font-size: 14px;
+    margin-top: 0px;
     font-weight: normal;
+    color: #aaa;
   }
   #profile  h5{
+    margin-top: -12px;
     font-size: 12px;
     font-weight: normal;
+    color: #ccc;
   }
   #sonic-container{
-    width: 440px;
+    width: 600px;
     height: 100%;
-    border-radius: 15px;
+    border-radius: 5px;
     box-sizing: border-box;
-    border-width: 20px;
+    border-width: 10px;
     border-color: #fff;
     border-style: solid;
     background-color: #fff;
@@ -116,44 +151,34 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    border-radius: 15px;
+    /*border-radius: 15px;*/
     overflow: hidden;
     /*background-image: url(/image/640x640.jpg);*/
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
   }
-
-  #profile_image{
-    width: 120px;
-    height: 120px;
-    background-image: url(/image/sonic_page_user_avatar_placeholder.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    margin: auto;
-    margin-top: 10px;
-    border-radius: 80px;
-  }
   #footer{
-    width: 700px;
+    width: <%= content_width%>;
     text-align: center;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 50px;
     font-size: 12px;
     color: #999;
   }
   #footer_menu{
-    width: 100%;
+    width: 600px;
     list-style: none;
     margin: auto;
     text-align: center;
     padding: 0;
     margin-bottom: 10px;
+    margin-left: 260px;
   }
   #footer_menu > li{
     /*float: left;*/
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-right: 20px;
+    margin-left: 20px;
     display: inline-block;
   }
   #footer_menu a{
@@ -163,17 +188,17 @@
   #footer_menu a:hover{
     color: #bbb;
   }
-  #trademark{
-    padding: 0;
-    clear: both;
-    margin: auto;
-  }
+  /*#trademark{*/
+    /*padding: 0;*/
+    /*clear: both;*/
+    /*margin: auto;*/
+  /*}*/
   #progress_bar{
     height: 3px;
     width: 0%;
     padding-top: 1px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 1px;
+    padding-right: 1px;
     background-color: #f00;
     background-clip: content-box;
     box-sizing: border-box;
@@ -248,8 +273,8 @@
       <a href="/"><img src="/image/sonic_page_sonicraph_logo.png"></a>
     </div>
     <div id="social">
-      <a href="#"><img src="/image/sonic_page_facebook.png"></a>
-      <a href="#"><img src="/image/sonic_page_twitter.png"></a>
+      <!--<a href="#"><img src="/image/sonic_page_facebook.png"></a>-->
+      <a href="http://twitter.com/Sonicraph" target="_blank"><img src="/image/sonic_page_twitter.png"></a>
     </div>
   </div>
 </div>
@@ -259,7 +284,7 @@
     <div id="profile_image">
 
     </div>
-    <div>
+    <div id="user_info">
       <% if @sonic %>
         <h3><%= @sonic.user.fullname%></h3>
         <h4>@<%= @sonic.user.username%></h4>
@@ -290,8 +315,9 @@
     <li><a href="#">About Us</a></li>
     <li><a href="#">FAQ</a></li>
     <li><a href="#">Legal & Privacy</a></li>
+    <li>@2014 Sonicraph</li>
   </ul>
-  <div id="trademark">@2014 Sonicraph</div>
+  <!--<div id="trademark">@2014 Sonicraph</div>-->
 </div>
 
 </body>
