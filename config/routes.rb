@@ -8,11 +8,21 @@ Sonicraph::Application.routes.draw do
 
   get 'sonic' => 'sonic#index'
 
+  get "about/company"
+  get "about/terms"
+  get "about/privacy"
+  get "about/contact"
+  get "about/team"
+  get 'about' => 'about#company'
+  get 'legal' => 'about#terms'
+  get 'terms' => 'about#terms'
+
   get 'new_password' => 'user#new_password'
   post 'set_new_password' => 'user#set_new_password'
 
-  get '/' => 'application#index'
-  post '/' => 'application#index'
+  get '/' => redirect('/home')
+  post '/' => redirect('/home')
+  #post '/' => 'application#index'
 
   post 'email' => 'email#save_email'
   get 'email/list/741285' => 'email#list'
