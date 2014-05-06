@@ -10,6 +10,8 @@ gem 'aws-sdk'
 
 gem 'apns'
 
+gem 'unicorn'
+
 # Use sqlite3 as the database for Active Record
 group :production do
   gem 'pg'
