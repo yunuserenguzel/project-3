@@ -639,8 +639,6 @@ label.error {
 
 /* Mobile Landscape Size -> Tablet Portrait size*/
 @media only screen and (min-width: 480px) and (max-width: 767px) {
-	
-	
 	.splash  {background-attachment: scroll;background-position:top center !important;background-size:cover;}
 	input, textarea{-webkit-appearance: none;-webkit-border-radius:0;}
 	html{-webkit-text-size-adjust: none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;}
@@ -679,7 +677,7 @@ label.error {
 
 /* Mobile Portrait Size -> Mobile Landscape Size */
 @media only screen and (max-width:479px) {
-	
+
 	
 	.splash  {background-attachment: scroll;background-position:top center !important;background-size:cover;}
 	input, textarea{-webkit-appearance: none;-webkit-border-radius:0;}
@@ -688,7 +686,7 @@ label.error {
 	#loaderInner {margin: -50px 0 0 -30px;}
 	
 	#overview{margin-top:-580px;}
-	.caption h1{font-size:22px;padding-left:30px;padding-right:30px;}
+	.caption h1{position: relative; top: -25px;font-size:22px;padding-left:30px;padding-right:30px;}
 	.logo, nav#mainNav{float:none;}
 	nav#mainNav{margin-right:0;}
 	nav#mainNav ul{display:none;margin-bottom:10px;}
