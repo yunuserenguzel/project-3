@@ -114,12 +114,12 @@ describe Sonic do
   context "get likes" do
     before :each do
       @sonic = Sonic.create
-      5.times do
-        Sonic.like_sonic_for_user @sonic,User.create
+      5.times do |i|
+        Sonic.like_sonic_for_user @sonic,User.create(:username=>"u#{i}",:fullname=>"f")
       end
     end
     it "gets the users as array" do
-      likes = Like.likes_of_sonic_for_user(@sonic.id,User.create.id)
+      likes = Like.likes_of_sonic_for_user(@sonic.id,User.create().id)
       expect(likes.count).to eq(5)
     end
   end

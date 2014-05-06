@@ -64,9 +64,9 @@ describe Api::UserController do
 
   context "follow" do
     before :each do
-      @u1 = User.create
+      @u1 = User.create(:username => 'u1', :fullname => 'fullname')
       token = Authentication.authenticate_user @u1
-      @u2 = User.create
+      @u2 = User.create(:username => 'u2', :fullname => 'fullname')
       @params = {:format=>'json',:token=>token,:user=>@u2.id}
     end
     it "returns success" do
@@ -80,8 +80,8 @@ describe Api::UserController do
     before :each do
       @user = User.create(:username => 'yeg')
       @token = Authentication.authenticate_user @user
-      5.times do
-        @user.follow_user User.create
+      5.times do |i|
+        @user.follow_user User.create(:username => "u#{i}", :fullname => 'full')
       end
       @params = {:format => 'json',:token => @token, :user=> @user.id}
     end

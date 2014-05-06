@@ -10,8 +10,8 @@ describe User do
 
   context "following" do
     before :each do
-      @u1 = User.create
-      @u2 = User.create
+      @u1 = User.create(:username=>'u1',:fullname=>'f')
+      @u2 = User.create(:username=>'u2',:fullname=>'f')
       @u1.follow_user @u2
     end
     context "follow_user" do

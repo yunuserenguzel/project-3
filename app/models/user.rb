@@ -116,7 +116,7 @@ SQL
       FROM users
       INNER JOIN follows ON follows.followed_user_id=users.id
       #{left_join}
-      WHERE follows.follower_user_id=? AND follows.followed_user_id<>follows.follower_user_id
+      WHERE follows.follower_user_id=? AND follows.followed_user_id<>follows.follower_user_id AND users.is_registered=true
       GROUP BY users.id #{group_by}
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
@@ -141,7 +141,7 @@ SQL
       FROM users
       INNER JOIN follows ON follows.follower_user_id=users.id
       #{left_join}
-      WHERE follows.followed_user_id=? AND follows.followed_user_id<>follows.follower_user_id
+      WHERE follows.followed_user_id=? AND follows.followed_user_id<>follows.follower_user_id AND users.is_registered=true
       GROUP BY users.id #{group_by}
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
@@ -205,7 +205,7 @@ SQL
         CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
       FROM users
       LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
-      WHERE users.id = ?
+      WHERE users.id = ? AND users.is_registered=true
       LIMIT 20;
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,for_user, user])).first
@@ -223,7 +223,7 @@ SQL
         CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
       FROM users
       LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
-      WHERE users.search_index % ?
+      WHERE users.search_index % ? AND users.is_registered=true
       LIMIT 20;
 SQL
     return User.find_by_sql sanitize_sql_array([sql, query, user, query ])

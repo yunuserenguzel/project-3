@@ -22,7 +22,7 @@ class Comment < ActiveRecord::Base
           SELECT comments.*
           FROM comments
           INNER JOIN users ON users.id = comments.user_id
-          WHERE comments.sonic_id = ?
+          WHERE comments.sonic_id = ? AND users.is_registered=true
           ORDER BY comments.created_at ASC
           LIMIT 20
 SQL

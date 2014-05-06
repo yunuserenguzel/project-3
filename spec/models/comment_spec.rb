@@ -5,8 +5,8 @@ describe Comment do
   context "get_comments" do
     before :each do
       @sonic = Sonic.create
-      5.times do
-        user = User.create
+      5.times do |i|
+        user = User.create(:username => "username#{i}", :fullname => 'fullname')
         Comment.create(:user_id => user.id, :sonic_id => @sonic.id, :text => 'comment text')
       end
     end

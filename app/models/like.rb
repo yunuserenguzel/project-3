@@ -21,7 +21,7 @@ class Like < ActiveRecord::Base
         CASE WHEN follows.followed_user_id IS NULL THEN 0 ELSE 1 END AS is_being_followed
       FROM likes INNER JOIN users ON users.id = likes.user_id
       LEFT JOIN follows ON (follows.follower_user_id=? AND follows.followed_user_id=users.id)
-      WHERE likes.sonic_id=?
+      WHERE likes.sonic_id=? AND users.is_registered=true
       LIMIT 20
 SQL
     return User.find_by_sql( sanitize_sql_array [sql, user_id, sonic_id] )
