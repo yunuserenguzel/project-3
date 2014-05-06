@@ -9,9 +9,7 @@ gem 'paperclip', '3.5.2'
 gem 'aws-sdk'
 
 gem 'apns'
-
-gem 'unicorn'
-
+gem 'newrelic_rpm'
 # Use sqlite3 as the database for Active Record
 group :production do
   gem 'pg'
