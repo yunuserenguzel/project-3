@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
 
   def on_save
     self.search_index = (self.username ? self.username : '') + ' ' + (self.fullname ? self.fullname : '')
+    self.is_registered = (self.username != nil and self.fullname != nil)
     return true
   end
 
