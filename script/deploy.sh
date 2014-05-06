@@ -8,7 +8,7 @@ if [ $? -eq 0 ]
     
     git add .
     git commit -m "Created repo for heroku"
-    git push heroku -f staging master
+    git push heroku -f master
 
     echo 'Push to Heroku complete'
     echo "You can delete the git repository by typing 'rm -rf .git'" 
