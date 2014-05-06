@@ -22,6 +22,9 @@ class User < ActiveRecord::Base
     Like.destroy_all(:user_id=>self.id)
     Comment.destroy_all(:user_id=>self.id)
     Sonic.destroy_all(:user_id=>self.id)
+    Follow.destroy_all(:follower_user_id=>self.id)
+    Follow.destroy_all(:followed_user_id=>self.id)
+    Authentication.destroy_all(:user_id=>self.id)
   end
 
   def on_save
