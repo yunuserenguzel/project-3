@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   before_create :generate_user_id
   after_create :follow_self_and_sonicraph
   before_save :on_save
+  before_destroy :on_destroy
   has_many :followeds, :class_name => 'Follow', :foreign_key => 'follower_user_id'
   has_many :followed_users, :through => :followeds, :class_name => 'User', :source => 'followed'
   has_many :followers, :class_name => 'Follow', :foreign_key => 'followed_user_id'
@@ -17,6 +18,11 @@ class User < ActiveRecord::Base
           :secret_access_key => ENV['S3_SECRET']
       }
   }
+  def on_destroy
+    Like.destroy_all(:user_id=>self.id)
+    Comment.destroy_all(:user_id=>self.id)
+    Sonic.destroy_all(:user_id=>self.id)
+  end
 
   def on_save
     self.search_index = (self.username ? self.username : '') + ' ' + (self.fullname ? self.fullname : '')
