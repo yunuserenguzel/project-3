@@ -236,7 +236,7 @@ SQL
     json['share_url'] = "http://www.sonicraph.com/sonic?s=#{self.id}"
     if(self.is_resonic)
       json['share_url'] = "http://www.sonicraph.com/sonic?s=#{self.original_sonic_id}"
-      json['original_sonic'] = Sonic.retrieve_sonic_for_user self.original_sonic_id, options[:for_user]
+      json['original_sonic'] = Sonic.retrieve_sonic_for_user(self.original_sonic_id, options[:for_user]).as_json options
     end
     return json
   end
