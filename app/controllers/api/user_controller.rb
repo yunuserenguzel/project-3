@@ -59,7 +59,7 @@ class Api::UserController < ApplicationController
                      :device_token => [:required, :not_empty],
                      :platform => [:required, :not_empty]
   def register_device_token
-    Authentication.register_device_token_for_token params[:device_token],params[:platform],params[:token]
+    Authentication.register_push_token_for_token params[:device_token],params[:platform],params[:token]
   end
 
 
