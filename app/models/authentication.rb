@@ -3,6 +3,16 @@ class Authentication < ActiveRecord::Base
   belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
   before_create :generate_token
 
+  def self.register_device_token_for_token device_token, platform, token
+    hash_token = Authentication.hash_token(token)
+    Authentication.where(:device_token => device_token, :platform => platform).where.not(:token => hash_token).destroy_all
+    Authentication.where(:token => hash_token).each do |auth|
+      auth.push_token = device_token
+      auth.platform = platform
+      auth.save
+    end
+  end
+
   def self.authenticate_user user, platform = nil
     a = Authentication.new
     a.user_id = user.is_a?(User) ? user.id : user
