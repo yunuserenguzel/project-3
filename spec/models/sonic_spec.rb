@@ -67,7 +67,7 @@ describe Sonic do
     end
     it "gets sonics of user" do
       expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user1.id).count).to eq(3)
-      expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user2.id).count).to eq(7)
+      expect(Sonic.get_sonic_feed_for_user(@user, :of_user=>@user2.id).count).to eq(6)
     end
   end
 
@@ -167,7 +167,7 @@ describe Sonic do
       @user = u1
     end
     it "brings sonics and resonics" do
-      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(7)
+      expect(Sonic.get_sonic_feed_for_user(@user).count).to eq(6)
     end
   end
 
@@ -182,7 +182,7 @@ describe Sonic do
       end
     end
     it "returns liked sonics" do
-      expect(Sonic.get_sonic_feed_for_user(@u, :me_liked=>true).count).to eq 7
+      expect(Sonic.get_sonic_feed_for_user(@u, :me_liked=>true).count).to eq 6
     end
   end
 

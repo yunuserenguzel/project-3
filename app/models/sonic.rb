@@ -60,6 +60,7 @@ SQL
   end
 
   def self.sql_with_params params
+    params[:limit] = 9 if !params.has_key?(:limit)
     where = ""
     where = sanitize_sql_array([' sonics.created_at > (SELECT created_at FROM sonics where sonics.id = ?)',params[:after]]) if params.has_key? :after
     where = sanitize_sql_array([' sonics.created_at < (SELECT created_at FROM sonics where sonics.id = ?) ',params[:before]]) if params.has_key? :before
@@ -97,7 +98,7 @@ LFT
     left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id], params[:user_id] ]
     rest = <<RST
       ORDER BY sonics.created_at DESC
-      LIMIT 9
+      LIMIT #{params[:limit]}
 RST
     sql = <<SQL1
       #{select}
@@ -135,6 +136,7 @@ SQL2
   def self.get_sonic_feed_for_user user, params = {}
     user = user.id if user.is_a?User
     params[:user_id] = user
+    params[:limit] = 6
     sql = Sonic.sql_with_params params
     return Sonic.find_by_sql(sql)
   end
