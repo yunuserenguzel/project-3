@@ -98,8 +98,9 @@ LFT
     left_joins = sanitize_sql_array [ left_joins, params[:user_id], params[:user_id], params[:user_id] ]
     rest = <<RST
       ORDER BY sonics.created_at DESC
-      LIMIT #{params[:limit]}
+      LIMIT ?
 RST
+    rest = sanitize_sql_array [rest, params[:limit]]
     sql = <<SQL1
       #{select}
       FROM follows
@@ -223,12 +224,15 @@ SQL
   end
 
   def as_json options = {}
-    self.user = User.retrieve_user_for_user self.user_id, options[:for_user]
     json = super.as_json options
     json["id"] = self.id.to_s
     json["sonic_data"] = self.sonic_data
     json['sonic_thumbnail'] = self.sonic_thumbnail
-    json['user'] = self.user
+    if options.has_key?(:for_user)
+      json['user'] = User.retrieve_user_for_user self.user_id, options[:for_user]
+    else
+      json['user'] = self.user
+    end
     json['share_url'] = "http://www.sonicraph.com/sonic?s=#{self.id}"
     if(self.is_resonic)
       json['share_url'] = "http://www.sonicraph.com/sonic?s=#{self.original_sonic_id}"
