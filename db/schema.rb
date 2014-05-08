@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140506171151) do
+ActiveRecord::Schema.define(version: 20140508084058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,10 @@ ActiveRecord::Schema.define(version: 20140506171151) do
     t.datetime "updated_at"
   end
 
+  add_index "follows", ["created_at"], name: "index_follows_on_created_at", using: :btree
+  add_index "follows", ["followed_user_id"], name: "index_follows_on_followed_user_id", using: :btree
+  add_index "follows", ["follower_user_id"], name: "index_follows_on_follower_user_id", using: :btree
+
   create_table "likes", force: true do |t|
     t.integer  "sonic_id",   limit: 8
     t.integer  "user_id",    limit: 8
@@ -59,7 +63,9 @@ ActiveRecord::Schema.define(version: 20140506171151) do
     t.datetime "updated_at"
   end
 
+  add_index "likes", ["created_at"], name: "index_likes_on_created_at", using: :btree
   add_index "likes", ["sonic_id"], name: "index_likes_on_sonic_id", using: :btree
+  add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
 
   create_table "notifications", force: true do |t|
     t.integer  "user_id",           limit: 8
@@ -72,10 +78,16 @@ ActiveRecord::Schema.define(version: 20140506171151) do
     t.integer  "comment_id"
   end
 
+  add_index "notifications", ["created_at"], name: "index_notifications_on_created_at", using: :btree
+  add_index "notifications", ["is_read"], name: "index_notifications_on_is_read", using: :btree
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
+
   create_table "reset_password_requests", force: true do |t|
     t.string "email"
     t.string "request_code"
   end
+
+  add_index "reset_password_requests", ["email"], name: "index_reset_password_requests_on_email", using: :btree
 
   create_table "sonics", id: false, force: true do |t|
     t.integer  "id",                           limit: 8,                 null: false
@@ -101,8 +113,10 @@ ActiveRecord::Schema.define(version: 20140506171151) do
     t.datetime "sonic_thumbnail_updated_at"
   end
 
+  add_index "sonics", ["created_at"], name: "index_sonics_on_created_at", using: :btree
   add_index "sonics", ["is_resonic"], name: "index_sonics_on_is_resonic", using: :btree
   add_index "sonics", ["original_sonic_id"], name: "index_sonics_on_original_sonic_id", using: :btree
+  add_index "sonics", ["user_id"], name: "index_sonics_on_user_id", using: :btree
 
   create_table "users", id: false, force: true do |t|
     t.integer  "id",                         limit: 8,                 null: false
