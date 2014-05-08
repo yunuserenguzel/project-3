@@ -57,6 +57,7 @@ Sonicraph::Application.routes.draw do
     get 'sonic/delete_comment' => 'sonic#delete_comment'
     get 'sonic/search' => 'sonic#search'
     get 'sonic/get_sonic' => 'sonic#get_sonic'
+    get 'sonic/get_populer_sonics'
 
     get 'noitifications/get_last_notifications' => 'notification#get_last_notifications'
     post 'noitifications/mark_as_read' => 'notification#mark_as_read'

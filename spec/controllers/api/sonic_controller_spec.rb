@@ -266,4 +266,18 @@ describe Api::SonicController do
       response.should be_successful
     end
   end
+
+  context "populer sonics" do
+    before :each do
+      user = User.create
+      10.times do
+        Sonic.create
+      end
+      @params = {:format => 'json', :token => Authentication.authenticate_user(user)}
+    end
+    it "returns http success" do
+      get :get_populer_sonics, @params
+      response.should be_successful
+    end
+  end
 end

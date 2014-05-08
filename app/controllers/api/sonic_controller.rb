@@ -57,10 +57,10 @@ class Api::SonicController < ApplicationController
     @sonics = Sonic.get_sonic_feed_for_user @authenticated_user, params
   end
 
-  prepare_params_for :get_latest_sonics,
+  prepare_params_for :get_populer_sonics,
                      :limit => [:not_empty, :type => Fixnum]
-  def get_latest_sonics
-    @sonics = Sonic.latest_sonics_for_user @authenticated_user, params[:limit]
+  def get_populer_sonics
+    @sonics = Sonic.populer_sonics_for_user @authenticated_user, params[:limit]
   end
 
   prepare_params_for :get_sonic,

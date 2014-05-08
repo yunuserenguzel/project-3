@@ -296,7 +296,7 @@ SQL
     return Sonic.find_by_sql sanitize_sql_array([sql, query, user, user, user, query])
   end
 
-  def self.latest_sonics_for_user user, limit = 9
+  def self.populer_sonics_for_user user, limit = 9
     user = user.id if user.is_a?User
     sql = <<-SQL
       SELECT sonics.*,
