@@ -31,7 +31,11 @@ SQL
 
   def as_json options = {}
     json = super.as_json options
-    json['user'] = self.user
+    if options.has_key?(:for_user)
+      json['user'] = User.retrieve_user_for_user self.user_id, options[:for_user]
+    else
+      json['user'] = self.user
+    end
     return json
   end
 
