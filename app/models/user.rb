@@ -120,14 +120,14 @@ SQL
       group_by = ",follows2.followed_user_id"
     end
     sql = <<-SQL
-      SELECT DISTINCT users.*
+      SELECT DISTINCT users.*,follows.created_at AS follow_created_at
         #{select_case}
       FROM users
       INNER JOIN follows ON follows.followed_user_id=users.id
       #{left_join}
       WHERE follows.follower_user_id=? AND follows.followed_user_id<>follows.follower_user_id AND users.is_registered=true
-      GROUP BY users.id #{group_by}
-      ORDER BY users.created_at DESC
+      GROUP BY users.id #{group_by}, follow_created_at
+      ORDER BY follows.created_at DESC
     SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
   end
@@ -146,14 +146,14 @@ SQL
       group_by = ",follows2.followed_user_id"
     end
     sql = <<SQL
-      SELECT DISTINCT users.*
+      SELECT DISTINCT users.*,follows.created_at AS follow_created_at
         #{select_case}
       FROM users
       INNER JOIN follows ON follows.follower_user_id=users.id
       #{left_join}
       WHERE follows.followed_user_id=? AND follows.followed_user_id<>follows.follower_user_id AND users.is_registered=true
-      GROUP BY users.id #{group_by}
-      ORDER BY users.created_at DESC
+      GROUP BY users.id #{group_by}, follow_created_at
+      ORDER BY follows.created_at DESC
 SQL
     return User.find_by_sql(sanitize_sql_array([sql,user]))
   end
@@ -239,4 +239,6 @@ SQL
 SQL
     return User.find_by_sql sanitize_sql_array([sql, query, user, query ])
   end
+
+
 end
