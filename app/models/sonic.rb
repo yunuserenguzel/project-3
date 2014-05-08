@@ -296,8 +296,9 @@ SQL
     return Sonic.find_by_sql sanitize_sql_array([sql, query, user, user, user, query])
   end
 
-  def self.populer_sonics_for_user user, limit = 9
+  def self.populer_sonics_for_user user, limit = nil
     user = user.id if user.is_a?User
+    limit = 9 if not limit.is_a?Fixnum
     sql = <<-SQL
       SELECT sonics.*,
         CASE WHEN likes.user_id    IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS liked_by_me,
