@@ -74,7 +74,7 @@ class Notification < ActiveRecord::Base
 
   def self.get_last_notifications_for_user user
     user = user.id if user.is_a?User
-    return Notification.where(:user_id=>user).order(:id=> :desc).limit(20)
+    return Notification.where(:user_id=>user).order(:id=> :desc).limit(12)
   end
 
   def self.createLikeNotification user, sonic, by_user

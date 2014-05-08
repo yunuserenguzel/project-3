@@ -71,7 +71,7 @@ describe Notification do
       30.times do
         Notification.createFollowNotification @user, User.create
       end
-      expect(Notification.get_last_notifications_for_user(@user).count).to eq(20)
+      expect(Notification.get_last_notifications_for_user(@user).count).to eq(12)
     end
   end
 end
