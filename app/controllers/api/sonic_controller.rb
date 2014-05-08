@@ -12,6 +12,7 @@ class Api::SonicController < ApplicationController
                      :tags => [:required, :type => String]
   def create_sonic
     @sonic = Sonic.new
+    start_time = DateTime.now
     base64image =  JSON.parse(params[:sonic_data].read)['image']
     thumbnailImageData = StringIO.new(Base64.decode64(base64image))
     thumbnailImageData.class_eval do
@@ -19,6 +20,8 @@ class Api::SonicController < ApplicationController
     end
     thumbnailImageData.content_type = params[:sonic_data].content_type
     thumbnailImageData.original_filename = params[:sonic_data].original_filename
+    end_time = DateTime.now
+    puts "sonic created with #{((end_time-start_time) * 1000.0).to_s} milliseconds"
     @sonic.sonic_thumbnail = thumbnailImageData
     @sonic.sonic_data = params[:sonic_data]
     @sonic.user_id = @authenticated_user.id
@@ -52,6 +55,12 @@ class Api::SonicController < ApplicationController
                      :me_liked => [:not_empty]
   def get_sonics
     @sonics = Sonic.get_sonic_feed_for_user @authenticated_user, params
+  end
+
+  prepare_params_for :get_latest_sonics,
+                     :limit => [:not_empty, :type => Fixnum]
+  def get_latest_sonics
+    @sonics = Sonic.latest_sonics_for_user @authenticated_user, params[:limit]
   end
 
   prepare_params_for :get_sonic,

@@ -186,4 +186,14 @@ describe Sonic do
     end
   end
 
+  context "latest sonics" do
+    before :each do
+      @u = User.create
+      10.times { |i| Sonic.create(:tags => i) }
+    end
+    it "gets latest 9 sonics defaultly" do
+      expect(Sonic.latest_sonics_for_user(@u).count).to eq 9
+    end
+  end
+
 end

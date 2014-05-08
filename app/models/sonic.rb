@@ -296,4 +296,32 @@ SQL
     return Sonic.find_by_sql sanitize_sql_array([sql, query, user, user, user, query])
   end
 
+  def self.latest_sonics_for_user user, limit = 9
+    user = user.id if user.is_a?User
+    sql = <<-SQL
+      SELECT sonics.*,
+        CASE WHEN likes.user_id    IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS liked_by_me,
+        CASE WHEN resonics.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS resoniced_by_me,
+        CASE WHEN comments.user_id IS NULL OR sonics.is_resonic=true THEN 0 ELSE 1 END AS commented_by_me
+      FROM sonics
+      LEFT JOIN likes ON (
+        likes.user_id = ? AND
+        likes.sonic_id = sonics.id
+      )
+      LEFT JOIN sonics AS resonics ON (
+        resonics.user_id = ? AND
+        resonics.original_sonic_id = sonics.id
+      )
+      LEFT JOIN comments ON (
+        comments.user_id = ? AND
+        comments.sonic_id = sonics.id
+      )
+      WHERE sonics.is_resonic = false AND sonics.user_id <> ?
+      ORDER BY sonics.created_at DESC
+      LIMIT ?;
+    SQL
+
+    return find_by_sql sanitize_sql_array [sql, user, user, user, user, limit]
+  end
+
 end
