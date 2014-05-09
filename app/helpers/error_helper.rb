@@ -6,9 +6,9 @@ ErrorCodeUnknown = 100
 
 ErrorCodeMissingParameter = 101
 ErrorCodeInvalidParameter = 102
+ErrorCodeInvalidParameterEmail = 1021
 
 ErrorCodeParameterTypeError = 103
-ErrorCodeInvalidParameterPhone = 201
 ErrorCodeParameterExists = 202
 ErrorCodeEmailExists = 211
 ErrorCodeUsernameExists = 212
@@ -32,7 +32,6 @@ ErrorDescriptionTable = {
   ErrorCodeInvalidParameter => "Invalid Parameter",
   ErrorCodeMissingParameter => 'Missing Parameter',
   ErrorCodeParameterExists => 'Parameter Exists ',
-  ErrorCodeInvalidParameterPhone => "Invalid Parameter 'Phone'",
   ErrorCodeAuthenticationRequired => 'Authentication Required',
   ErrorCodeUsernameOrPasswordIsWrong => "Invalid username or password",
   ErrorCodeActiveRecordNotFound => "Active Record Not Found Error",

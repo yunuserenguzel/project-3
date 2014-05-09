@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
     passhash = User.hash_password password
     user = User.where(:username => username, :passhash => passhash).first
     if user == nil
-      User.where(:email => username, :passhash => passhash).first
+      user = User.where(:email => username, :passhash => passhash).first
     end
     return user
   end
