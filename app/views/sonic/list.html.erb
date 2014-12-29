@@ -3,8 +3,8 @@
     border: #eee solid 1px;
     border-radius: 5px;
     float: left;
-    width: 250px;
-    height: 200px;
+    width: 200px;
+    height: 250px;
     text-decoration: none;
     color: #0b0b0b;
     overflow: hidden;
@@ -21,8 +21,8 @@
     background-color: #ede1d1;
   }
   .sonic-list-item img {
-    max-width: 75px;
-    max-height: 75px;
+    max-width: 200px;
+    max-height: 200px;
   }
   .sonic-list-item span {
     margin-left: 5px;
@@ -30,7 +30,7 @@
 </style>
 <div>
   <% @sonics.each do |sonic|%>
-    <a class="sonic-list-item" href="/sonic?s=<%= sonic.id%>">
+    <a class="sonic-list-item" target="_blank" href="/sonic?s=<%= sonic.id%>">
       <img src="<%= sonic.sonic_thumbnail.to_s %>">
       <div>
         <span class="username"><%= sonic.user.username%></span>
