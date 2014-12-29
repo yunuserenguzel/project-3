@@ -1,8 +1,24 @@
-<div>
+<style>
+  .sonic-list-item {
+    border-bottom: #ccc solid 1px;
+  }
+  .sonic-list-item:hover {
+    background-color: #ede1d1;
+  }
+  .sonic-list-item img {
+    max-width: 75px;
+    max-height: 75px;
+  }
+  .sonic-list-item span {
+    margin-left: 5px;
+  }
+</style>
+<div class="sonic-list-item">
   <% @sonics.each do |sonic|%>
     <a href="/sonic?s=<%= sonic.id%>">
-      <div><%= sonic.user.username%> </div>
-      <div><%= sonic.created_at%> </div>
+      <img src="<%= sonic.sonic_thumbnail.to_s %>">
+      <span><%= sonic.user.username%> </span>
+      <span><%= sonic.created_at%> </span>
     </a>
   <% end %>
 </div>
