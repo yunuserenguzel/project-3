@@ -1,7 +1,7 @@
 class SonicController < ApplicationController
 
   def list
-    @sonics = Sonic.all.order(:id => :desc)
+    @sonics = Sonic.where(:is_resonic => false).order(:id => :desc)
   end
 
   def index
