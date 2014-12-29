@@ -1,8 +1,7 @@
 class SonicController < ApplicationController
 
   def list
-    @sonics = Sonic.where(:is_resonic => false).order(:created_at => :desc)
-    Sonic.find_by_sql <<-SQL
+     @sonics = Sonic.find_by_sql <<-SQL
       SELECT sonics.*
       FROM sonics
       WHERE sonics.is_resonic = false
