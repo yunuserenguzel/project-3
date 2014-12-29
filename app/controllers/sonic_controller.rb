@@ -1,5 +1,8 @@
 class SonicController < ApplicationController
 
+  def list
+    @sonics = Sonic.all.order(:id => :desc)
+  end
 
   def index
     if Rails.env.development?

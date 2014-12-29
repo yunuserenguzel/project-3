@@ -1,0 +1,8 @@
+<div>
+  <% @sonics.each do |sonic|%>
+    <a href="sonic/<%= sonic.id%>">
+      <div><%= sonic.user.username%> </div>
+      <div><%= sonic.created_at%> </div>
+    </a>
+  <% end %>
+</div>
