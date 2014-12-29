@@ -8,6 +8,8 @@ Sonicraph::Application.routes.draw do
 
   get 'sonic' => 'sonic#index'
 
+  get 'sonic/list'
+
   get "about/company"
   get "about/terms"
   get "about/privacy"
