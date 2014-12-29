@@ -1,6 +1,6 @@
 <div>
   <% @sonics.each do |sonic|%>
-    <a href="sonic/<%= sonic.id%>">
+    <a href="/sonic?s=<%= sonic.id%>">
       <div><%= sonic.user.username%> </div>
       <div><%= sonic.created_at%> </div>
     </a>
