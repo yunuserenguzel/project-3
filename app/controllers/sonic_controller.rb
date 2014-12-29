@@ -2,6 +2,7 @@ class SonicController < ApplicationController
 
   def list
     @sonics = Sonic.where(:is_resonic => false).order(:created_at => :desc)
+
   end
 
   def index
