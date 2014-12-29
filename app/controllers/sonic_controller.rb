@@ -2,7 +2,12 @@ class SonicController < ApplicationController
 
   def list
     @sonics = Sonic.where(:is_resonic => false).order(:created_at => :desc)
-
+    Sonic.find_by_sql <<-SQL
+      SELECT sonics.*
+      FROM sonics
+      WHERE sonics.is_resonic = false
+      ORDER BY sonics.likes_count + sonics.comments_count + sonics.resonics_count DESC
+    SQL
   end
 
   def index
