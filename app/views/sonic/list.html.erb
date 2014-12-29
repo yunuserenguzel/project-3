@@ -2,6 +2,17 @@
   .sonic-list-item {
     border-bottom: #ccc solid 1px;
     display: block;
+    width: 250px;
+    text-decoration: none;
+    color: #0b0b0b;
+  }
+  .sonic-list-item .username {
+    font-weight: bold;
+    font-size: larger;
+  }
+  .sonic-list-item .created_at {
+    font-size: smaller;
+    font-weight: lighter;
   }
   .sonic-list-item:hover {
     background-color: #ede1d1;
@@ -18,8 +29,10 @@
   <% @sonics.each do |sonic|%>
     <a class="sonic-list-item" href="/sonic?s=<%= sonic.id%>">
       <img src="<%= sonic.sonic_thumbnail.to_s %>">
-      <span><%= sonic.user.username%> </span>
-      <span><%= sonic.created_at%> </span>
+      <div>
+        <span class="username"><%= sonic.user.username%></span>
+        <span class="created_at"><%= sonic.created_at.to%></span>
+      </div>
     </a>
   <% end %>
 </div>
