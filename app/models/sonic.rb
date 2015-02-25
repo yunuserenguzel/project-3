@@ -243,8 +243,8 @@ SQL
 
   def on_destroy
     update_sonic_count
-    Like.destroy_all(:sonic_id=>self.id)
-    Comment.destroy_all(:sonic_id=>self.id)
+    Like.where(:sonic_id=>self.id).destroy_all
+    Comment.where(:sonic_id=>self.id).destroy_all
     Sonic.where(:original_sonic_id => self.id).each do |sonic|
       sonic.destroy
     end

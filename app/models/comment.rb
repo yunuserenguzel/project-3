@@ -13,7 +13,8 @@ class Comment < ActiveRecord::Base
 
   def on_destroy
     Sonic.update_comments_count_for_sonic self.sonic_id
-    Notification.deleteCommentNotification self.sonic.user_id, self.sonic_id, self.id, self.user_id
+    # Notification.deleteCommentNotification self.sonic.user_id, self.sonic_id, self.id, self.user_id
+    Notification.where(:to_sonic_id => self.sonic_id).destroy_all
   end
 
 
