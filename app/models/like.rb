@@ -12,7 +12,7 @@ class Like < ActiveRecord::Base
   end
 
   def on_destroy
-    Notification.deleteLikeNotification self.sonic.user_id, self.sonic_id, self.user_id
+    Notification.where(:to_sonic_id => self.sonic_id).destroy_all
   end
 
   def self.likes_of_sonic_for_user sonic_id, user_id
